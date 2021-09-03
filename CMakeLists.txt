@@ -8,6 +8,10 @@ project(performance	VERSION 1.0
 			DESCRIPTION "Bachelor Thesis - performance"
 			LANGUAGES CXX)
 
-add_subdirectory(include)
 add_subdirectory(source)
+#add_subdirectory(system)
+#add_subdirectory(workload)
 
+set_target_properties(test PROPERTIES 
+	RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
