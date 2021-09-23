@@ -4,7 +4,7 @@ using namespace workload;
 
 Workload::Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bool async)
 {
-	this->runningSimulation = false;
+	this->runningSimulation.store(false);
 	this->asyncWorkload     = async;
 	std::cout << "-- We will create " << deviceThreads << " Threads" << std::endl;
 	for (unsigned int i = 0; i < deviceThreads; i++)
@@ -15,15 +15,11 @@ Workload::Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bo
 
 void Workload::startWL() 
 {
-	runningSimulation = true;
+	this->runningSimulation.store(true);
 }
 void Workload::stopWL() 
 {
-	runningSimulation = false;
-}
-bool Workload::getRunningSim() 
-{
-	return this->runningSimulation;
+	this->runningSimulation.store(false);
 }
 
 void Workload::simulateWorkload(unsigned int workload, unsigned int randomize, unsigned int* WLPriority)
@@ -35,7 +31,7 @@ void Workload::simulateWorkload(unsigned int workload, unsigned int randomize, u
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(randomize * 50));
 	}
-	while (runningSimulation)
+	while (runningSimulation.load())
 	{
 		auto start = std::chrono::system_clock::now();
 		std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));

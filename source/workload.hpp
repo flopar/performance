@@ -16,7 +16,7 @@ class Workload
 {
   private:
       std::vector<std::thread> threadList;
-      bool        runningSimulation;
+      std::atomic_bool        runningSimulation;
       // Device dependable
       unsigned int             deviceThreads = std::thread::hardware_concurrency();
       bool                     asyncWorkload;
@@ -27,9 +27,8 @@ class Workload
       void finishWorkload();
       void simulateWorkload(unsigned int workload, unsigned int randomize, unsigned int* WLPriority);
 
-      // Setter and getter for the boolean runningSimulation
-      void              startWL();
-      void              stopWL();
-      bool              getRunningSim();
+      // Simulation switch
+      void startWL();
+      void stopWL();
 };
 }
