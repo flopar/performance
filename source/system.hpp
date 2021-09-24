@@ -43,3 +43,12 @@ int getProcessTimes(uint64_t& kernel, uint64_t& user)
 	kernel = static_cast<uint64_t>(time.tms_stime);
 	return 0;
 }
+
+int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
+{
+	std::vector<uint64_t> measurements = returnData(0);
+	user = measurements[0] + measurements[1];
+	kernel = measurements[2];
+	idle = measurements[3];
+	return 0;
+}
