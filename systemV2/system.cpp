@@ -1,6 +1,4 @@
-#include <fstream>
-#include <stdint.h>
-#include <sys/times.h>
+#include "system.hpp"
 
 std::string readCPUTime(int cpu)
 {
@@ -38,7 +36,6 @@ std::vector<uint64_t> returnData(int cpu)
 int getProcessTimes(uint64_t& kernel, uint64_t& user)
 {
 	struct tms time;
-	std::cout << "clocks" << times(&time) << std::endl;
 	user = static_cast<uint64_t>(time.tms_utime);
 	kernel = static_cast<uint64_t>(time.tms_stime);
 	return 0;

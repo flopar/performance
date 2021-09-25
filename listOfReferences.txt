@@ -1,0 +1,6 @@
+CMAKE:
+	https://cmake.org/cmake/help/v3.21/
+	https://surfertas.github.io/cmake/cpp/projecteuler/2019/05/01/cmake.html
+	http://derekmolloy.ie/hello-world-introductions-to-cmake/
+	https://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art026
+
