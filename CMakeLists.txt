@@ -16,24 +16,16 @@ project(performance	VERSION 1.0
 
 add_subdirectory(source)
 
-set_target_properties(test PROPERTIES
-	RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
 # Allows the build of the library
 add_subdirectory(systemV2)
+add_subdirectory(workload)
 
 # Adds the directories to the include search path
-target_include_directories(test PUBLIC systemV2)
+target_include_directories(test PUBLIC 
+	systemV2
+	workload)
 
 # Links the libraries to the main target
-target_link_libraries(test system workload)
-
-
-
-
-#add_subdirectory(workload)
-#target_link_libraries(test PUBLIC workload)
-#target_include_directories(test PUBLIC 
-#	"${PROJECT_BINARY_DIR}"
-#	"${PROJECT_SOURCE_DIR}/workload")
+target_link_libraries(test 
+	system 
+	workload)
