@@ -102,22 +102,17 @@ int calculateAndShowLoad(double duration)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			check_return_val += getCPUTimes(std::ref(kernel_time), std::ref(user_time), std::ref(idle_time));
-			check_return_val += getProcessTimes(std::ref(process_kernel_time), std::ref(user_time));
+			check_return_val += getProcessTimes(std::ref(process_kernel_time), std::ref(process_user_time));
 			if(check_return_val == 0)
 			{
 				// CPU Times
 				kernel_time -= pre_kernel_time;
 				user_time -= pre_user_time;
 				idle_time -= pre_idle_time;
-				std::cout << "System Kernel time " << kernel_time << std::endl;
-				std::cout << "System User time " << user_time << std::endl;
-				std::cout << "System Idle time " << idle_time << std::endl;
 				
 				// Process Times
 				process_kernel_time -= pre_process_kernel_time;
-				process_user_time -= pre_user_time;
-				std::cout << "Process Kernel time " << process_kernel_time << std::endl;
-				std::cout << "Process User time " << process_user_time << std::endl;
+				process_user_time -= pre_process_user_time;				
 
 				process_workload = 100.0 * static_cast<double>(process_kernel_time + process_user_time) / static_cast<double>(kernel_time + user_time + idle_time);
 				process_workload_sum += process_workload;
@@ -138,7 +133,7 @@ int calculateAndShowLoad(double duration)
 		}
 		else
 		{
-			// what if we fail from the beggining?
+			// what if we fail from the beggining? -> can we even fail? make sense? idk
 		}
 	}
 	avg_system_wl = system_workload_sum / average;
