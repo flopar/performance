@@ -3,11 +3,17 @@
 
 
 int main(){
-	
-	workload::Workload worky(100,NULL,true);
-	worky.startWL();
-	calculateAndShowLoad(60);	
-	worky.stopWL();
-	worky.finishWorkload();
+	try
+	{
+		workload::Workload worky(10,NULL,true);
+		worky.startWL();
+		calculateAndShowLoad(60);	
+		worky.stopWL();
+		worky.finishWorkload();
+	}
+	catch(const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 	return 0;
 }

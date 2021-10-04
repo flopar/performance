@@ -26,6 +26,10 @@ std::vector<uint64_t> returnData(int cpu)
 	std::size_t searchPos = 5, strEndPos = 0;
 	// If the we want a certain cpu's data we need to set the search position to 4 because
 	// of the file's layout
+	if(cpu > std::thread::hardware_concurrency())
+	{
+		throw std::range_error("Given CPU is out of range");
+	}
 	if(cpu)
 	{
 		searchPos = 4;
@@ -34,9 +38,7 @@ std::vector<uint64_t> returnData(int cpu)
 	std::vector<uint64_t> data;
 	if(compound == STR_ERR)
 	{
-		// maybe find a better way of error handling :S -> any opinions on this Herr Kirchmeier?
-		data.emplace_back(UINT64_MAX);
-		return data;
+		throw std::runtime_error("Could not read data line from the given CPU");
 	}
 	else
 	{
@@ -55,20 +57,19 @@ int getProcessTimes(uint64_t& kernel, uint64_t& user)
 	struct tms time;
 	if(times(&time) == (clock_t)-1)
 	{
-		return 1;
+		throw std::runtime_error("times() failes. Process times cannot be read\n");
 	}
 	user = static_cast<uint64_t>(time.tms_utime);
 	kernel = static_cast<uint64_t>(time.tms_stime);
+	// If we throw errors, do we still need to return a value?
 	return 0;
 }
 
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 {
-	std::vector<uint64_t> measurements = returnData(0);
-	if(measurements[0] == UINT64_MAX)
-	{
-		return 1;
-	}
+
+	std::vector<uint64_t> measurements;
+	measurements = returnData(0);
 	user = measurements[0] + measurements[1];
 	kernel = measurements[2];
 	idle = measurements[3];

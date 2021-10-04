@@ -7,16 +7,13 @@
 #include <ctime>
 #include <map>
 #include <chrono>
-#ifdef _WIN32
-#include <windows.h>
-#endif
 namespace workload
 {
 class Workload
 {
   private:
       std::vector<std::thread> threadList;
-      std::atomic_bool        runningSimulation;
+      std::atomic_bool        runningSimulation, startSimulation;
       // Device dependable
       unsigned int             deviceThreads = std::thread::hardware_concurrency();
       bool                     asyncWorkload;

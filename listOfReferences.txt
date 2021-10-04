@@ -4,3 +4,5 @@ CMAKE:
 	http://derekmolloy.ie/hello-world-introductions-to-cmake/
 	https://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art026
 
+Workload: 
+	https://www.nutanix.com/theforecastbynutanix/technology/rethinking-workload-for-the-clou-era

@@ -4,8 +4,13 @@ using namespace workload;
 
 Workload::Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bool async)
 {
-	this->runningSimulation.store(false);
-	this->asyncWorkload     = async;
+	if(workloadPercentage < 0 || workloadPercentage > 100)
+	{
+		throw std::invalid_argument("workload cannot be less than 0 or higher than 100");
+	}
+	runningSimulation.store(false);
+	startSimulation.store(false);
+	asyncWorkload = async;
 	std::cout << "-- We will create " << deviceThreads << " Threads" << std::endl;
 	for (unsigned int i = 0; i < deviceThreads; i++)
 	{
@@ -15,30 +20,40 @@ Workload::Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bo
 
 void Workload::startWL() 
 {
-	this->runningSimulation.store(true);
+	if(static_cast<unsigned int>(threadList.size()) == deviceThreads)
+	{
+		std::cout << "All threads have been created\n";
+		startSimulation.store(true);
+		runningSimulation.store(true);
+	}
+	else
+	{
+		throw std::runtime_error("Some threads could not be created");
+	}
 }
 void Workload::stopWL() 
 {
-	this->runningSimulation.store(false);
+	std::cout << "Stopping simulation\n";
+	runningSimulation.store(false);
 }
 
 void Workload::simulateWorkload(unsigned int workload, unsigned int randomize, unsigned int* WLPriority)
 {
-	unsigned int a         = 0;
+	while(!startSimulation.load())
+	{
+		//Busy waiting for all threads to be created
+	}
+	unsigned int countingVar = 0;
 	long long    sleepTime = (long long)(500 - workload * 5);
 	std::cout << "we are in the func" << std::endl;
-	if (asyncWorkload)
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(randomize * 50));
-	}
-	while (runningSimulation.load())
+	while(runningSimulation.load())
 	{
 		auto start = std::chrono::system_clock::now();
 		std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
 		auto end = std::chrono::system_clock::now();
 		while (std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() < 500)
 		{
-			a++;
+			countingVar++;
 			end = std::chrono::system_clock::now();
 		}
 	}
