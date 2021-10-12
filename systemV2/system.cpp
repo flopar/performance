@@ -1,5 +1,6 @@
 #include "system.hpp"
 
+#ifdef __linux__
 std::string readCPUTime(int cpu)
 {
 	std::string text;
@@ -24,8 +25,8 @@ std::vector<uint64_t> returnData(int cpu)
 {
 	// CPU 0 -> System
 	std::size_t searchPos = 5, strEndPos = 0;
-	// If the we want a certain cpu's data we need to set the search position to 4 because
-	// of the file's layout
+	// If the we want a certain cpu's data we need to set the search position to 4 because of
+	// of the name "cpuN", where 4 is the position of the first space in the entry
 	if(cpu > std::thread::hardware_concurrency())
 	{
 		throw std::range_error("Given CPU is out of range");
@@ -51,6 +52,8 @@ std::vector<uint64_t> returnData(int cpu)
 		return data;
 	}
 }
+#endif
+
 
 int getProcessTimes(uint64_t& kernel, uint64_t& user)
 {
@@ -61,17 +64,19 @@ int getProcessTimes(uint64_t& kernel, uint64_t& user)
 	}
 	user = static_cast<uint64_t>(time.tms_utime);
 	kernel = static_cast<uint64_t>(time.tms_stime);
-	// If we throw errors, do we still need to return a value?
 	return 0;
 }
 
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 {
-
 	std::vector<uint64_t> measurements;
-	measurements = returnData(0);
+	measurements = returnData(0);	
+	// we have to add the values because measurements[0] are only the normal processes in user
+	// mode, while measurements[1] are niced processes in user mode. Togheter they represent the
+	// whole user mode
 	user = measurements[0] + measurements[1];
 	kernel = measurements[2];
+	// not idle vorkommt????
 	idle = measurements[3];
 	return 0;
 }

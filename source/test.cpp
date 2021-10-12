@@ -7,7 +7,7 @@ int main(){
 	{
 		workload::Workload worky(10,NULL,true);
 		worky.startWL();
-		calculateAndShowLoad(60);	
+		calculateAndShowLoad(5);	
 		worky.stopWL();
 		worky.finishWorkload();
 	}

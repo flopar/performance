@@ -7,6 +7,10 @@
 #include <ctime>
 #include <map>
 #include <chrono>
+
+// For testing purposes
+#include <unistd.h>
+
 namespace workload
 {
 class Workload
