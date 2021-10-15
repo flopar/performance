@@ -7,10 +7,15 @@
 #include <ctime>
 #include <map>
 #include <chrono>
+#include <string.h>
+#include <sstream>
 
+#ifdef __linux__
 // For testing purposes
 #include <unistd.h>
-
+#elif WIN32
+#include <windows.h>
+#endif
 namespace workload
 {
 class Workload

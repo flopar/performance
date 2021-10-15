@@ -1,4 +1,4 @@
-add_library(workload SHARED workload.cpp workload.hpp)
+add_library(workload STATIC workload.cpp workload.hpp)
 
 # Enable -pthread and -lthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)

@@ -14,8 +14,6 @@ Workload::Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bo
 	std::cout << "-- We will create " << deviceThreads << " Threads" << std::endl;
 	for (unsigned int i = 0; i < deviceThreads; i++)
 	{
-		// check if we can spare the keyword this when making the simulateWorkload func
-		// static
 		threadList.emplace_back(&Workload::simulateWorkload, this, workloadPercentage, i, WLPriority);
 	}
 }
@@ -75,7 +73,9 @@ void Workload::finishWorkload()
 		else
 		{
 			std::hash<std::thread::id> hasher;
-			throw std::invalid_argument("Thread with ID: " + std::to_string(static_cast<uint64_t>(hasher(threadList[i].get_id()))) + " is not joinable\n");
+			std::ostringstream ss;
+			ss << static_cast<uint64_t>(hasher(threadList[i].get_id()));
+			throw std::invalid_argument("Thread with ID: " + ss.str() + " is not joinable\n");
 		}
 	}
 	std::cout << "-- Workload threads finished\n";

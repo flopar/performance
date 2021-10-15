@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+message("System: ${CMAKE_SYSTEM_NAME}")
 project(performance	VERSION 1.0
 			DESCRIPTION "Bachelor Thesis - performance"
 			LANGUAGES CXX)
