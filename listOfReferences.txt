@@ -6,3 +6,14 @@ CMAKE:
 
 Workload: 
 	https://www.nutanix.com/theforecastbynutanix/technology/rethinking-workload-for-the-clou-era
+
+Threads:
+	https://www.thegeekstuff.com/2013/11/linux-process-and-threads/
+	https://docs.oracle.com/cd/E19455-01/806-5257/6je9h032e/index.html#mtintro-69945
+
+Schedueling:
+	https://man7.org/linux/man-pages/man7/sched.7.html
+
+CPU-Mask(Affinity):
+	https://man7.org/linux/man-pages/man2/sched_setaffinity.2.html
+	https://learning.oreilly.com/library/view/linux-kernel-programming/9781789953435/
