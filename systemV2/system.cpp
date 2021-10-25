@@ -27,7 +27,7 @@ std::vector<uint64_t> returnData(int cpu)
 {
 	// CPU 0 -> System
 	std::size_t searchPos = 5, strEndPos = 0;
-	// If the we want a certain cpu's data we need to set the search position to 4 because of
+	// If we want a certain cpu's data we need to set the search position to 4 because of
 	// of the name "cpuN", where 4 is the position of the first space in the entry
 	if(cpu > std::thread::hardware_concurrency())
 	{
@@ -54,6 +54,92 @@ std::vector<uint64_t> returnData(int cpu)
 		return data;
 	}
 }
+
+int increaseProcessPriority(int pid=0)
+{
+	int retVal = 0, niceValue = 0;
+	errno = 0;
+	niceValue = getpriority(PRIO_PROCESS, pid);
+	if(niceValue == -1)
+	{
+		if(errno != 0)
+		{
+			throw std::runtime_error("Couldn't get the nice value of process");
+			return -1;
+		}
+		else
+		{
+			retVal = setpriority(PRIO_PROCESS, pid, -2);
+			if(retVal == -1)
+			{
+				throw std::runtime_error("Couldn't set a new nice value to the given process");
+				return -1;
+			}
+		}
+	}
+	else
+	{
+		if(niceValue <= -19)
+		{
+			throw std::runtime_error("Can't increase the process's priority. The max priority is already set");
+			return -1;
+		}
+		else
+		{
+			niceValue--;
+			retVal = setpriority(PRIO_PROCESS, pid, niceValue);
+			if(retVal == -1)
+			{
+				throw std::runtime_error("Couldn't set a new nice value to the given process");
+				return -1;
+			}
+		}
+	}
+}
+
+int decreaseProcessPriority(int pid=0)
+{
+	int retVal = 0, niceValue = 0;
+	errno = 0;
+	niceValue = getpriority(PRIO_PROCESS, pid);
+	if(niceValue == -1)
+	{
+		if(errno != 0)
+		{
+			throw std::runtime_error("Couldn't get the nice value of process");
+			return -1;
+		}
+		else
+		{
+			retVal = setpriority(PRIO_PROCESS, pid, 0);
+			if(retVal == -1)
+			{
+				throw std::runtime_error("Couldn't set a new nice value to the given process");
+				return -1;
+			}
+		}
+	}
+	else
+	{
+		if(niceValue >= 20)
+		{
+			throw std::runtime_error("Can't decrease the process's priority. The min priority is already set");
+			return -1;
+		}
+		else
+		{
+			niceValue++;
+			retVal = setpriority(PRIO_PROCESS, pid, niceValue);
+			if(retVal == -1)
+			{
+				throw std::runtime_error("Couldn't set a new nice value to the given process");
+				return -1;
+			}
+		}
+	}
+}
+
+
 #endif
 #ifdef WIN32
 // This is necessary because Filetime is a struct with two 32-bit attributes
@@ -83,6 +169,8 @@ int checkCPUAvailability(HANDLE& proc)
 		return 0;
 	}
 }
+
+// this function needs rethinking....
 int setCPUAvailability(HANDLE& proc, uint64_t mask)
 {
 	BOOL ret = SetProcessAffinityMask(proc, mask);
@@ -252,17 +340,72 @@ int getProcessTimes(uint64_t& kernel, uint64_t& user)
 #endif
 }
 
+
+
+uint64_t getSpecificCPUTime(int which)
+{
+	uint64_t kernel ,idle, user;
+	kernel = idle = user = 0;
+	int retval = getCPUTimes(std::ref(kernel), std::ref(user), std::ref(idle));
+	if(retval)
+	{
+		throw std::invalid_argument("Couldn't get specific time");	
+		return -1;
+	}
+	else
+	{
+		if(which == KERNEL_TIME)
+		{
+			return kernel;
+		}
+		if(which == USER_TIME)
+		{
+			return user;
+		}
+		if(which == IDLE_TIME)
+		{
+			return idle;
+		}
+	}
+}
+
+
+/*---------------------------------------------
+ * This function returns the given time in ms *
+ ---------------------------------------------*/
+int convertTime(uint64_t timeToConvert)
+{
+#ifdef __linux__
+	// get system frequency => 1/ret pro sec
+	long ret = sysconf(_SC_CLK_TCK);
+	if(ret!=-1)
+	{
+		std::cout << "sys freq " << ret << std::endl;
+		return static_cast<int>(timeToConvert/ret);		
+	}
+	else
+	{
+		throw std::runtime_error("Failed to get system's frequency");
+		return -1;
+	}
+#elif WIN32
+	// the time represents timeToConvert in 100ns intervals
+	return static_cast<int>(timeToConvert*0.1);	
+#else
+// MacOS not implemented yet
+#endif
+}
+
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 {
 #ifdef __linux__
 	std::vector<uint64_t> measurements;
 	measurements = returnData(0);	
 	// we have to add the values because measurements[0] are only the normal processes in user
-	// mode, while measurements[1] are niced processes in user mode. Togheter they represent the
+	// mode, while measurements[1] are niced processes in user mode. Together they represent the
 	// whole user mode
 	user = measurements[0] + measurements[1];
 	kernel = measurements[2];
-	// not idle vorkommt????
 	idle = measurements[3];
 	return 0;
 #elif WIN32
@@ -281,6 +424,46 @@ int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 // MacOS not implemented yet
 #endif
 }
+
+template<typename type> int writeRuntimeStats(type list, std::string statName)
+{
+	std::ofstream statisticsFile;
+	statisticsFile.open("runtime_statistics.csv", std::ios::in | std::ios::app | std::ios::binary);
+	if(!statisticsFile.is_open())
+	{
+		throw std::runtime_error("Couldn't open file to write");
+		return -1;
+	}
+	statisticsFile << statName << std::endl;
+	for(auto x : list)
+	{
+		if(x != list.back())
+		{
+			statisticsFile << x << ",";
+		}
+		else
+		{
+			statisticsFile << x << std::endl;
+		}
+	}
+	statisticsFile.close();
+	return 0;
+}
+
+template<typename type> int writeOverallStats(type stat, std::string statName)
+{
+	std::ofstream statisticsFile;
+	statisticsFile.open("overall_stats.csv", std::ios::in | std::ios::app | std::ios::binary);
+	if(!statisticsFile.is_open())
+	{
+		throw std::runtime_error("Couldn't open the file to write");
+		return -1;
+	}
+	statisticsFile << statName << ": " << stat << std::endl; 
+	statisticsFile.close();
+	return 0;
+}
+
 int calculateAndShowLoad(double duration)
 {
 	// Error Checking Value
@@ -300,17 +483,24 @@ int calculateAndShowLoad(double duration)
 	double process_workload = 0, process_workload_sum = 0;
 	double average = duration;
 	double avg_process_wl = 0, avg_system_wl = 0;
+	
+	std::vector<double> processWLList, systemWLList;
+
+
+	// For not idle vor
+	auto startDuration = std::chrono::system_clock::now();
+	int pre_notIdle = convertTime(getSpecificCPUTime(IDLE_TIME));
 
 	while(duration)
 	{
 		check_return_val += getCPUTimes(std::ref(pre_kernel_time), std::ref(pre_user_time), std::ref(pre_idle_time));
 		check_return_val += getProcessTimes(std::ref(pre_process_kernel_time), std::ref(pre_process_user_time));
-		if(check_return_val == 0)
+		if(!check_return_val)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			check_return_val += getCPUTimes(std::ref(kernel_time), std::ref(user_time), std::ref(idle_time));
 			check_return_val += getProcessTimes(std::ref(process_kernel_time), std::ref(process_user_time));
-			if(check_return_val == 0)
+			if(!check_return_val)
 			{
 				// CPU Times
 				kernel_time -= pre_kernel_time;
@@ -331,6 +521,8 @@ int calculateAndShowLoad(double duration)
 #endif
 				process_workload_sum += process_workload;
 				system_workload_sum += system_workload;
+				processWLList.push_back(process_workload);
+				systemWLList.push_back(system_workload);
 				std::cout << "Current process workload " << process_workload << std::endl;
 				std::cout << "Current system workload " << system_workload << std::endl;
 				duration--;
@@ -348,8 +540,24 @@ int calculateAndShowLoad(double duration)
 			// what if we fail from the beggining? -> can we even fail? make sense? idk
 		}
 	}
+	writeRuntimeStats(processWLList, "ProcessWorkload");
+	writeRuntimeStats(systemWLList, "SystemWorkload");
+	auto totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startDuration).count();
+	if(pre_notIdle != -1)
+	{
+		int notIdle = convertTime(getSpecificCPUTime(IDLE_TIME));
+		notIdle -= pre_notIdle;
+		std::cout << "idle time " << notIdle << "ms" << std::endl;
+		notIdle = totalDuration - notIdle;
+		std::cout << "The amount of time the processor has not been idle: " << notIdle << "ms" << std::endl;
+		writeOverallStats(notIdle, "NotIdleTime");
+
+	}
+	std::cout << "total duration " << totalDuration << std::endl;		
 	avg_system_wl = system_workload_sum / average;
 	avg_process_wl = process_workload_sum / average;
+	writeOverallStats(avg_system_wl, "AverageSystemWorkload");
+	writeOverallStats(avg_process_wl, "AverageProcessWorkload");
 	std::cout << "Average process workload " << avg_process_wl << std::endl;
 	std::cout << "Average system workload " << avg_system_wl << std::endl;
 	return 0;
