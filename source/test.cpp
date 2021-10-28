@@ -17,6 +17,8 @@ int main(){
 	std::cout << std::endl << std::endl;
 
 
+
+	// Policies
 	std::cout << "sched_getscheduler " << sched_getscheduler(0) << std::endl;
 	std::cout << "Errno: " << errno << std::endl;
 	std::cout << "FIFO: " << SCHED_FIFO << std::endl;
@@ -24,6 +26,10 @@ int main(){
 	std::cout << "OTHER: " << SCHED_OTHER << std::endl;
 	std::cout << "IDLE: " << SCHED_IDLE << std::endl;
 	std::cout << "BATCH: " << SCHED_BATCH << std::endl;
+	
+	// With sched_setscheduler you can change the policy of that thread (and its priortiy if the
+	// given policy is a realtime policy like RR or FIFO)
+*/
 	errno = 0;
 	struct sched_attr prio;
 	std::cout << "get_attr " << syscall(SYS_sched_getattr, 0, &prio, sizeof(prio), 0) << std::endl;
@@ -66,9 +72,9 @@ int main(){
 	//std::cout << "pthread_getsched " << pthread_getschedparam(
 
 
-*/
 
-	
+
+/*	
 	workload::Workload worky(10, NULL, true);
 	try
 	{
@@ -83,5 +89,6 @@ int main(){
 		worky.stopWL();
 		worky.finishWorkload();
 	}
+	*/
 	return 0;
 }

@@ -1,7 +1,5 @@
 #include "system.hpp"
 
-
-
 #ifdef __linux__
 std::string readCPUTime(int cpu)
 {
@@ -55,7 +53,7 @@ std::vector<uint64_t> returnData(int cpu)
 	}
 }
 
-int increaseProcessPriority(int pid=0)
+int increaseProcessNiceValue(int pid=0)
 {
 	int retVal = 0, niceValue = 0;
 	errno = 0;
@@ -97,7 +95,7 @@ int increaseProcessPriority(int pid=0)
 	}
 }
 
-int decreaseProcessPriority(int pid=0)
+int decreaseProcessNiceValue(int pid=0)
 {
 	int retVal = 0, niceValue = 0;
 	errno = 0;
@@ -139,8 +137,32 @@ int decreaseProcessPriority(int pid=0)
 	}
 }
 
+void printPolicy(int policy)
+{
+	switch(policy)
+	{
+		case SCHED_FIFO:
+			std::cout << "Current scheduling policy is SCHED_FIFO";
+			break;
+		case SCHED_RR:
+			std::cout << "Current scheduling policy is SCHED_RR";
+			break;
+		case SCHED_IDLE:
+			std::cout << "Current scheduling policy is SCHED_IDLE";
+			break;
+		case SCHED_OTHER:
+			std::cout << "Current scheduling policy is SCHED_OTHER";
+			break;
+		case SCHED_BATCH:
+			std::cout << "Current scheduling policy is SCHED_BATCH";
+			break;
+		default:
+			break;
+	}
+}
 
 #endif
+
 #ifdef WIN32
 // This is necessary because Filetime is a struct with two 32-bit attributes
 uint64_t mergeFILETIME(FILETIME ft)
@@ -247,10 +269,17 @@ int decreaseSchedClass()
 #endif
 
 
-int increaseThreadPrio()
+int increaseThreadPrio(int id=0)
 {
 #ifdef WIN32
-	int currThreadPrio = GetThreadPriority(GetCurrentThread());
+	if(id == 0)
+	{
+		int currThreadPrio = GetThreadPriority(GetCurrentThread());
+	}
+	else
+	{
+		int currThreadPrio = GetThreadPriority(id);
+	}
 	std::cout << "Current thread prio: " << currThreadPrio << std::endl;
 	if (currThreadPrio == threadPrioList.back())
 	{
@@ -266,7 +295,14 @@ int increaseThreadPrio()
 			if (*iterator == currThreadPrio)
 			{
 				index++;
-				SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
+				if(id == 0)
+				{
+					SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
+				}
+				else
+				{
+					SetThreadPriority(id, threadPrioList.at(index));
+				}
 				std::cout << "New thread Prio: " << GetThreadPriority(GetCurrentThread()) << std::endl;
 				return 0;
 			}
@@ -276,15 +312,61 @@ int increaseThreadPrio()
 		return 1;
 	}
 #elif __linux__
-
+	int currPolicy = sched_getscheduler(id);
+	if(currPolicy == -1)
+	{
+		throw std::runtime_error("Couldn't get the given thread's policy (decreaseThreadPrio)");
+		return 1;
+	}
+	else
+	{
+		if(currPolicy != SCHED_FIFO || currPolicy != SCHED_RR)
+		{
+			printPolicy(currPolicy);
+			throw std::runtime_error("You cannot change the priority of the given thread while this policy is set!");
+			return 1;
+		}
+		else
+		{
+			printPolicy(currPolicy);
+			struct sched_attr prio;
+			errno = 0;
+			int max_prio = sched_get_priority_max(currPolicy);
+			if(!syscall(SYS_sched_getattr, id, &prio, sizeof(prio), 0))
+			{
+				if(prio.sched_priority == max_prio)
+				{
+					throw::std::runtime_error("Max priority already set!");
+					return 1;
+				}
+				else
+				{
+					prio.sched_priority++;
+					if(syscall(SYS_sched_setattr, id, &prio, 0))
+					{
+						throw std::runtime_error("Couldn't decrease priority of thread(decreaseThreadPrio)");
+						return 1;
+					}
+				}
+			}
+		}
+	}
 #endif
 }
 
-int decreaseThreadPrio()
+// make additional argument with the id of a thread
+int decreaseThreadPrio(int id=0)
 {
 #ifdef WIN32
-	int currThreadPrio = GetThreadPriority(GetCurrentThread());
-	std::cout << "Current thread prio: " << currThreadPrio << std::endl;
+	if(id == 0)
+	{
+		int currThreadPrio = GetThreadPriority(GetCurrentThread());
+	}
+	else
+	{
+		int currThreadPrio = GetThreadPriority(tid);
+	}
+	std::cout << "Thread prio: " << currThreadPrio << std::endl;
 	if (currThreadPrio == threadPrioList.front())
 	{
 		throw std::invalid_argument("Thread Priority cannot be decreased. Lowest priority is already set!");
@@ -299,7 +381,14 @@ int decreaseThreadPrio()
 			if (*iterator == currThreadPrio)
 			{
 				index--;
-				SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
+				if(id == 0)
+				{
+					SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
+				}
+				else
+				{
+					SetThreadPriority(id, threadPrioList.at(index));
+				}
 				std::cout << "New thread Prio: " << GetThreadPriority(GetCurrentThread()) << std::endl;
 				return 0;
 			}
@@ -309,7 +398,46 @@ int decreaseThreadPrio()
 		return 1;
 	}
 #elif __linux__
-
+	errno = 0;
+	int currPolicy = sched_getscheduler(id);
+	if(currPolicy == -1)
+	{
+		throw std::runtime_error("Couldn't get the given thread's policy (decreaseThreadPrio)");
+		return 1;
+	}
+	else
+	{
+		if(currPolicy != SCHED_FIFO || currPolicy != SCHED_RR)
+		{
+			printPolicy(currPolicy);
+			throw std::runtime_error("You cannot change the priority of the given thread while this policy is set!");
+			return 1;
+		}
+		else
+		{
+			printPolicy(currPolicy);
+			struct sched_attr prio;
+			errno = 0;
+			int min_prio = sched_get_priority_min(currPolicy);
+			if(!syscall(SYS_sched_getattr, id, &prio, sizeof(prio), 0))
+			{
+				if(prio.sched_priority == min_prio)
+				{
+					throw::std::runtime_error("Min priority already set!");
+					return 1;
+				}
+				else
+				{
+					prio.sched_priority--;
+					if(syscall(SYS_sched_setattr, id, &prio, 0))
+					{
+						throw std::runtime_error("Couldn't decrease priority of thread(decreaseThreadPrio)");
+						return 1;
+					}
+				}
+			}
+		}
+	}
 #endif
 }
 
@@ -339,8 +467,6 @@ int getProcessTimes(uint64_t& kernel, uint64_t& user)
 	return 0;
 #endif
 }
-
-
 
 uint64_t getSpecificCPUTime(int which)
 {
@@ -425,6 +551,9 @@ int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 #endif
 }
 
+/* 
+ * this function will write statistic to a csv File on if the type of "list" is an iterable object
+ */
 template<typename type> int writeRuntimeStats(type list, std::string statName)
 {
 	std::ofstream statisticsFile;
@@ -529,6 +658,8 @@ int calculateAndShowLoad(double duration)
 			}
 			else
 			{
+				// until I think of something pls don't fail!!!
+
 				// we got no failure at the beggining, but we can still fail now
 				// in case of failure we shall repeat the calls 
 				// Herr Kirchmeier: do you think is a good idea? if yes how is 1

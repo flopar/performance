@@ -120,33 +120,33 @@ else:
 
 # Create Diagramms
 # Plot the Package Diagramm
-createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Seen Packages"], dictionary["Received Packages"], dictionary["Lost Packages"], dictionary["Resent Packages"]], barLegend=["Seen Packages", "Received Packages", "Lost Packages", "Resent Packages"], name=fileName+"-PackageDiagramm", xLabel="Workload %", yLabel="Packages")
+#createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Seen Packages"], dictionary["Received Packages"], dictionary["Lost Packages"], dictionary["Resent Packages"]], barLegend=["Seen Packages", "Received Packages", "Lost Packages", "Resent Packages"], name=fileName+"-PackageDiagramm", xLabel="Workload %", yLabel="Packages")
 
 # Plot Resent Package Diagram
-plt.figure(2)
-plt.plot(dictionary["Set Workload"], dictionary["Resent Packages"])
-plt.xlabel("8-Threads-Workload %")
-plt.ylabel("Packages")
-plt.title(fileName+"-Resent Package Diagramm")
-plt.savefig(fileName+"-ResentPackageDiagramm.png") 
+#plt.figure(2)
+#plt.plot(dictionary["Set Workload"], dictionary["Resent Packages"])
+#plt.xlabel("8-Threads-Workload %")
+#plt.ylabel("Packages")
+#plt.title(fileName+"-Resent Package Diagramm")
+#plt.savefig(fileName+"-ResentPackageDiagramm.png") 
 
 # Plot Resend Commands Diagram
-plt.figure(3)
-plt.plot(dictionary["Set Workload"], dictionary["Resend Commands"])
-plt.xlabel("8-Threads-Workload %")
-plt.ylabel("Commands")
-plt.title(fileName+"-Resend Commands Diagramm")
-plt.savefig(fileName+"-ResendCommandDiagramm.png")
+#plt.figure(3)
+#plt.plot(dictionary["Set Workload"], dictionary["Resend Commands"])
+#plt.xlabel("8-Threads-Workload %")
+#plt.ylabel("Commands")
+#plt.title(fileName+"-Resend Commands Diagramm")
+#plt.savefig(fileName+"-ResendCommandDiagramm.png")
 
 # Plot Images/FrameID Diagramm
-createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Processed Images"], dictionary["Frame ID"]], barLegend=["Processed Images", "Frame ID"], name=fileName+"-ProcessedImages_FrameID_Diagramm", xLabel="8-Threads-Workload %", yLabel="Images/FrameID")
+#createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Processed Images"], dictionary["Frame ID"]], barLegend=["Processed Images", "Frame ID"], name=fileName+"-ProcessedImages_FrameID_Diagramm", xLabel="8-Threads-Workload %", yLabel="Images/FrameID")
 
 
 # Plot Block Diagramm
-createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Blocks discarded for any reason"], dictionary["Blocks discarded - no buffer available"], dictionary["Blocks skipped"]], barLegend=["Blocks discarded for any reason", "Blocks discarded - no buffer available", "blocks skipped"], name=fileName+"-BlockDiagramm", xLabel="8-Threads-Workload %", yLabel="Blocks")
+#createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Blocks discarded for any reason"], dictionary["Blocks discarded - no buffer available"], dictionary["Blocks skipped"]], barLegend=["Blocks discarded for any reason", "Blocks discarded - no buffer available", "blocks skipped"], name=fileName+"-BlockDiagramm", xLabel="8-Threads-Workload %", yLabel="Blocks")
 
 # Plot Buffer Diagramm
-createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Incomplete Buffer"], dictionary["Underrun Buffers"]], barLegend=["Incomplete Buffers", "Underrung Buffers"], name=fileName+"-BufferDiagramm", xLabel="8-Threads-Workload %", yLabel="Buffers")
+#createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Incomplete Buffer"], dictionary["Underrun Buffers"]], barLegend=["Incomplete Buffers", "Underrung Buffers"], name=fileName+"-BufferDiagramm", xLabel="8-Threads-Workload %", yLabel="Buffers")
 
 # Plot Average Workload Diagramm
-createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Average CPU Workload"], dictionary["Average Process Workload"]], barLegend=["Average CPU Workload", "Average Process Workload"], name=fileName+"-AverageWorkloadDiagramm", xLabel="8-Threads-Workload %", yLabel="Workload")
+#createBarDiagramm(xValues=dictionary["Set Workload"], yValues=[dictionary["Average CPU Workload"], dictionary["Average Process Workload"]], barLegend=["Average CPU Workload", "Average Process Workload"], name=fileName+"-AverageWorkloadDiagramm", xLabel="8-Threads-Workload %", yLabel="Workload")

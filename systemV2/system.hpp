@@ -41,9 +41,6 @@ int decreaseSchedClass();
 #include <sys/syscall.h>
 #include <unistd.h>
 
-std::string readCPUTime(int cpu);
-std::vector<uint64_t> returnData(int cpu);
-
 struct sched_attr{
 	uint32_t size;			
 	uint32_t sched_policy;
@@ -56,12 +53,22 @@ struct sched_attr{
 	uint64_t sched_period;
 };
 
+std::string readCPUTime(int cpu);
+std::vector<uint64_t> returnData(int cpu);
+void printPolicy(int policy);
+int decreaseProcessNiceValue(int pid);
+int increaseProcessNiceValue(int pid);
+
 #endif
 
-
+// Non-OS-Specific methods
+uint64_t getSpecificCPUTime(int which);
+int convertTime(uint64_t timeToConvert);
+template<typename type> int writeOverallStats(type stat, std::string statName);
+template<typename type> int writeRuntimeStats(type list, std::string statName);
 int getProcessTimes(uint64_t& kernel, uint64_t& user);
-int increaseThreadPrio();
-int decreaseThreadPrio();
+int increaseThreadPrio(int id);
+int decreaseThreadPrio(int id);
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle);
 int calculateAndShowLoad(double duration);
 
