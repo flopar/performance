@@ -75,47 +75,47 @@ labels = csvData[0]
 csvEntryLen = len(csvData[1])
 
 # Calculate the measurement's  mean values 
-for times in range(1, csvDataLen, repetitions):
-	for statistics in range(csvEntryLen):
-		for value in range(repetitions):
-			meanValue = meanValue + int(csvData[times+value][statistics])
-		meanValue = meanValue / repetitions
-		statisticMean.append(int(meanValue))
-		meanValue = 0
-	repetitionMean.append(statisticMean[:])
-	statisticMean.clear()
+#for times in range(1, csvDataLen, repetitions):
+#	for statistics in range(csvEntryLen):
+#		for value in range(repetitions):
+#			meanValue = meanValue + int(csvData[times+value][statistics])
+#		meanValue = meanValue / repetitions
+#		statisticMean.append(int(meanValue))
+#		meanValue = 0
+#	repetitionMean.append(statisticMean[:])
+#	statisticMean.clear()
 
-repetitionMeanLen = len(repetitionMean)
+#repetitionMeanLen = len(repetitionMean)
 
 # Sort the elements
-sortedEntry = []
-sortedList = []
-dictionary = {}
-for numberOfStatistics in range(csvEntryLen):
-	for numberOfValues in range(repetitionMeanLen):
-		sortedEntry.append(repetitionMean[numberOfValues][numberOfStatistics])
-	sortedList.append(sortedEntry[:])
-	dictionary[labels[numberOfStatistics]] = sortedEntry[:]
-	sortedEntry.clear()
+#sortedEntry = []
+#sortedList = []
+#dictionary = {}
+#for numberOfStatistics in range(csvEntryLen):
+#	for numberOfValues in range(repetitionMeanLen):
+#		sortedEntry.append(repetitionMean[numberOfValues][numberOfStatistics])
+#	sortedList.append(sortedEntry[:])
+#	dictionary[labels[numberOfStatistics]] = sortedEntry[:]
+#	sortedEntry.clear()
 
 # Check filepath
-separator = ""
-if filePath.find("/") != -1: 
+#separator = ""
+#if filePath.find("/") != -1: 
 	# Unix path
-	separator = "/"
-elif filePath.find("\\") != 1:
+#	separator = "/"
+#elif filePath.find("\\") != 1:
 	# Windows path
-	separator = "\\"
-else: 
+#	separator = "\\"
+#else: 
 	# File is in the same directory with the executable
-	pass
+#	pass
 
 # Get device name from path
-if separator == "":
-	fileName = fileName.rstrip(".csv")
-else:
-	split = filePath.split(separator)
-	fileName = split[len(split)-1].rstrip(".csv")
+#if separator == "":
+#	fileName = fileName.rstrip(".csv")
+#else:
+#	split = filePath.split(separator)
+#	fileName = split[len(split)-1].rstrip(".csv")
 
 
 # Create Diagramms

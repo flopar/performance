@@ -56,8 +56,9 @@ struct sched_attr{
 std::string readCPUTime(int cpu);
 std::vector<uint64_t> returnData(int cpu);
 void printPolicy(int policy);
-int decreaseProcessNiceValue(int pid);
-int increaseProcessNiceValue(int pid);
+int changePolicy(int policy, int pid);
+int decreaseProcessNiceValue(int pid=0);
+int increaseProcessNiceValue(int pid=0);
 
 #endif
 
@@ -67,8 +68,8 @@ int convertTime(uint64_t timeToConvert);
 template<typename type> int writeOverallStats(type stat, std::string statName);
 template<typename type> int writeRuntimeStats(type list, std::string statName);
 int getProcessTimes(uint64_t& kernel, uint64_t& user);
-int increaseThreadPrio(int id);
-int decreaseThreadPrio(int id);
+int increaseThreadPrio(int id=0);
+int decreaseThreadPrio(int id=0);
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle);
 int calculateAndShowLoad(double duration);
 

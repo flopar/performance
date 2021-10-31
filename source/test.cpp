@@ -30,7 +30,7 @@ int main(){
 	// With sched_setscheduler you can change the policy of that thread (and its priortiy if the
 	// given policy is a realtime policy like RR or FIFO)
 */
-	errno = 0;
+/*	errno = 0;
 	struct sched_attr prio;
 	std::cout << "get_attr " << syscall(SYS_sched_getattr, 0, &prio, sizeof(prio), 0) << std::endl;
 	std::cout << "Errno " << errno << std::endl << std::endl;
@@ -73,22 +73,45 @@ int main(){
 
 
 
-
-/*	
-	workload::Workload worky(10, NULL, true);
+*/
+	
+	workload::Workload worky(100, NULL, true);
 	try
 	{
+		//worky.startWL();
+		changePolicy(SCHED_RR,0);
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		//increaseThreadPrio();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		increaseProcessNiceValue();
+		
 		worky.startWL();
-		calculateAndShowLoad(10);	
+		calculateAndShowLoad(30);	
 		worky.stopWL();
 		worky.finishWorkload();
 	}
 	catch(const std::exception& e)
 	{
 		std::cout << e.what() << std::endl;
-		worky.stopWL();
-		worky.finishWorkload();
+		std::cout << errno << std::endl;
+		//worky.stopWL();
+		//worky.finishWorkload();
 	}
-	*/
 	return 0;
 }

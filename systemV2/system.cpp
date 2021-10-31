@@ -53,7 +53,7 @@ std::vector<uint64_t> returnData(int cpu)
 	}
 }
 
-int increaseProcessNiceValue(int pid=0)
+int increaseProcessNiceValue(int pid)
 {
 	int retVal = 0, niceValue = 0;
 	errno = 0;
@@ -95,7 +95,7 @@ int increaseProcessNiceValue(int pid=0)
 	}
 }
 
-int decreaseProcessNiceValue(int pid=0)
+int decreaseProcessNiceValue(int pid)
 {
 	int retVal = 0, niceValue = 0;
 	errno = 0;
@@ -142,25 +142,53 @@ void printPolicy(int policy)
 	switch(policy)
 	{
 		case SCHED_FIFO:
-			std::cout << "Current scheduling policy is SCHED_FIFO";
+			std::cout << "Current scheduling policy is SCHED_FIFO\n";
 			break;
 		case SCHED_RR:
-			std::cout << "Current scheduling policy is SCHED_RR";
+			std::cout << "Current scheduling policy is SCHED_RR\n";
 			break;
 		case SCHED_IDLE:
-			std::cout << "Current scheduling policy is SCHED_IDLE";
+			std::cout << "Current scheduling policy is SCHED_IDLE\n";
 			break;
 		case SCHED_OTHER:
-			std::cout << "Current scheduling policy is SCHED_OTHER";
+			std::cout << "Current scheduling policy is SCHED_OTHER\n";
 			break;
 		case SCHED_BATCH:
-			std::cout << "Current scheduling policy is SCHED_BATCH";
+			std::cout << "Current scheduling policy is SCHED_BATCH\n";
 			break;
 		default:
 			break;
 	}
 }
 
+int changePolicy(int policy, int pid)
+{
+	struct sched_attr curr;
+	errno = 0;
+	if(!syscall(SYS_sched_getattr, pid, &curr, sizeof(curr), 0))
+	{
+		printPolicy(curr.sched_policy);
+		printPolicy(policy);
+		curr.sched_policy = policy;
+		curr.sched_priority = 99;
+		if(!syscall(SYS_sched_setattr, pid, &curr, 0))
+		{
+			std::cout << "Current policy changed" << std::endl;
+		}
+		else
+		{
+			throw std::runtime_error("Couldn't change policy\n");
+			std::cout << "Errno " << errno << std::endl;
+			return 1;
+		}
+	}
+	else
+	{
+		throw std::runtime_error("Could not get current attributes of the current policy");
+		std::cout << "Errno " << errno << std::endl;
+		return 1;
+	}
+}
 #endif
 
 #ifdef WIN32
@@ -269,7 +297,7 @@ int decreaseSchedClass()
 #endif
 
 
-int increaseThreadPrio(int id=0)
+int increaseThreadPrio(int id)
 {
 #ifdef WIN32
 	if(id == 0)
@@ -355,7 +383,7 @@ int increaseThreadPrio(int id=0)
 }
 
 // make additional argument with the id of a thread
-int decreaseThreadPrio(int id=0)
+int decreaseThreadPrio(int id)
 {
 #ifdef WIN32
 	if(id == 0)
@@ -563,7 +591,7 @@ template<typename type> int writeRuntimeStats(type list, std::string statName)
 		throw std::runtime_error("Couldn't open file to write");
 		return -1;
 	}
-	statisticsFile << statName << std::endl;
+	statisticsFile << statName << ",";
 	for(auto x : list)
 	{
 		if(x != list.back())
@@ -572,6 +600,7 @@ template<typename type> int writeRuntimeStats(type list, std::string statName)
 		}
 		else
 		{
+			std::cout << "newline at " << list.back() << std::endl;
 			statisticsFile << x << std::endl;
 		}
 	}
