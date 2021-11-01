@@ -296,17 +296,17 @@ int decreaseSchedClass()
 
 #endif
 
-
-int increaseThreadPrio(int id)
-{
 #ifdef WIN32
-	if(id == 0)
+int increaseThreadPrio(HANDLE id)
+{
+	int currThreadPrio;
+	if (id == 0)
 	{
-		int currThreadPrio = GetThreadPriority(GetCurrentThread());
+		currThreadPrio = GetThreadPriority(GetCurrentThread());
 	}
 	else
 	{
-		int currThreadPrio = GetThreadPriority(id);
+		currThreadPrio = GetThreadPriority(id);
 	}
 	std::cout << "Current thread prio: " << currThreadPrio << std::endl;
 	if (currThreadPrio == threadPrioList.back())
@@ -323,7 +323,7 @@ int increaseThreadPrio(int id)
 			if (*iterator == currThreadPrio)
 			{
 				index++;
-				if(id == 0)
+				if (id == 0)
 				{
 					SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
 				}
@@ -339,7 +339,10 @@ int increaseThreadPrio(int id)
 		}
 		return 1;
 	}
+}
 #elif __linux__
+int increaseThreadPrio(int id)
+{
 	int currPolicy = sched_getscheduler(id);
 	if(currPolicy == -1)
 	{
@@ -383,16 +386,17 @@ int increaseThreadPrio(int id)
 }
 
 // make additional argument with the id of a thread
-int decreaseThreadPrio(int id)
-{
 #ifdef WIN32
-	if(id == 0)
+int decreaseThreadPrio(HANDLE id)
+{
+	int currThreadPrio;
+	if (id == 0)
 	{
-		int currThreadPrio = GetThreadPriority(GetCurrentThread());
+		currThreadPrio = GetThreadPriority(GetCurrentThread());
 	}
 	else
 	{
-		int currThreadPrio = GetThreadPriority(tid);
+		currThreadPrio = GetThreadPriority(id);
 	}
 	std::cout << "Thread prio: " << currThreadPrio << std::endl;
 	if (currThreadPrio == threadPrioList.front())
@@ -409,7 +413,7 @@ int decreaseThreadPrio(int id)
 			if (*iterator == currThreadPrio)
 			{
 				index--;
-				if(id == 0)
+				if (id == 0)
 				{
 					SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
 				}
@@ -425,7 +429,10 @@ int decreaseThreadPrio(int id)
 		}
 		return 1;
 	}
+}
 #elif __linux__
+int decreaseThreadPrio(int id)
+{
 	errno = 0;
 	int currPolicy = sched_getscheduler(id);
 	if(currPolicy == -1)
@@ -466,8 +473,9 @@ int decreaseThreadPrio(int id)
 			}
 		}
 	}
-#endif
 }
+#endif
+
 
 int getProcessTimes(uint64_t& kernel, uint64_t& user)
 {

@@ -78,8 +78,7 @@ int main(){
 	workload::Workload worky(100, NULL, true);
 	try
 	{
-		//worky.startWL();
-		changePolicy(SCHED_RR,0);
+		/*changePolicy(SCHED_RR, 0);
 		increaseProcessNiceValue();
 		increaseProcessNiceValue();
 		increaseProcessNiceValue();
@@ -100,7 +99,13 @@ int main(){
 		increaseProcessNiceValue();
 		increaseProcessNiceValue();
 		increaseProcessNiceValue();
-		
+		*/
+		increaseSchedClass();
+		increaseSchedClass();
+		increaseSchedClass();
+		increaseSchedClass();
+		increaseSchedClass();
+
 		worky.startWL();
 		calculateAndShowLoad(30);	
 		worky.stopWL();
