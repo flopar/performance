@@ -21,17 +21,19 @@ namespace workload
 class Workload
 {
   private:
-      std::vector<std::thread> threadList;
-      std::atomic_bool        runningSimulation, startSimulation;
+      std::vector<std::thread> m_threadList;
+      std::atomic_bool m_runningSimulation, m_startSimulation;
+      std::atomic<uint32_t> m_workload;
       // Device dependable
-      unsigned int             deviceThreads = std::thread::hardware_concurrency();
-      bool                     asyncWorkload;
+      unsigned int             m_deviceThreads = std::thread::hardware_concurrency();
+      bool                     m_asyncWorkload;
 
   public:
       Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bool async);
       ~Workload() = default;
       void finishWorkload();
-      void simulateWorkload(unsigned int workload, unsigned int randomize, unsigned int* WLPriority);
+      void simulateWorkload(unsigned int randomize, unsigned int* WLPriority);
+      void setWorkload(uint32_t workload);
 
       // Simulation switch
       void startWL();

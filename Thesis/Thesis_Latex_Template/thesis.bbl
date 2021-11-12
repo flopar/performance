@@ -1,0 +1,67 @@
+\begin{thebibliography}{10}
+
+\bibitem{8389562}
+Karuturi Sneha and Gowda~M Malle.
+\newblock Research on software testing techniques and software automation
+  testing tools.
+\newblock In {\em 2017 International Conference on Energy, Communication, Data
+  Analytics and Soft Computing (ICECDS)}, pages 77--81, 2017.
+
+\bibitem{GMI}
+Shubhangi~Yadav Preeti~Wadhwani.
+\newblock {Software Market Insights} software testing market.
+\newblock
+  \url{https://www.gminsights.com/industry-analysis/software-testing-market},
+  September 2021.
+\newblock Accessed: 2021-11-06.
+
+\bibitem{10.1145/1807128.1807153}
+George Candea, Stefan Bucur, and Cristian Zamfir.
+\newblock Automated software testing as a service.
+\newblock In {\em Proceedings of the 1st ACM Symposium on Cloud Computing},
+  SoCC '10, pages 155--160, New York, NY, USA, 2010. Association for Computing
+  Machinery.
+
+\bibitem{8822082}
+Kevin~J. Valle-G{\'{o}}mez, Pedro Delgado-P{\'{e}}rez, Inmaculada Medina-Bulo,
+  and Jos{\'{e}} Magallanes-Fern{\'{a}}ndez.
+\newblock Software testing: Cost reduction in industry 4.0.
+\newblock In {\em 2019 IEEE/ACM 14th International Workshop on Automation of
+  Software Test (AST)}, pages 69--70, 2019.
+
+\bibitem{10.1145/1010773.1010774}
+Edward~F. Miller.
+\newblock Some statistics from the software testing service.
+\newblock {\em SIGSOFT Softw. Eng. Notes}, 4(1):8--11, January 1979.
+
+\bibitem{10.1007/978-981-10-8848-3_46}
+Vasundhara Bhatia, Abhishek Singhal, Abhay Bansal, and Neha Prabhakar.
+\newblock A review of software testing approaches in object-oriented and
+  aspect-oriented systems.
+\newblock In M.~N. Hoda, Naresh Chauhan, S.~M.~K. Quadri, and Praveen~Ranjan
+  Srivastava, editors, {\em Software Engineering}, pages 487--496, Singapore,
+  2019. Springer Singapore.
+
+\bibitem{6724273}
+Vishal Anand and Deepanker Saxena.
+\newblock Comparative study of modern web browsers based on their performance
+  and evolution.
+\newblock In {\em 2013 IEEE International Conference on Computational
+  Intelligence and Computing Research}, pages 1--5, 2013.
+
+\bibitem{CppRef}
+{Cpp Reference} list of c++ standard library headers.
+\newblock \url{https://en.cppreference.com/w/cpp/header}.
+\newblock Accessed: 2021-11-06.
+
+\bibitem{Jenkins}
+Jenkins.
+\newblock \url{https://www.jenkins.io/}.
+\newblock Accessed: 2021-11-09.
+
+\bibitem{GitLab}
+Gitlab.
+\newblock \url{https://about.gitlab.com/}.
+\newblock Accessed: 2021-11-09.
+
+\end{thebibliography}

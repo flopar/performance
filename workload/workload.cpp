@@ -1,4 +1,5 @@
 #include "workload.hpp"
+#include "system.hpp"
 
 using namespace workload;
 
@@ -8,23 +9,33 @@ Workload::Workload(unsigned int workloadPercentage, unsigned int* WLPriority, bo
 	{
 		throw std::invalid_argument("workload cannot be less than 0 or higher than 100");
 	}
-	runningSimulation.store(false);
-	startSimulation.store(false);
-	asyncWorkload = async;
-	std::cout << "-- We will create " << deviceThreads << " Threads" << std::endl;
-	for (unsigned int i = 0; i < deviceThreads; i++)
+	m_runningSimulation.store(false);
+	m_startSimulation.store(false);
+	m_asyncWorkload = async;
+	std::cout << "-- Checking system...\n";
+	double currentWorkload = calculateSystemLoad(10000);
+	if(currentWorkload != -1)
 	{
-		threadList.emplace_back(&Workload::simulateWorkload, this, workloadPercentage, i, WLPriority);
+		std::cout << "-- Current system workload: " << currentWorkload << std::endl;
+	}
+	m_workload.store(workloadPercentage);
+	std::cout << "-- We will create " << m_deviceThreads << " Threads" << std::endl;
+	for (unsigned int i = 0; i < m_deviceThreads; i++)
+	{
+		m_threadList.emplace_back(&Workload::simulateWorkload, this, i, WLPriority);
 	}
 }
-
+void Workload::setWorkload(uint32_t workload)
+{
+	m_workload.store(workload);
+}
 void Workload::startWL() 
 {
-	if(static_cast<unsigned int>(threadList.size()) == deviceThreads)
+	if(static_cast<unsigned int>(m_threadList.size()) == m_deviceThreads)
 	{
 		std::cout << "All threads have been created\n";
-		startSimulation.store(true);
-		runningSimulation.store(true);
+		m_startSimulation.store(true);
+		m_runningSimulation.store(true);
 	}
 	else
 	{
@@ -34,21 +45,22 @@ void Workload::startWL()
 void Workload::stopWL() 
 {
 	std::cout << "Stopping simulation\n";
-	runningSimulation.store(false);
+	m_runningSimulation.store(false);
 }
 
-void Workload::simulateWorkload(unsigned int workload, unsigned int randomize, unsigned int* WLPriority)
+void Workload::simulateWorkload(unsigned int randomize, unsigned int* WLPriority)
 {
 	// maybe rewrite this with condition variables -> std::condition_variable::wait_until()
-	while(!startSimulation.load())
+	while(!m_startSimulation.load())
 	{
 		//Busy waiting for all threads to be created
 	}
 	unsigned int countingVar = 0;
-	long long    sleepTime = (long long)(500 - workload * 5);
+	long long    sleepTime;
 	std::cout << "we are in the func" << std::endl;
-	while(runningSimulation.load())
+	while(m_runningSimulation.load())
 	{
+		sleepTime = (long long)(500 - m_workload.load() * 5);
 		auto start = std::chrono::system_clock::now();
 		std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
 		auto end = std::chrono::system_clock::now();
@@ -63,18 +75,18 @@ void Workload::simulateWorkload(unsigned int workload, unsigned int randomize, u
 void Workload::finishWorkload()
 {
 	std::cout << "-- Terminating workload...\n";
-	for (size_t i = 0; i < threadList.size(); i++)
+	for (size_t i = 0; i < m_threadList.size(); i++)
 	{	
-		// Check if thread is joinable. On the contrary std::invalid_argument will be thrown
-		if(threadList[i].joinable())
+		// Check if thread is joinable. Otherwise std::invalid_argument will be thrown
+		if(m_threadList[i].joinable())
 		{
-			threadList[i].join();
+			m_threadList[i].join();
 		}
 		else
 		{
 			std::hash<std::thread::id> hasher;
 			std::ostringstream ss;
-			ss << static_cast<uint64_t>(hasher(threadList[i].get_id()));
+			ss << static_cast<uint64_t>(hasher(m_threadList[i].get_id()));
 			throw std::invalid_argument("Thread with ID: " + ss.str() + " is not joinable\n");
 		}
 	}

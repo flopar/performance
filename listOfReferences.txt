@@ -2,6 +2,7 @@ Einführung:
 	https://www.gminsights.com/industry-analysis/software-testing-market
 	https://blog.knoldus.com/must-adopt-test-automation-trends-2021/
 	https://www.lambdatest.com/blog/top-automation-testing-trends-2021/
+	https://www.isixsigma.com/tools-templates/software/defect-prevention-reducing-costs-and-enhancing-quality/
 CMAKE:
 	https://cmake.org/cmake/help/v3.21/
 	https://surfertas.github.io/cmake/cpp/projecteuler/2019/05/01/cmake.html

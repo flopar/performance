@@ -1,0 +1,14 @@
+\chapter{Systemgrundlagen}
+\section{Prozesse}
+Ein Prozess ist ein Programm, welches sich in einem ausf\"uhrbaren Zustand befindet. Er besteht aus zwei oder mehreren Befehle.\\
+Bei der Erzeugung eines Prozesses bekommt dieser eine eindeutige Identifikationsnummer die sogenannte PID. Somit k\"onnen zwei unterschiedliche Prozesse nicht die gleiche PID besitzen. Die Erzeugung neuer Prozesse erfolgt auf jedem Betriebssystem unterschiedlich. Wenn ein Prozess ein neuer Prozess erzeugt, dann spricht man von einem Kindprozess.
+Dieser besitzt eine PID und zus\"atzlich eine \textit{Parent Process ID} kurz PPID, welche auf der PID des Elternprozesses zuweist.\\
+
+
+
+\section{Threads}
+Threads 
+\section{Workload}
+The definition for workload varies from field to field. In the IT-branch it is defined as a unit of measure for your CPU (mostly in \%). This tells the user how well his system can handle the number of current running processes. Most systems calculate their workload over a defined period of time. To understand this concept better, here is an example. Let's say a user starts an calculator program at time $\mathrm{t}_0$ = 0. The application will finish initializing a GUI at time $\mathrm{t}_{wait}$ = 2s and then wait for the user to enter some equation.
+After the equation was typed at $\mathrm{t}_{input}$ = 5s and the "Enter"-key was pressed, the app proceeds calculating and delivering the answer at $\mathrm{t}_{done}$ = 6s. So the CPU-time of the application is 3s(GUI initialization and calculation time). In order to get its workload the system has to divide this time by the time of the system needed for the whole process $\frac{\mathrm{t}_{wait}+\mathrm{t}_{calc}}{6s}*100$.
+A detailed explanation on how to get these values will follow in Chapter (*Kapitelnr*).

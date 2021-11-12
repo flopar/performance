@@ -83,7 +83,7 @@ if __name__ == '__main__':
         for row in spamreader:
             csvData.append(row)
     print(csvData)
-    makeDiagram(csvData) 
+     
     
 
 

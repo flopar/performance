@@ -65,12 +65,11 @@ int increaseProcessNiceValue(int pid=0);
 // Non-OS-Specific methods
 uint64_t getSpecificCPUTime(int which);
 int convertTime(uint64_t timeToConvert);
-template<typename type> int writeOverallStats(type stat, std::string statName);
-template<typename type> int writeRuntimeStats(type list, std::string statName);
+int writeOverallStats(auto stat, std::string statName);
 int getProcessTimes(uint64_t& kernel, uint64_t& user);
 int increaseThreadPrio(int id=0);
 int decreaseThreadPrio(int id=0);
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle);
-int calculateAndShowLoad(double duration);
-
+int calculateAndShowLoad(double duration, std::vector<double>& processWLList, std::vector<double>& systemWLList);
+double calculateSystemLoad(int duration);
 

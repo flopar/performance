@@ -1,0 +1,191 @@
+\documentclass{wissdoc}
+%\documentclass[oneside]{wissdoc}
+% ----------------------------------------------------------------
+% Diplomarbeit - Hauptdokument
+% ----------------------------------------------------------------
+% wissdoc Optionen: draft, relaxed, pdf, oneside --> siehe wissdoc.cls
+% ------------------------------------------------------------------
+
+
+% Packages für Deckblatt
+\usepackage[absolute]{textpos} 	%Textboxen an absolute Position setzen
+\usepackage{setspace}						%Zeilenabstand anpassen
+\usepackage{color}							%Farbige Schrift
+\usepackage{graphicx}						%Einbinden von Grafiken
+
+% Weitere packages: (Dokumentation dazu durch "latex <package>.dtx")
+% \usepackage{varioref}
+% \usepackage{verbatim}
+% \usepackage{float}    %z.B. \floatstyle{ruled}\restylefloat{figure}
+%\usepackage{subfig}
+\usepackage{subfigure}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+
+% Zitaten
+\usepackage[]{dirtytalk}
+\usepackage{epigraph}
+
+% Footnote
+\usepackage{scrextend}
+
+
+
+% Zeilenabstand nach Vorgabe - Falls gefordert
+%\setstretch{1,3} 
+
+% Inhaltsangabe auf Unterabschnitte(2 Ebenen) begrenzen
+\setcounter{tocdepth}{2}
+
+
+% \usepackage{color}    % Farbiger/grauer Text
+% \usepackage{colortbl}   % Farbige/graue Tabellenzeilen und -spalten!! <--
+% \usepackage{fancybox} % für schattierte,ovale Boxen etc.
+% \usepackage{tabularx} % automatische Spaltenbreite
+% \usepackage{supertab} % mehrseitige Tabellen
+%% ---------------- end of usepackages -------------
+
+%% Informationen für die PDF-Datei
+\hypersetup{pdfauthor={Max Mustermann},%
+            pdftitle={Bachelorarbeit},%
+            pdfsubject={Titel der Arbeit},%
+            pdfkeywords={Forschung, Entwicklung, Funktechnik},%
+            pdfproducer={LaTeX},%
+            pdfcreator={pdfLaTeX}
+}
+
+% Macros, nicht unbedingt notwendig
+\input{macros}
+
+% Print URLs not in Typewriter Font
+\def\UrlFont{\rm}
+
+\newcommand{\blankpage}{% Leerseite ohne Seitennummer, nächste Seite rechts
+ \clearpage{\pagestyle{empty}\cleardoublepage}
+}
+
+%% Einstellungen für das gesamte Dokument
+
+% Trennhilfen
+% Wichtig!
+% Im german-paket sind zusätzlich folgende Trennhinweise enthalten:
+% "- = zusätzliche Trennstelle
+% "| = Vermeidung von Ligaturen und mögliche Trennung (bsp: Schaf"|fell)
+% "~ = Bindestrich an dem keine Trennung erlaubt ist (bsp: bergauf und "~ab)
+% "= = Bindestrich bei dem Worte vor und dahinter getrennt werden dürfen
+% "" = Trennstelle ohne Erzeugung eines Trennstrichs (bsp: und/""oder)
+
+% Trennhinweise fuer Woerter hier beschreiben
+\hyphenation{
+% Pro-to-koll-in-stan-zen
+% Ma-na-ge-ment  Netz-werk-ele-men-ten
+% Netz-werk Netz-werk-re-ser-vie-rung
+% Netz-werk-adap-ter Fein-ju-stier-ung
+% Da-ten-strom-spe-zi-fi-ka-tion Pa-ket-rumpf
+% Kon-troll-in-stanz
+}
+
+%Tabellen Kommandos
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Index-Datei öffnen
+\ifnotdraft{\makeindex}
+%%%%%%%%%%%%%% includeonly %%%%%%%%%%%%%%%%%%%
+% Es werden nur die Teile eingebunden, die hier aufgefuehrt sind!
+%\includeonly{%
+%titelseite,%
+%erklaerung,%
+%kurzfassung,%
+%einleitung,%
+%analyse,%
+%entwurf,%
+%implemen,%
+%zusammenf%
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%Auskommentiert, da nicht notwendig für das Praktikum
+%\ifnotdraft{
+	%%%%Vorlage
+	\include{deckblatt}  %<-- Nach Vorgabe der HS Augsburg
+	%
+	%%%% Innere Titelseite 
+ 	%\include{titelseite} %<-- Vorgabe Prüfer oder frei wählbar
+	%
+	%%%%Optional - Falls von der Firma gefordert
+	%\include{sperrvermerk}
+	%
+	%%%%Pflicht
+ 	%\include{erklaerung}
+	%
+	%%% Leere Seite bei zweiseitigem Druck
+	%\ifnotonesideelse{\blankpage}{}
+	%\include{kurzfassung}
+	%%% Leere Seite bei zweiseitigem Druck
+	%\ifnotonesideelse{\blankpage}{}
+%}
+
+
+
+%
+%% ++++++++++++++++++++++++++++++++++++++++++
+%% Verzeichnisse
+%% ++++++++++++++++++++++++++++++++++++++++++
+\pagenumbering{roman}
+\ifnotdraft{
+\tableofcontents
+% Leere Seite bei zweiseitigem Druck
+\ifnotonesideelse{\blankpage}{}
+%\listoffigures
+%% Leere Seite bei zweiseitigem Druck
+%\ifnotonesideelse{\blankpage}{}
+%\listoftables
+%% Leere Seite bei zweiseitigem Druck
+%\ifnotonesideelse{\blankpage}{}
+}
+%% ++++++++++++++++++++++++++++++++++++++++++
+%% Hauptteil
+%% ++++++++++++++++++++++++++++++++++++++++++
+\graphicspath{{figures/}}
+\pagenumbering{arabic}
+
+%%% Ab hier eigene Kapitel einfügen
+%%% Kapitel sind analog zur Wordvorlage zu wählen
+\include{einleitung}  % Einleitung
+\include{systemgrundlagen} %Systemgrundlagen
+\include{beispiele}   % Beispiele
+\include{analyse}     % Analyse
+
+
+%% ++++++++++++++++++++++++++++++++++++++++++
+%% Anhang
+%% ++++++++++++++++++++++++++++++++++++++++++
+
+%\appendix
+%\include{anhang_a}
+%\include{anhang_b}
+
+\ifnotonesideelse{\cleardoublepage}{}
+
+%% ++++++++++++++++++++++++++++++++++++++++++
+%% Literatur
+%% ++++++++++++++++++++++++++++++++++++++++++
+\addcontentsline{toc}{chapter}{\bibname}
+%  mit dem Befehl \nocite werden auch nicht zitierte Referenzen abgedruckt 
+% (normalerweise nicht erwünscht)
+% \nocite{*}
+\bibliographystyle{unsrt}
+%Einbinden Bibtexdatei - Direkt aus JabRef generiert
+\bibliography{literatur}
+%% ++++++++++++++++++++++++++++++++++++++++++
+%% Index (optional)
+%% ++++++++++++++++++++++++++++++++++++++++++
+%\ifnotdraft{
+%\addcontentsline{toc}{chapter}{Index}
+%\printindex            % Index, Stichwortverzeichnis
+%}
+\listoffigures
+\end{document}

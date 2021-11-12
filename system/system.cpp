@@ -346,12 +346,12 @@ int increaseThreadPrio(int id)
 	int currPolicy = sched_getscheduler(id);
 	if(currPolicy == -1)
 	{
-		throw std::runtime_error("Couldn't get the given thread's policy (decreaseThreadPrio)");
+		throw std::runtime_error("Couldn't get the given thread's policy (increaseThreadPrio)");
 		return 1;
 	}
 	else
-	{
-		if(currPolicy != SCHED_FIFO || currPolicy != SCHED_RR)
+	{ 
+		if(currPolicy != SCHED_FIFO && currPolicy != SCHED_RR)
 		{
 			printPolicy(currPolicy);
 			throw std::runtime_error("You cannot change the priority of the given thread while this policy is set!");
@@ -382,8 +382,8 @@ int increaseThreadPrio(int id)
 			}
 		}
 	}
-#endif
 }
+#endif
 
 // make additional argument with the id of a thread
 #ifdef WIN32
@@ -586,37 +586,7 @@ int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 // MacOS not implemented yet
 #endif
 }
-
-/* 
- * this function will write statistic to a csv File on if the type of "list" is an iterable object
- */
-template<typename type> int writeRuntimeStats(type list, std::string statName)
-{
-	std::ofstream statisticsFile;
-	statisticsFile.open("runtime_statistics.csv", std::ios::in | std::ios::app | std::ios::binary);
-	if(!statisticsFile.is_open())
-	{
-		throw std::runtime_error("Couldn't open file to write");
-		return -1;
-	}
-	statisticsFile << statName << ",";
-	for(auto x : list)
-	{
-		if(x != list.back())
-		{
-			statisticsFile << x << ",";
-		}
-		else
-		{
-			std::cout << "newline at " << list.back() << std::endl;
-			statisticsFile << x << std::endl;
-		}
-	}
-	statisticsFile.close();
-	return 0;
-}
-
-template<typename type> int writeOverallStats(type stat, std::string statName)
+int writeOverallStats(auto stat, std::string statName)
 {
 	std::ofstream statisticsFile;
 	statisticsFile.open("overall_stats.csv", std::ios::in | std::ios::app | std::ios::binary);
@@ -629,8 +599,51 @@ template<typename type> int writeOverallStats(type stat, std::string statName)
 	statisticsFile.close();
 	return 0;
 }
+double calculateSystemLoad(int duration)
+{
+	
+	// System Times
+	uint64_t kernel = 0, pre_kernel = 0;
+	uint64_t user = 0, pre_user = 0;
+	uint64_t idle = 0, pre_idle = 0;
 
-int calculateAndShowLoad(double duration)
+	double workload = 0;
+	int ret = 0;
+	ret += getCPUTimes(std::ref(pre_kernel), std::ref(pre_user), std::ref(pre_idle));
+	if(!ret)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		ret += getCPUTimes(std::ref(kernel), std::ref(user), std::ref(idle));
+		if(!ret)
+		{
+			kernel -= pre_kernel;
+			user -= pre_user;
+			idle -= pre_idle;
+			std::cout << "kerne " << kernel << std::endl << "user " << user << std::endl << "idle " << idle << std::endl;
+#ifdef __linux__
+			workload = 100.0 * static_cast<double>(kernel + user) / static_cast<double>(kernel + user + idle);
+			std::cout << "workload " << workload;
+#elif WIN32
+			workload = 100.0 * static_cast<double>(kernel - idle + user) / static_cast<double>(kernel + user);
+#else
+			//MacOS not implemented
+#endif
+			return workload;
+		}
+		else
+		{
+			throw std::runtime_error("(calculateSystemLoad) GetCPUTimes failed!\n");
+			return static_cast<double>(-1);
+		}
+	}
+	else
+	{
+		throw std::runtime_error("(calculateSystemLoad) GetCPUTimes failed!\n");
+		return static_cast<double>(-1);
+	}
+	
+}
+int calculateAndShowLoad(double duration, std::vector<double>& processWLList, std::vector<double>& systemWLList)
 {
 	// Error Checking Value
 	int check_return_val = 0;
@@ -649,8 +662,6 @@ int calculateAndShowLoad(double duration)
 	double process_workload = 0, process_workload_sum = 0;
 	double average = duration;
 	double avg_process_wl = 0, avg_system_wl = 0;
-	
-	std::vector<double> processWLList, systemWLList;
 
 
 	// For not idle vor
@@ -708,8 +719,6 @@ int calculateAndShowLoad(double duration)
 			// what if we fail from the beggining? -> can we even fail? make sense? idk
 		}
 	}
-	writeRuntimeStats(processWLList, "ProcessWorkload");
-	writeRuntimeStats(systemWLList, "SystemWorkload");
 	auto totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startDuration).count();
 	if(pre_notIdle != -1)
 	{

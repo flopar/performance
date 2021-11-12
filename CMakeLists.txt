@@ -18,12 +18,12 @@ project(performance	VERSION 1.0
 add_subdirectory(source)
 
 # Allows the build of the library
-add_subdirectory(systemV2)
+add_subdirectory(system)
 add_subdirectory(workload)
 
 # Adds the directories to the include search path
 target_include_directories(test PUBLIC 
-	systemV2
+	system
 	workload)
 
 # Links the libraries to the main target
