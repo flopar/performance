@@ -114,8 +114,6 @@ int main(int argc, char* argv[])
 
 
 
-
-
 	// With sched_setscheduler you can change the policy of that thread (and its priortiy if the
 	// given policy is a realtime policy like RR or FIFO)
 /*	errno = 0;
@@ -127,9 +125,6 @@ int main(int argc, char* argv[])
 	std::cout << "policy after set " << prio.sched_policy << std::endl;
 	std::cout << "set_attr " << syscall(SYS_sched_setattr, 0, &prio, 0) << std::endl;
 	std::cout << "Errno " << errno << std::endl;
-	struct rlimit oldcap, newcap;
-	std::cout << "getrlimit: " << getrlimit(RLIMIT_NICE, &oldcap) << std::endl;
-	std::cout << "rlimit_nice soft: " << oldcap.rlim_cur << std::endl << "rlimit_nice hard: " << oldcap.rlim_max << std::endl;	
 	newcap.rlim_cur = 2;
 	newcap.rlim_max = 10;
 	int curr_proc = getpid();

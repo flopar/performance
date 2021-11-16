@@ -64,4 +64,36 @@ Gitlab.
 \newblock \url{https://about.gitlab.com/}.
 \newblock Accessed: 2021-11-09.
 
+\bibitem{createProcWinAPI}
+Createprocess function.
+\newblock
+  \url{https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa}.
+\newblock Accessed: 2021-11-12.
+
+\bibitem{LPI}
+Michael Kerrisk.
+\newblock {\em The Linux Programming Interface}.
+\newblock No Starch Press, 2010.
+
+\bibitem{wikiPPID}
+Process identifier.
+\newblock \url{https://en.wikipedia.org/wiki/Process_identifier}.
+\newblock Accessed: 2021-11-12.
+
+\bibitem{stack}
+Kaiwan~N Billimoria.
+\newblock {\em Hands-On System Programming with Linux}.
+\newblock Packt Publishing, 2018.
+
+\bibitem{concurrency}
+Anthony Williams.
+\newblock {\em C++ Concurrency in Action, Second Edition}.
+\newblock Manning Publications, 2019.
+
+\bibitem{priorityClasses}
+Getpriorityclass function.
+\newblock
+  \url{https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getpriorityclass}.
+\newblock Accessed: 2021-11-15.
+
 \end{thebibliography}

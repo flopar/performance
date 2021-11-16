@@ -56,7 +56,7 @@ There are already some alternative libraries on the internet to recreate this me
 Some people would think "Well C++ is a new and modern language. There must be something similar out there". This statement is true and because of its young age there are a limited number of officially tested methods. You could also take a look at the headers implemented in the \href{https://en.cppreference.com/w/cpp/header}{C++ standard library} \cite{CppRef} to familiarize yourself with common algorithms and data structures.
 
 \section{Obective}
-The purpose of this thesis is the development, implementation and testing of a Library for C++ applications that creates an artificial workload and delivers system independent statistics based on multi-threading. This will allow developers to implement their own stress tests and run simulations with different workloads, process priorities and scheduling, which can be used in different manners to achieve real-time applications. These could be later automatized by using programs like \href{https://www.jenkins.io/}{Jenkins}\cite{Jenkins} or \href{https://about.gitlab.com/}{Gitlab}\cite{GitLab}.
+The purpose of this thesis is the development, implementation and testing of a Library for C++ applications that creates an artificial workload and delivers system independent statistics based on multi-threading. This will allow developers to implement their own stress tests and run simulations with different workloads, process priorities and scheduling, which can be used in different manners to achieve real-time applications and create benchmarks for each new product. These could be later automatized by using programs like \href{https://www.jenkins.io/}{Jenkins}\cite{Jenkins} or \href{https://about.gitlab.com/}{Gitlab}\cite{GitLab}.
 
 \section{Implementation}
 The library has two main components. The first one is the workload, which can vary depending of the user's input. This will create a system specific amount of threads and make them run a simulation function. The number of threads will stay constant and the time for running the workload task will be set accordingly for each input.\\
@@ -75,7 +75,7 @@ Basic operations are implemented to work on most operating systems, but there ar
 \subsection{Cons}
 \begin{enumerate}
 	\item Tests don't come already prepared
-	\item Developers have add the source code to their build system or add the build files to their own if they already use CMake
+	\item Developers have to add the source code to their build system or add the build files(CMakeLists.txt) to their own (if they already use CMake)
 \end{enumerate}
-\subsection{Summary}
+\section{Summary}
 With this library a company can save money, improve their product based on user feedback and create an internet independent test system for very minimal effort.
