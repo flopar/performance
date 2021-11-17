@@ -96,4 +96,14 @@ Getpriorityclass function.
   \url{https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getpriorityclass}.
 \newblock Accessed: 2021-11-15.
 
+\bibitem{stdAtomic}
+std::atomic.
+\newblock \url{https://en.cppreference.com/w/cpp/atomic/atomic}.
+\newblock Accessed: 2021-11-17.
+
+\bibitem{atomicConference}
+Fedor Pikus.
+\newblock C++ atomics, from basic to advanced. what they really do?
+\newblock Accessed: 2021-11-17.
+
 \end{thebibliography}

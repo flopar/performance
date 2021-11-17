@@ -8,50 +8,52 @@ A level-1 auxiliary file: beispiele.aux
 A level-1 auxiliary file: analyse.aux
 The style file: unsrt.bst
 Database file #1: literatur.bib
+Warning--entry type for "atomicConference" isn't style-file defined
+--line 405 of file literatur.bib
 Warning--I didn't find a database entry for "li00"
 Warning--I didn't find a database entry for "jackson91"
 Warning--I didn't find a database entry for "lakhina04a"
 Warning--I didn't find a database entry for "netflow"
 Warning--I didn't find a database entry for "rfc2386"
-You've used 16 entries,
+You've used 18 entries,
             1791 wiz_defined-function locations,
-            543 strings with 6132 characters,
-and the built_in function-call counts, 3202 in all, are:
-= -- 288
-> -- 95
+            553 strings with 6340 characters,
+and the built_in function-call counts, 3434 in all, are:
+= -- 307
+> -- 100
 < -- 5
-+ -- 40
-- -- 24
++ -- 43
+- -- 25
 * -- 130
-:= -- 437
-add.period$ -- 51
-call.type$ -- 16
-change.case$ -- 13
+:= -- 466
+add.period$ -- 57
+call.type$ -- 18
+change.case$ -- 15
 chr.to.int$ -- 0
-cite$ -- 16
-duplicate$ -- 171
-empty$ -- 380
-format.name$ -- 24
-if$ -- 795
+cite$ -- 18
+duplicate$ -- 181
+empty$ -- 416
+format.name$ -- 25
+if$ -- 853
 int.to.chr$ -- 0
-int.to.str$ -- 16
+int.to.str$ -- 18
 missing$ -- 12
-newline$ -- 84
-num.names$ -- 12
-pop$ -- 102
+newline$ -- 94
+num.names$ -- 13
+pop$ -- 118
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 95
+skip$ -- 101
 stack$ -- 0
 substring$ -- 124
-swap$ -- 56
+swap$ -- 58
 text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 23
-width$ -- 18
-write$ -- 169
-(There were 5 warnings)
+while$ -- 24
+width$ -- 20
+write$ -- 187
+(There were 6 warnings)

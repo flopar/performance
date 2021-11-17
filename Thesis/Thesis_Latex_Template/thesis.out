@@ -24,14 +24,18 @@
 \BOOKMARK [2][-]{subsection.2.4.1}{2.4.1 Windows}{section.2.4}% 24
 \BOOKMARK [2][-]{subsection.2.4.2}{2.4.2 Linux}{section.2.4}% 25
 \BOOKMARK [1][-]{section.2.5}{2.5 Workload}{chapter.2}% 26
-\BOOKMARK [0][]{chapter.3}{3 Beispiele}{}% 27
-\BOOKMARK [1][-]{section.3.1}{3.1 Zitieren}{chapter.3}% 28
-\BOOKMARK [1][-]{section.3.2}{3.2 Bild einf\374gen}{chapter.3}% 29
-\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Ein Bild skaliert}{section.3.2}% 30
-\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Zwei Bilder nebeneinander oder untereinander}{section.3.2}% 31
-\BOOKMARK [1][-]{section.3.3}{3.3 Tabellen}{chapter.3}% 32
-\BOOKMARK [0][]{chapter.4}{4 Analyse}{}% 33
-\BOOKMARK [1][-]{section.4.1}{4.1 Abschnitt 1}{chapter.4}% 34
-\BOOKMARK [1][-]{section.4.2}{4.2 Abschnitt 2}{chapter.4}% 35
-\BOOKMARK [2][-]{subsection.4.2.1}{4.2.1 Unterabschnitt}{section.4.2}% 36
-\BOOKMARK [0][]{subsubsection.4.2.1.1}{Literaturverzeichnis}{}% 37
+\BOOKMARK [1][-]{section.2.6}{2.6 Synchronization}{chapter.2}% 27
+\BOOKMARK [2][-]{subsection.2.6.1}{2.6.1 Mutex}{section.2.6}% 28
+\BOOKMARK [2][-]{subsection.2.6.2}{2.6.2 Atomic Variables}{section.2.6}% 29
+\BOOKMARK [0][]{chapter.3}{3 Library Overview}{}% 30
+\BOOKMARK [0][]{chapter.4}{4 Beispiele}{}% 31
+\BOOKMARK [1][-]{section.4.1}{4.1 Zitieren}{chapter.4}% 32
+\BOOKMARK [1][-]{section.4.2}{4.2 Bild einf\374gen}{chapter.4}% 33
+\BOOKMARK [2][-]{subsection.4.2.1}{4.2.1 Ein Bild skaliert}{section.4.2}% 34
+\BOOKMARK [2][-]{subsection.4.2.2}{4.2.2 Zwei Bilder nebeneinander oder untereinander}{section.4.2}% 35
+\BOOKMARK [1][-]{section.4.3}{4.3 Tabellen}{chapter.4}% 36
+\BOOKMARK [0][]{chapter.5}{5 Analyse}{}% 37
+\BOOKMARK [1][-]{section.5.1}{5.1 Abschnitt 1}{chapter.5}% 38
+\BOOKMARK [1][-]{section.5.2}{5.2 Abschnitt 2}{chapter.5}% 39
+\BOOKMARK [2][-]{subsection.5.2.1}{5.2.1 Unterabschnitt}{section.5.2}% 40
+\BOOKMARK [0][]{subsubsection.5.2.1.1}{Literaturverzeichnis}{}% 41

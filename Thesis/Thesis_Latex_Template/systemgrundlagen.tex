@@ -44,7 +44,7 @@ be execuvted at the same time. Many systems have this ability, because most of t
 multiprocessor computers. Even some single core computers can handle concurrency to some extent.
 One calculation unit can handle one task at a time, but it can quickly switch to another task if
 necessary. This is why sometime even single core units give the impression of resolving jobs
-simultaneously\cite{concurrency}. Although performant this method does not come without its flaws. When a cpu gets a new task, the resources of the old task (eg. local variable, meta data of the current task, etc.)will be replaced by those of the new job. This is also known as \dq Context Switching\dq{}.
+simultaneously\cite[Chapter~1]{concurrency}. Although performant this method does not come without its flaws. When a cpu gets a new task, the resources of the old task (eg. local variable, meta data of the current task, etc.)will be replaced by those of the new job. This is also known as \dq Context Switching\dq{}.
 The order of task switching will be explained in detail in chapter *scheduling*.\\ 
 Nowadays many systems measure the concurrency of a system by its number of hardware threads. This
 unit of measure tells us how many independet tasks can the processor handle.
@@ -71,7 +71,7 @@ CPUs of a given process and tries to create an additional workload with the libr
 mind that the workload will also be cut in half because the threads have less processors to work on.
 \section{Priorities}
 When it comes to the priority of a process there is a big difference between a UNIX system and a
-windows machine. On windows the priority is determined by the priority class of the process and the
+windows machine. On Windows the priority is determined by the priority class of the process and the
 its thread priority.\\
 \subsection{Windows}
 Based on the winAPI documentation\cite{priorityClasses}, the classes can have the following values:
@@ -100,22 +100,22 @@ On Linux however, the priority of a process is harder to be determined. This val
 \subsubsection{Nice Values}
 Nice values can range from 20 to
 -19 with 20 being the nicest value and so the smallest priority and -19 being the worst value and so
-the highest priority. For a better understanding one could think that one process is nice when he doesn't need
-the CPU and so it lets other threads to use it. In my reasearch one thing was mentioned and that is
-that a low nice value (hence a high priority) doesn't mean that other processes won't get any CPU
-time. The scheduler will make them favorable, but other processes will also get their turn for the
+the highest priority. For a better understanding one could think that a process is nice, when he doesn't need
+the CPU and so it lets other threads to use it. In my research one thing was mentioned and that is a low nice value (hence a high priority) doesn't mean other processes won't get any CPU
+time. The scheduler will make them more favorable, but other processes will also get their turn for the
 CPU.
-To change the nice values of a process in this library i am using
+To change the nice value of a process, in this library, I am using
 the calls \texttt{getpriority()} and \texttt{setpriority()} from the header \texttt{sys/resource.h}.\\
 There is one
 critical thing that the caller needs to know. In order to increase the nice value of the calling
-process, the user needs to use the given methods of the library and additionally use the command
-\texttt{sudo setcap cap\_sys\_nice=ep PATH/TO/EXECUTABLE} on the built binary, run it as root or build the executable
-program as the root-user. You need to do this extra step
+process, the user can use the given methods of the library and additionally use the command
+\texttt{sudo setcap cap\_sys\_nice=ep PATH/TO/EXECUTABLE} on the built binary (the command \texttt{setcap} can change the executable to
+run as a privileged process, but only when called as root or with the keyword sudo), run it as root or build the executable
+program as the root-user from the beginning. You need to do this extra step,
 because by default any user-created processes are unprivileged.\\
 Unprivileged processes can lower their own
 priority, but are not allowed to increase it more than the value of the operation
-\textit{20-RLIMIT\_NICE}. The RLIMIT\_NICE is resource on your UNIX machine. The structure \texttt{rlimit} has two attributes: the \dq rlim\_cur\dq{}(also called the soft limit), which represent the current value of the process and the \dq rlim\_max\dq{}(also called the hard limit or ceiling), which tells one user the limit of which that process can be set to. On my testing system
+\textit{20-RLIMIT\_NICE}. The RLIMIT\_NICE is resource on your UNIX machine and can be set/gotten with the methods \texttt{getrlimit()} and \texttt{setrlimit()} respectively. These functions takes as arguments an integer, which describes the resource we want to get or set (in this case RLIMIT\_NICE) and a \texttt{struct rlimit} pointer, which describes the priority of the given resource. The structure \texttt{rlimit} has two attributes: the \dq rlim\_cur\dq{}(also called the soft limit), that represent the current value of the process and the \dq rlim\_max\dq{}(also called the hard limit or ceiling), which tells one user the limit of which that process can be set to. On my testing system
 RLIMIT\_NICE is set to 13 and the limits for processes compiled by my users are zero.
 \begin{figure*}[!htb]
 	\centering
@@ -131,8 +131,7 @@ RLIMIT\_NICE is set to 13 and the limits for processes compiled by my users are 
 \\
 Per default the process will have
 the nice value of 0 and this value can be increased to the highest value allowed (19), but cannot be
-decreased afterwards to a value lower than \textit{user\_nice\_value = 20-RLIMIT\_NICE}. The command \texttt{setcap} can change the executable to
-run as a privileged process (but only when called as root or with the keyword sudo). A way of
+decreased afterwards to a value lower than \textit{user\_nice\_value = 20-RLIMIT\_NICE}. A way of
 increasing the nice value would be to increase the RLIMIT\_NICE value (also as root or with root-rights = sudo), which will allow a normal user to increase the value given until it reaches
 \dq user\_nice\_value\dq{} or log in as root, use the library's functions, build the program and set the SUID as root.
 \footnote{The SUID is a special bit that one can set and allows normal users to run the program as they
@@ -186,6 +185,39 @@ or the user changes the value himself). SCHED\_RR can also lose its access if th
 the job expires.
 
 \section{Workload}
-The definition for workload varies from field to field. In the IT-branch it is defined as a unit of measure for your CPU (mostly in \%). This tells the user how well his system can handle the number of current running processes. Most systems calculate their workload over a defined period of time. To understand this concept better, here is an example. Let's say a user starts an calculator program at time $\mathrm{t}_0$ = 0. The application will finish initializing a GUI at time $\mathrm{t}_{wait}$ = 2s and then wait for the user to enter some equation.
-After the equation was typed at $\mathrm{t}_{input}$ = 5s and the "Enter"-key was pressed, the app proceeds calculating and delivering the answer at $\mathrm{t}_{done}$ = 6s. So the CPU-time of the application is 3s(GUI initialization and calculation time). In order to get its workload the system has to divide this time by the time of the system needed for the whole process $\frac{\mathrm{t}_{wait}+\mathrm{t}_{calc}}{6s}*100$.
-A detailed explanation on how to get these values will follow in Chapter (*Kapitelnr*).
+The definition for workload varies from field to field. In the IT-branch it is defined as a unit of measure for your CPU (mostly in \%). This tells the user how well his system can handle the number of current running processes. Most systems calculate their workload over a defined period of time. To understand this concept better, here is an example. Let's say a user starts a calculator program at time $\mathrm{t}_0$ = 0. The application will finish initializing a GUI at time $\mathrm{t}_{wait}$ = 2s and then an interactive visual window will appear, which will wait for the user to enter some equation.
+After the equation was typed at $\mathrm{t}_{input}$ = 5s and the \dq Enter\dq{}-key was pressed, the application proceeds calculating and delivers the answer at $\mathrm{t}_{done}$ = 6s. So the CPU-time of the application is 3s(GUI initialization and calculation time). In order to get its workload the system has to divide this time by the time the system needed for the whole process and multiply it by one hundred to have the result as percentage:
+\begin{equation}
+	workload =  \frac{\mathrm{t}_{wait}+\mathrm{t}_{calc}}{6s}*100
+\end{equation} 
+A detailed explanation on how to get the values of these specific times will follow in Chapter (*Kapitelnr*).
+
+\section{Synchronization}
+When working with threads, the programmer cannot forget that these share the same stack, therefore they share the same variables. When two or more threads start their execution (eg. a simple addition), one cannot tell when will they perform what (if their priorities weren't tampered with).\\
+There are two main operations threads can perform on a variable: \texttt{read()} and \texttt{write()}. Reading from a variable is not problematic, because its content will always stay the same, but writing to one is a whole different story. Let's take a look at the following code:
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{../figures/systemgrundlagen/synchronizationExample.png}
+\end{figure}
+Here we create two threads with the sole purpose of adding a common variable. Most people would expect, because of the order of creation, for t1 to do his job and afterwards t2, but this is not the case.
+\newpage
+%\begin{figure}[!h]
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{../figures/systemgrundlagen/synchronizationExampleOutput.png}
+%\end{figure}
+\begin{wrapfigure}{1}{0.5\textwidth}
+	\centering
+	\includegraphics[width=.98\linewidth]{../figures/systemgrundlagen/synchronizationExampleOutput.png}
+	\caption{Stack segment}
+\end{wrapfigure}
+
+As you can observe, these prints make no sense. The threads do not follow a sequentially pattern so the variable can be increased by \texttt{t1} for a time then by \texttt{t2} and for the rest of the remaining time by \texttt{t1} again.\\
+Something that cannot be seen in the output would be the scenario when \texttt{t1} and \texttt{t2} try to access the variable and increment it at the same time. No one can accurately predict what the result would be (this is also known as \textit{ Unexpected behavior}). To resolve this problem in classic C people came up with the idea of a locking mechanism called \texttt{Mutex}.\\
+\subsection{Mutex}
+Mutexes are guards that can block other threads the access to variables inside a user-defined block of code (also known as \textit{scope}). These allow the thread that called \texttt{lock()} exclusive access to the variables inside that scope until the thread calls \texttt{unlock()}. If another thread tries to lock the mutex for himself while the mutex is being used, then it will land in a waiting state until that lock is released. This method requires a lot of concentration from the programmer and a good overview of all locking and release point\cite{concurrency}.\\
+Fortunately the \textit{Standard C++ Library} implemented a new, more simplistic technology for threads to access common variable called \textit{Atomic Variables}.
+\subsection{Atomic Variables}
+Atomic variables can be seen as wrappers for primitive data types, like \texttt{bool}, \texttt{int}, \texttt{double}, \texttt{float}, etc., but also for defined structs like \texttt{uint32\_t}, \texttt{uintptr\_t} or \texttt{int\_fast32\_t}\\
+Basic syntax of this wrapper is: \textit{atomic<data\_type/class>} or (if defined) \textit{atomic\_data\_type}, that will grant the calling thread exclusive access to a certain variable while reading from or writing to it.\\
+To read from an atomic variable one could just use the \dq =\dq{}-operator or (preferred) the \texttt{atomic\_var.load()} method. Writing to an atomic variable should only be done by using the \texttt{atomic\_var.store()} method, because this way you can expect that no one else besides the calling thread is accessing that variable\cite{stdAtomic, atomicConference}.\\
+The library comes with additional member functions to make certain sequences of reading and writing easier and specialized member function that define bitwise operations on a variable, but they go way too deep in complexity and understanding for me to focus too much on them.
