@@ -38,9 +38,14 @@ int writeRuntimeStats(auto list, std::string statName)
 void test(int mode, unsigned int percentage, bool async)
 {
 	std::vector<double> procWorkload, sysWorkload, test1,test2;
-	bool check_prio = true;
+
+	// flag to indicate normal or critical workload for the workload class
+	unsigned int prio = NULL;
+#ifdef WIN32
+	bool incrementClass = true;
+#endif
 #ifdef __linux__
-	bool check_nice = true;
+	bool incrementNice = true;
 #endif
 	try
 	{	
@@ -51,24 +56,11 @@ void test(int mode, unsigned int percentage, bool async)
 #ifdef __linux__
 			// Change Policy
 			changePolicy(SCHED_RR, 0);
-			try
-			{
-				// Increase Thread Prio, if for some reason is not set to max
-				while(check_prio)
-				{
-					std::cout << "increasing prio...\n";
-					increaseThreadPrio();
-				}
-			}
-			catch(const std::exception& e)
-			{
-				check_prio = false;
-				std::cout << e.what() << std::endl;
-			}
+			prio = MAX_PRIO;
 			try
 			{
 				// Increase process nice value
-				while(check_nice)
+				while(incrementNice)
 				{
 					std::cout << "increasing nice value...\n";
 					increaseProcessNiceValue();
@@ -76,13 +68,29 @@ void test(int mode, unsigned int percentage, bool async)
 			}
 			catch(const std::exception& e)
 			{
-				check_nice = false;
+				incrementNice = false;
+				std::cout << e.what() << std::endl;
+			}
+#endif
+#ifdef WIN32
+			// Change Priority Class
+			try
+			{
+				while(incrementClass)
+				{
+					std::cout << "increasing class prio...\n";
+					increaseSchedClass();
+				}
+			}
+			catch(const std::exception& e)
+			{
+				incrementClass = false;
 				std::cout << e.what() << std::endl;
 			}
 #endif
 		}
 		// Create Workload, start it, analyze it, stop it and write the results to a file
-		workload::Workload worky(percentage, NULL, async);
+		workload::Workload worky(percentage, &prio, async);
 		worky.startWL();
 		calculateAndShowLoad(60, std::ref(procWorkload), std::ref(sysWorkload));	
 		worky.stopWL();
@@ -100,8 +108,9 @@ void test(int mode, unsigned int percentage, bool async)
 
 int main(int argc, char* argv[])
 {
-	test(CRITICAL, 10, true);	
-	//test(NORMAL, 90, false);
+	//test(CRITICAL, 10, true);	
+	test(NORMAL, 90, false);
+
 	return 0;
 }
 

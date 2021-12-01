@@ -4,56 +4,58 @@ The top-level auxiliary file: thesis.aux
 A level-1 auxiliary file: deckblatt.aux
 A level-1 auxiliary file: einleitung.aux
 A level-1 auxiliary file: systemgrundlagen.aux
+A level-1 auxiliary file: bibliothek_ueberblick.aux
 A level-1 auxiliary file: beispiele.aux
 A level-1 auxiliary file: analyse.aux
 The style file: unsrt.bst
 Database file #1: literatur.bib
 Warning--entry type for "atomicConference" isn't style-file defined
---line 405 of file literatur.bib
+--line 471 of file literatur.bib
 Warning--I didn't find a database entry for "li00"
 Warning--I didn't find a database entry for "jackson91"
 Warning--I didn't find a database entry for "lakhina04a"
 Warning--I didn't find a database entry for "netflow"
 Warning--I didn't find a database entry for "rfc2386"
-You've used 18 entries,
+Warning--can't use both author and editor fields in Daneva1995
+You've used 27 entries,
             1791 wiz_defined-function locations,
-            553 strings with 6340 characters,
-and the built_in function-call counts, 3434 in all, are:
-= -- 307
-> -- 100
-< -- 5
-+ -- 43
-- -- 25
-* -- 130
-:= -- 466
-add.period$ -- 57
-call.type$ -- 18
-change.case$ -- 15
+            607 strings with 7994 characters,
+and the built_in function-call counts, 5857 in all, are:
+= -- 533
+> -- 164
+< -- 11
++ -- 69
+- -- 42
+* -- 231
+:= -- 797
+add.period$ -- 87
+call.type$ -- 27
+change.case$ -- 20
 chr.to.int$ -- 0
-cite$ -- 18
-duplicate$ -- 181
-empty$ -- 416
-format.name$ -- 25
-if$ -- 853
+cite$ -- 28
+duplicate$ -- 322
+empty$ -- 682
+format.name$ -- 42
+if$ -- 1457
 int.to.chr$ -- 0
-int.to.str$ -- 18
-missing$ -- 12
-newline$ -- 94
-num.names$ -- 13
-pop$ -- 118
+int.to.str$ -- 27
+missing$ -- 24
+newline$ -- 142
+num.names$ -- 24
+pop$ -- 172
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 101
+skip$ -- 189
 stack$ -- 0
-substring$ -- 124
-swap$ -- 58
-text.length$ -- 5
+substring$ -- 268
+swap$ -- 118
+text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 24
-width$ -- 20
-write$ -- 187
-(There were 6 warnings)
+warning$ -- 1
+while$ -- 49
+width$ -- 29
+write$ -- 290
+(There were 7 warnings)

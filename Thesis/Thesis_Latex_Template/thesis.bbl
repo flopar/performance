@@ -1,5 +1,25 @@
 \begin{thebibliography}{10}
 
+\bibitem{8432081}
+Davide Arcelli, Vittorio Cortellessa, and Daniele Di~Pompeo.
+\newblock Performance-driven software architecture refactoring.
+\newblock In {\em 2018 IEEE International Conference on Software Architecture
+  Companion (ICSA-C)}, pages 2--3, 2018.
+
+\bibitem{4299916}
+Jasmine K.S and R.~Vasantha.
+\newblock Identification of software performance bottleneck components in reuse
+  based software products with the application of acquaintanceship graphs.
+\newblock In {\em International Conference on Software Engineering Advances
+  (ICSEA 2007)}, pages 34--34, 2007.
+
+\bibitem{7302456}
+Kamil Jezek and Jan Ambroz.
+\newblock Detecting incompatibilities concealed in duplicated software
+  libraries.
+\newblock In {\em 2015 41st Euromicro Conference on Software Engineering and
+  Advanced Applications}, pages 233--240, 2015.
+
 \bibitem{8389562}
 Karuturi Sneha and Gowda~M Malle.
 \newblock Research on software testing techniques and software automation
@@ -42,6 +62,28 @@ Vasundhara Bhatia, Abhishek Singhal, Abhay Bansal, and Neha Prabhakar.
   Srivastava, editors, {\em Software Engineering}, pages 487--496, Singapore,
   2019. Springer Singapore.
 
+\bibitem{spec-benchmark}
+SPEC Organization.
+\newblock Standard performance evaluation corporation.
+\newblock \url{https://www.spec.org/spec/glossary/#benchmark}.
+\newblock Accessed: 2021-11-29.
+
+\bibitem{4221595}
+Klaus Luther.
+\newblock Embedded tutorial: Ic test cost benchmarking.
+\newblock In {\em 12th IEEE European Test Symposium (ETS'07)}, pages 200--200,
+  2007.
+
+\bibitem{Daneva1995}
+Maya Daneva.
+\newblock {\em Software benchmark design and use}, pages 20--29.
+\newblock Springer US, Boston, MA, 1995.
+
+\bibitem{Kounev2020}
+Samuel Kounev, Klaus-Dieter Lange, and J{\'o}akim~von Kistowski.
+\newblock {\em Workloads}, pages 185--201.
+\newblock Springer International Publishing, Cham, 2020.
+
 \bibitem{6724273}
 Vishal Anand and Deepanker Saxena.
 \newblock Comparative study of modern web browsers based on their performance
@@ -53,16 +95,6 @@ Vishal Anand and Deepanker Saxena.
 {Cpp Reference} list of c++ standard library headers.
 \newblock \url{https://en.cppreference.com/w/cpp/header}.
 \newblock Accessed: 2021-11-06.
-
-\bibitem{Jenkins}
-Jenkins.
-\newblock \url{https://www.jenkins.io/}.
-\newblock Accessed: 2021-11-09.
-
-\bibitem{GitLab}
-Gitlab.
-\newblock \url{https://about.gitlab.com/}.
-\newblock Accessed: 2021-11-09.
 
 \bibitem{createProcWinAPI}
 Createprocess function.
@@ -90,11 +122,21 @@ Anthony Williams.
 \newblock {\em C++ Concurrency in Action, Second Edition}.
 \newblock Manning Publications, 2019.
 
+\bibitem{clone}
+Raghu Bharadwaj.
+\newblock {\em Mastering Linux Kernel Developement}.
+\newblock Packt Publishing, 2017.
+
 \bibitem{priorityClasses}
 Getpriorityclass function.
 \newblock
   \url{https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getpriorityclass}.
 \newblock Accessed: 2021-11-15.
+
+\bibitem{cppExpert}
+Shunguang~Wu Vardan~Grigoryan.
+\newblock {\em Expert C++}.
+\newblock Packt Publishing, 2020.
 
 \bibitem{stdAtomic}
 std::atomic.
@@ -105,5 +147,17 @@ std::atomic.
 Fedor Pikus.
 \newblock C++ atomics, from basic to advanced. what they really do?
 \newblock Accessed: 2021-11-17.
+
+\bibitem{linux-man-proc}
+Michael Kerrisk.
+\newblock proc(5)-linux manual page.
+\newblock \url{https://man7.org/linux/man-pages/man5/proc.5.html#NAME}.
+\newblock Accessed: 2021-11-25.
+
+\bibitem{linux-man-set/getattribute}
+Michael Kerrisk.
+\newblock sched\_setattr(2)-linux manual page.
+\newblock \url{https://man7.org/linux/man-pages/man2/sched_setattr.2.html}.
+\newblock Accessed: 2021-11-25.
 
 \end{thebibliography}

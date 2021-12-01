@@ -27,7 +27,7 @@ std::vector<uint64_t> returnData(int cpu)
 	std::size_t searchPos = 5, strEndPos = 0;
 	// If we want a certain cpu's data we need to set the search position to 4 because of
 	// of the name "cpuN", where 4 is the position of the first space in the entry
-	if(cpu > std::thread::hardware_concurrency())
+	if(cpu > std::thread::hardware_concurrency() || cpu < 0)
 	{
 		throw std::range_error("Given CPU is out of range");
 	}

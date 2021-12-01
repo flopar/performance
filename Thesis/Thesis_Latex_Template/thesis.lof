@@ -1,20 +1,27 @@
 \select@language {ngerman}
+\select@language {english}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces US Software Market Size\cite {GMI}}}{2}{figure.1.1}
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Browser CPU utilization comparison\cite {6724273}}}{3}{figure.1.2}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces US Software Market Size\cite {GMI}}}{3}{figure.1.1}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Hexagon of criteria}}{5}{figure.1.2}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Stack segment}}{6}{figure.2.1}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces RLIMIT\_NICE}}{9}{figure.2.2}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {RLIMIT\_NICE code}}}{9}{figure.2.2}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {RLIMIT\_NICE output}}}{9}{figure.2.2}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces sched\_prio\_range}}{10}{figure.2.3}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {sched\_prio\_range code}}}{10}{figure.2.3}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {sched\_prio\_range output}}}{10}{figure.2.3}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Stack segment}}{12}{figure.2.4}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Browser CPU utilization comparison\cite {6724273}}}{8}{figure.2.1}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Stack segment}}{9}{figure.2.2}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces RLIMIT\_NICE}}{12}{figure.2.3}
+\contentsline {subfigure}{\string \numberline {2.3(a)}{\ignorespaces RLIMIT\string \_NICE code}}{12}{figure.2.3}
+\contentsline {subfigure}{\string \numberline {2.3(b)}{\ignorespaces RLIMIT\string \_NICE output}}{12}{figure.2.3}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces sched\_prio\_range}}{14}{figure.2.4}
+\contentsline {subfigure}{\string \numberline {2.4(a)}{\ignorespaces sched\string \_prio\string \_range code}}{14}{figure.2.4}
+\contentsline {subfigure}{\string \numberline {2.4(b)}{\ignorespaces sched\string \_prio\string \_range output}}{14}{figure.2.4}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Thread's behavior without synchronization - Source code}}{14}{figure.2.5}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Thread's behavior without synchronization - Output}}{15}{figure.2.6}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Thread's behavior without synchronization - Source code}}{17}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Workload Time Diagrams}}{19}{figure.3.2}
+\contentsline {subfigure}{\string \numberline {3.2(a)}{\ignorespaces \string \texttt {asyncWorkload} not set}}{19}{figure.3.2}
+\contentsline {subfigure}{\string \numberline {3.2(b)}{\ignorespaces \string \texttt {asyncWorkload} set}}{19}{figure.3.2}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Beschriftungstext}}{15}{figure.4.1}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Beschriftung beide Bilder}}{16}{figure.4.2}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Beschriftung Bild links}}}{16}{figure.4.2}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Beschriftung Bild rechts}}}{16}{figure.4.2}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Beschriftungstext}}{23}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Beschriftung beide Bilder}}{24}{figure.4.2}
+\contentsline {subfigure}{\string \numberline {4.2(a)}{\ignorespaces Beschriftung Bild links}}{24}{figure.4.2}
+\contentsline {subfigure}{\string \numberline {4.2(b)}{\ignorespaces Beschriftung Bild rechts}}{24}{figure.4.2}
 \addvspace {10\p@ }

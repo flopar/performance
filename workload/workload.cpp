@@ -51,13 +51,30 @@ void Workload::stopWL()
 void Workload::simulateWorkload(unsigned int randomize, unsigned int* WLPriority)
 {
 	// maybe rewrite this with condition variables -> std::condition_variable::wait_until()
+	if(*WLPriority == MAX_PRIO)
+	{
+		try
+		{
+			while(true)
+			{
+				increaseThreadPrio(0);
+			}
+		}
+		catch(const std::exception& e)
+		{
+			std::cout << "Thread #" << randomize << " " << e.what() << std::endl;
+		}
+	}
 	while(!m_startSimulation.load())
 	{
 		//Busy waiting for all threads to be created
 	}
 	unsigned int countingVar = 0;
 	long long    sleepTime;
-	std::cout << "we are in the func" << std::endl;
+	if(m_asyncWorkload)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(randomize*50));
+	}
 	while(m_runningSimulation.load())
 	{
 		sleepTime = (long long)(500 - m_workload.load() * 5);

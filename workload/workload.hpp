@@ -16,6 +16,9 @@
 #elif WIN32
 #include <windows.h>
 #endif
+
+#define MAX_PRIO 1
+
 namespace workload
 {
 class Workload

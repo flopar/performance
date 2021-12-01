@@ -1,4 +1,21 @@
-\chapter{System fundamentals}
+\chapter{State of the art}
+\section{Current Situation} 
+At the time of writing this (December 2021), there are four mostly used architectures in the IT-Branch. These are Windows, Linux and MacOS. Linux was developed with the UNIX system as its core, while MacOS is only based on UNIX, which means that these are similar but not entirely compatible with each other. The big difference comes with Windows.\\
+Each operating system can deliver informations about its own computer.
+
+\footnotetext{Some companies also use ARM(aarch64), but this is not an OS and per default doesn't come with any process control system. In order to do so one needs to write or use an extra library for that solely purpose}
+
+For that each of them has its own unique program. Windows uses the \dq Task-Manger\dq{} which comes with a GUI and shows real-time information about the CPU and memory of the computer, it comes with a list of processes and makes it possible for the user to manage them with only a couple of clicks.\\
+Linux on the other hand is more text oriented. This operating systems comes with a built in command called "top". This also delivers informations about your system, but it doesn't allow you to manipulate processes like \dq Task-manger\dq{} does. Although not very practicable for developers, these tools allow the user to measure performance in a normal state where your computer is not put under pressure, but the most interesting state is when the CPU needs to do a lot of operations and it needs to share its valuable time with other processes. To force such situations, the user can use online stress tests, which use the browser as an workload source, which for many is not very practicable, because it uses an additional program, which runs in the background. Online stress tests rely on internet to work and a stable ethernet or wifi connection to work. This way the results can be very inaccurate if the the network is under pressure.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.25]{figures/einleitung/browser_comparisson.png}
+	\caption{Browser CPU utilization comparison\cite{6724273}}
+	\label{browser_comp}
+\end{figure}
+\\
+There are already some alternative libraries on the internet to recreate this method, but most of them are written in other programming languages. Adding them to a C++ Project would rise the complexity of the source code.\\
+Some people would think "Well C++ is a new and modern language. There must be something similar out there". This statement is true and because of its young age there are a limited number of officially tested methods. You could also take a look at the headers implemented in the \href{https://en.cppreference.com/w/cpp/header}{C++ standard library} \cite{CppRef} to familiarize yourself with common algorithms and data structures.
 Not all operating systems will be covered in this thesis.
 The following statements are true for the testing machines used in chapter 4?.
 \section{Processes}
@@ -40,15 +57,19 @@ can be set using the \texttt{Create\_Thread()} function just like in unix using 
 Concurrency means that two or more things are happening simultaneously. This pehnomenon is happening
 everyday almost everywhere we look. Even we as humans are capable of such thing, for example walking
 and talking at the same time. In computer science concurrency means that more than one process can
-be execuvted at the same time. Many systems have this ability, because most of them are
-multiprocessor computers. Even some single core computers can handle concurrency to some extent.
+be executed at the same time. Many systems have this ability, because most of them are
+multiprocessor computers. Nowadays many systems measure the concurrency of a system by its number of hardware threads. This
+unit of measure tells us how many independent tasks can the processor handle. Even some single core computers can handle concurrency to some extent.
 One calculation unit can handle one task at a time, but it can quickly switch to another task if
 necessary. This is why sometime even single core units give the impression of resolving jobs
-simultaneously\cite[Chapter~1]{concurrency}. Although performant this method does not come without its flaws. When a cpu gets a new task, the resources of the old task (eg. local variable, meta data of the current task, etc.)will be replaced by those of the new job. This is also known as \dq Context Switching\dq{}.
-The order of task switching will be explained in detail in chapter *scheduling*.\\ 
-Nowadays many systems measure the concurrency of a system by its number of hardware threads. This
-unit of measure tells us how many independet tasks can the processor handle.
+simultaneously\cite[Chapter~1]{concurrency}. Although performant this method does not come without its flaws. When a cpu gets a new task, the resources of the old task (eg. local variable, meta data of the current task, etc.)will be replaced by those of the new job. This is also known as \dq Context Switching\dq{}.\\
+\subsubsection{Context switching}
+Context switching can be triggered with an interrupt or a syscall. One example would be when another thread/process with a higher priority starts. This happens because the system would have to execute \texttt{fork()} for processes or \texttt{clone()} for threads which are also system calls. This would trigger the cpu
+to reschedule his task based on the schedule and priority of the tasks in the tasks list\cite{clone}.
+The reordering of tasks after switching CPUs will be explained in detail in \ref{priorities}.\\ 
+
 \section{CPU Affinity}
+\label{ssec:cpu_affinity}
 The affinity of a CPU determines the number of processors that one process can use for its threads.
 This library offers methods to restrict the number of CPUs off which a process can run on. This is
 sometimes desirable because of the following reasons:
@@ -70,10 +91,12 @@ By default most systems allow each process to use all CPUs. If the user turns of
 CPUs of a given process and tries to create an additional workload with the library's methods for that process, he must keep in
 mind that the workload will also be cut in half because the threads have less processors to work on.
 \section{Priorities}
+\label{priorities}
 When it comes to the priority of a process there is a big difference between a UNIX system and a
 windows machine. On Windows the priority is determined by the priority class of the process and the
 its thread priority.\\
 \subsection{Windows}
+\label{winPrioClass}
 Based on the winAPI documentation\cite{priorityClasses}, the classes can have the following values:
 \begin{enumerate}
 	\item IDLE\_PRIORITY\_CLASS (0x00000040): This is the lowest priority, processes belonging to this class run only if the system is idle and can be preempted\footnote{If a process is preempted that means it stops executing and yields the cpu} by a process with a higher priority
@@ -140,6 +163,7 @@ At last you could also modify the \dq/etc/security/limits.conf\dq{} file and set
 certain user, but this is not the best solution, because that user would have the power to change
 priorities not only for one program, but for all programs.
 \subsubsection{Scheduling}
+\label{ssec:sched_policies}
 Unlike Windows, Linux has methods to change one's process and its threads scheduling policies.The default policy set on UNIX
 is called "Round-Robin Timesharing" (SCHED\_OTHER). This allows jobs to be executed in a round robin fashion where
 each process gets an equal time-slice of a CPU. There are more than one policy which can be set.
@@ -184,20 +208,13 @@ and a higher priority process preempts them (a process with a lower nice value a
 or the user changes the value himself). SCHED\_RR can also lose its access if the timeslice of
 the job expires.
 
-\section{Workload}
-The definition for workload varies from field to field. In the IT-branch it is defined as a unit of measure for your CPU (mostly in \%). This tells the user how well his system can handle the number of current running processes. Most systems calculate their workload over a defined period of time. To understand this concept better, here is an example. Let's say a user starts a calculator program at time $\mathrm{t}_0$ = 0. The application will finish initializing a GUI at time $\mathrm{t}_{wait}$ = 2s and then an interactive visual window will appear, which will wait for the user to enter some equation.
-After the equation was typed at $\mathrm{t}_{input}$ = 5s and the \dq Enter\dq{}-key was pressed, the application proceeds calculating and delivers the answer at $\mathrm{t}_{done}$ = 6s. So the CPU-time of the application is 3s(GUI initialization and calculation time). In order to get its workload the system has to divide this time by the time the system needed for the whole process and multiply it by one hundred to have the result as percentage:
-\begin{equation}
-	workload =  \frac{\mathrm{t}_{wait}+\mathrm{t}_{calc}}{6s}*100
-\end{equation} 
-A detailed explanation on how to get the values of these specific times will follow in Chapter (*Kapitelnr*).
-
 \section{Synchronization}
 When working with threads, the programmer cannot forget that these share the same stack, therefore they share the same variables. When two or more threads start their execution (eg. a simple addition), one cannot tell when will they perform what (if their priorities weren't tampered with).\\
 There are two main operations threads can perform on a variable: \texttt{read()} and \texttt{write()}. Reading from a variable is not problematic, because its content will always stay the same, but writing to one is a whole different story. Let's take a look at the following code:
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.5\textwidth]{../figures/systemgrundlagen/synchronizationExample.png}
+	\caption{Thread's behavior without synchronization - Source code}
 \end{figure}
 Here we create two threads with the sole purpose of adding a common variable. Most people would expect, because of the order of creation, for t1 to do his job and afterwards t2, but this is not the case.
 \newpage
@@ -208,16 +225,30 @@ Here we create two threads with the sole purpose of adding a common variable. Mo
 \begin{wrapfigure}{1}{0.5\textwidth}
 	\centering
 	\includegraphics[width=.98\linewidth]{../figures/systemgrundlagen/synchronizationExampleOutput.png}
-	\caption{Stack segment}
+	\caption{Thread's behavior without synchronization - Output}
 \end{wrapfigure}
 
 As you can observe, these prints make no sense. The threads do not follow a sequentially pattern so the variable can be increased by \texttt{t1} for a time then by \texttt{t2} and for the rest of the remaining time by \texttt{t1} again.\\
 Something that cannot be seen in the output would be the scenario when \texttt{t1} and \texttt{t2} try to access the variable and increment it at the same time. No one can accurately predict what the result would be (this is also known as \textit{ Unexpected behavior}). To resolve this problem in classic C people came up with the idea of a locking mechanism called \texttt{Mutex}.\\
 \subsection{Mutex}
-Mutexes are guards that can block other threads the access to variables inside a user-defined block of code (also known as \textit{scope}). These allow the thread that called \texttt{lock()} exclusive access to the variables inside that scope until the thread calls \texttt{unlock()}. If another thread tries to lock the mutex for himself while the mutex is being used, then it will land in a waiting state until that lock is released. This method requires a lot of concentration from the programmer and a good overview of all locking and release point\cite{concurrency}.\\
-Fortunately the \textit{Standard C++ Library} implemented a new, more simplistic technology for threads to access common variable called \textit{Atomic Variables}.
+Mutexes are guards that can block other threads the access to variables inside a user-defined block of code (also known as \textit{scope}). These allow the thread that called \texttt{lock()} exclusive access to the variables inside that scope until the thread calls \texttt{unlock()}\cite{concurrency}. If another thread tries to lock the mutex for himself while the mutex is being used, then it will land in a waiting state until that lock is released.  The accessing order of the variable is \dq First come, first served\dq{}.\\
+But as many implementations, this method can create problems, especially if the programmer forgets to \texttt{unlock()} the mutex. If this ever happens, it can lead to other threads being stucked in a waiting state forever (this is also called a \textit{Deadlock})\cite{cppExpert}.\\
+This method requires a lot of concentration from the programmer and a good overview of all locking and release point.
+Fortunately the \textit{Standard C++ Library} implemented new ways to use mutexes like \textit{lock\_guards}, which unlock themselves when the user goes out of scope, \textit{unique\_locks}, \textit{shared\_locks} and even \textit{timed\_mutexes}. Additionally they made a more simplistic technology for threads to access only common variable (and not a whole scope) called \textit{Atomic Variables}.
 \subsection{Atomic Variables}
 Atomic variables can be seen as wrappers for primitive data types, like \texttt{bool}, \texttt{int}, \texttt{double}, \texttt{float}, etc., but also for defined structs like \texttt{uint32\_t}, \texttt{uintptr\_t} or \texttt{int\_fast32\_t}\\
-Basic syntax of this wrapper is: \textit{atomic<data\_type/class>} or (if defined) \textit{atomic\_data\_type}, that will grant the calling thread exclusive access to a certain variable while reading from or writing to it.\\
+Basic syntax of this wrapper is: \textit{atomic<data\_type/class>} or (if defined) \textit{atomic\_data\_type} and it will grant the calling thread exclusive access to a certain variable while reading from or writing to it.\\
 To read from an atomic variable one could just use the \dq =\dq{}-operator or (preferred) the \texttt{atomic\_var.load()} method. Writing to an atomic variable should only be done by using the \texttt{atomic\_var.store()} method, because this way you can expect that no one else besides the calling thread is accessing that variable\cite{stdAtomic, atomicConference}.\\
-The library comes with additional member functions to make certain sequences of reading and writing easier and specialized member function that define bitwise operations on a variable, but they go way too deep in complexity and understanding for me to focus too much on them.
+One must be very careful when using atomic operations on a variable.
+To explain this in detail let's observe the following example:
+\begin{center}
+	A simple incrementation of a variable:
+	\begin{enumerate}
+		\centering
+		\item x++
+		\item x += 1
+		\item x = x+1
+	\end{enumerate}
+\end{center}
+All of these are atomic operation, but number three is different from the first two. The first and second operation are both \textit{atomic increments}. The third however, needs to apply more operations on the variable. Here there is an \textit{atomic read}, to get the value from x and store it in a register, afterwards we add one to it and there is an \textit{atomic write}, to set the variable to its new value. If you are working with multiple threads any other thread can come in between the \texttt{write} and the \texttt{read} and temper with the value, because there is no exclusivity while the value is stored in the register. 
+The atomic library comes with additional member functions to make sequences of reading and writing easier and specialized member function that define bitwise operations on a variable, but they go way too deep in complexity and understanding for me to focus too much on them.

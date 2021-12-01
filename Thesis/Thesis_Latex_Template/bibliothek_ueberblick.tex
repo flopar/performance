@@ -1,2 +1,134 @@
 \chapter{Library Overview}
-this is a new chap
+This chapter will cover the library's build system and its main components, the system and workload components, as well as their logic.\\
+The library has two main components. The first one is the workload, which can vary depending of the user's input. This will create a system specific amount of threads and make them run a simulation function. The number of threads will stay constant and the time for running the workload task will be set accordingly for each input.\\
+The second components is the system. This comes with functions, which can easily change a thread's priority, a system's scheduling policy and deliver statistics of the user's computer.\\
+Basic operations are implemented to work on most operating systems, but there are some exceptions because of the differences between OS implementations, which makes them independent from one another.
+\section{Workload}
+This part of the library is mainly a C++ class, that lets the user create a specific workload.
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{../figures/libraryOverview/workloadClass.png}
+	\caption{Thread's behavior without synchronization - Source code}
+\end{figure}
+\subsection{Attributes}
+The class has six private Attributes:
+\begin{enumerate}
+	\item threadList: is a list of type vector that holds the current number of working threads after the initialization
+	\item runningSimulation: is a flag that tells the user the status of his working threads. This will be set to true once at least one thread in \texttt{threadList} has started executing a routine
+	\item startSimulation: is a switch that starts a simulation function (in our case \texttt{simulateWorkload()}). This is in order to synchronize threads and start them simultaneously
+	\item workload: hold the current workload set by the user. This is meant for future implementations in order to let the user change workloads dynamically at runtime
+	\item deviceThreads: is the number of threads the current machine can handle at the same time. This depends on the processor that the executable is running on therefore can differ on different device
+	\item asyncWorkload: this is a flag for testing purposes in order to simulate a \dq real\dq{} workload. This will be explained in detail in *section*.
+\end{enumerate}
+The name start with \dq m\_\dq{} in order to tell the programmer that the variable is a member of the class. It makes it easier to read and informs the user about the variable at the same time, without the need to check the class's definition.
+
+\subsection{Methods}
+The class's methods are:
+\begin{enumerate}
+	\item \texttt{Workload()}: this is the class's constructor and takes three arguemnts:
+	\begin{enumerate}
+		\item workloadPercentage: given workload percentage, that the user wants to simulate
+		\item WLPriority: this is a pointer to a OS-specific thread's priority. If this is set to \textit{NULL}, all threads will have the same (default) priority
+		\item async: let	s the user to create a more \dq real\dq{} workload. This will be explained in detail in chapter***  
+	\end{enumerate}
+	The first thing the constructor checks when a new object is created is the validity of the passed workload. Next it sets the \textit{runningSimulation} and \textit{startSimulation} attributes to false for a synchronized start. Afterwards it measures the current workload for ten seconds (it can be less or more, but ten seconds is in my opinion a proper chunk of time) in order to warn the user for a possible system overload.
+	At last, the workload's given percentage is stored in the attribute \textit{workload}, an output will inform the user about the number of threads that will be created and the loop creates the threads with the class's \texttt{simulateWorkload} method.\\
+	\texttt{emplace\_back()} pushes the created threads into an \texttt{std::vector}. I opted for this method instead of \texttt{push\_back()} because the compiler doesn't have to create the thread temporarily and push it afterwards, but it uses the \texttt{std::move} mechanism where the object is moved directly after the creation. This way we spare ourselves some extra memory (which is a very important factor if this is used on an ARM architecture)
+	\item \texttt{$\sim$Workload()}: this is the class's deconstructor. It is set to default and should be changed for future development
+	\item \texttt{finishWorkload()}: this function iterates through the class's thread list, checks if these are joinable (in case some user used detach for some reason) and joins them. In case a thread cannot be joined the \textit{TID} will be printed to the console\newpage
+	\item \texttt{simulateWorkload()}: this takes two arguments
+	\begin{enumerate}
+		\item randomize: is the index in the thread's construction loop
+		\item WLPriority: is the priority passed in the constructor. If this is not \texttt{NULL}, the given priority will be set
+	\end{enumerate}
+	First the functions increases the priority of the calling thread to maximum, then it waits for all threads to be created. When that happens the attribute \texttt{startSimulation} will be set to true, this way we ensure a finer synchronisation between the threads, because reading from a variable and leaving the loop should take less time than the time gap between the thread's creation. Next, each thread sleeps for a couple of milliseconds, if \texttt{asyncWorkload} is set. This way each thread starts with a small delay so the library's workload will never be zero. One can imagine a sinus curve if the flag is set and a square wave function otherwise (as seen in Figure \ref*{workloadTimeDiagram}).
+	\begin{figure*}[!htb]
+		\centering
+		\subfigure[\texttt{asyncWorkload} not set]{
+			\label{syncWorkloadDiagram}
+			\includegraphics[width=0.7\textwidth]{../figures/libraryOverview/sync_workload.JPG}}
+		\subfigure[\texttt{asyncWorkload} set]{
+			\label{asyncWorkloadDiagram}
+			\includegraphics[width=0.4\textwidth]{../figures/libraryOverview/async_workload.png}}
+		\caption{Workload Time Diagrams} 
+		\label{workloadTimeDiagram}
+	\end{figure*}
+	Afterwards the actual workload loop will start. I decided to recalculate the sleep time based on the current workload here, in order to support future dynamically changing workload for the simulation. The frequency of the workload is hard coded to ($\frac{2*workload}{100}$)Hz,because a cycle of working and sleeping for a thread is half a second and the system measures the workload once a second so this highly depends on how often the library's system component makes its time measurements.	
+	\item \texttt{setWorkload()}: this method's concept is to let the user dynamically change the thread's priority 
+	\item \texttt{startWL()}: checks if all threads that needed to be created were saved in the thread list. If this is the case it sets \texttt{simulationStart} and \texttt{runningSimulation} to \textit{true}
+	\item \texttt{stopWL()}: sets \texttt{runningSimulation} to \textit{false}. It makes sense to call this method before \texttt{finishWorkload()}, in order to properly stop all workload threads
+\end{enumerate}
+\section{System}
+This part of the library mainly contains methods to modify a thread's or process priority, the number of CPUs the a process can run on (see the cpu's affinity \ref{ssec:cpu_affinity} and the scheduler's policy \ref{ssec:sched_policies}).
+\subsection{Definitions}
+\begin{enumerate}
+	\item STR\_ERR: macro returned by a function if it failed
+	\item IDLE\_TIME: macro that represents idle time of the system
+	\item USER\_TIME: macro that represents user time of the system
+	\item KERNEL\_TIME: macro that represents kernel time of the system
+	\item schedPrioList: vector containing scheduler classes for a WINDOWS machine in ascending order(mentioned in \ref*{winPrioClass})
+	\item threadPrioList: vector containing thread priorities for a WINDOWS machine in ascending order(see \ref*{winPrioClass})
+	\item sched\_attr: struct containing thread's attributes for a LINUX machine
+\end{enumerate}
+\subsection{Methods}
+\label{system-methods}
+\begin{enumerate}
+	\item Windows:
+	\begin{enumerate}
+		\item mergeFILETIME(): takes a FILETIME structure as argument, merges the two 32-Bits attributes of the struct into a uint64\_t variable and returns it
+		\item setCPUAvailability():
+		\begin{enumerate}
+			\item proc: is a windows identification struct for processes of type \texttt{HANDLE}
+			\item mask: a 64-Bit value representing the cpu affinity for most computers out there. Each bit represents a cpu. If a bit is set to 1,that means the process can run on the CPU corresponding to that bit.
+		\end{enumerate}
+		\item increaseSchedClass():this method gets the current scheduler class and checks if it is already set to the maximum value allowed. In that case it will not do anything, throw and error and return 1. Otherwise it will get the index of the current class in the \texttt{schedPrioList}, increase the index by one and set it accordingly. This allows the user to test its program step by step without knowing the actual values in the list. If the user wants to set a certain value for his thread, he can simply use the \textit{winAPI} functions.
+		\item decreaseSchedClass(): does almost the same as \texttt{increaseSchedClass()}, but instead of increasing the scheduler class's priority, it decreases it
+	\end{enumerate}
+	\item Linux/Unix:
+	\begin{enumerate}
+		\item readCPUTime(): this functions takes an argument of type integer and reads data about the CPU specified by the given number. The data read comes from the \dq/proc/stat\dq{} file. As described in the manual page, the proc filesystem provides informations about the kernel structure or in other words about all processes on the calling system. The \dq/proc/stat\dq{} file contains statistics about the system.\\
+		This component uses only the first line and the lines which begin with the name \textit{cpuN}, where \textit{N} stands for the CPU specified by the argument passed to this function. Each line that contains statistics about the CPU has the following pattern\cite{linux-man-proc}:\\\\\vspace{1cm}
+		\begin{tabular}[h!]{ |c|c|c|c|c|c|c|c|c|c|c| }
+				\hline
+				name & user & nice & system & idle & iowait & irq & softirq & steal & guest & guest\_niced\\
+				\hline
+		\end{tabular}\\
+		The most important statistics for the library are\cite{linux-man-proc}:
+		\begin{enumerate}
+			\item name: is either cpu or cpuN, where cpu stands for the whole system and cpuN for a cpu specified by N, where N$\in$ [0;max\_number\_of\_CPUs]
+			\item user: is the time spent in user mode
+			\item nice: is the time spent in user mode with low nice values
+			\item system: is the time spent in system mode
+			\item idle: is the time spent for idle tasks
+		\end{enumerate}
+			If the function is successful, it always returns an \texttt{std::string} containing the line specified by the passed argument, else it return the macro \texttt{STR\_ERR}.
+		\item returnData(): this function takes an integer as its argument specifying the cpu that we want data from. If the integer is zero, the function returns data from the whole system, one for the first cpu, two for the second cpu and so on. If the given integer is higher than the value returned by \texttt{std::thread::hardware\_concurrency()} or lower than zero the function will fail and throw an exception, else the argument will be passed to the \texttt{readData()} method, parse the string returned by it and return the data as an \texttt{std::vector} containing \texttt{uint64\_t} values.
+		\item printPolicy(): this is a utility function that takes an integer as the argument and prints the policy corresponding to it. Possible values are for the arguments are specified in \ref{ssec:sched_policies}.
+		\item changedPolicy(): this functions takes two integer as its arguments:
+		\begin{enumerate}
+			\item policy(int): new policy that should be set
+			\item pid(int): the process's \textit{PID}. If this is zero this function will change the policy of the calling process
+		\end{enumerate}
+		First this function uses system calls, \texttt{SYS\_sched\_getattr} to get the current \texttt{sched\_attr struct} specified in the linux man pages and \texttt{SYS\_sched\_setattr} to set the new one for the given process specified by the passed arguemnts.\cite{linux-man-set/getattribute}
+		\item decreaseProcessNiceValue(): this method takes an integer as its argument specifying the pid and is similar to \texttt{decreaseSchedClass()}, but instead of checking a local vector list, it uses \texttt{getpriority()} with \texttt{PRIO\_PROCESS} and \texttt{pid} to get the current nice value, saves it temporarily and decreases/increments it by one. Then it uses \texttt{setpriority()} to set the new value with the same arguments passed to \texttt{getpriority()}. If the nice value reaches 20, the function will throw an exception. The method will fail only if \texttt{set/getpriority} fails.
+		\item increaseProcessNiceValues: this method does the same as its former mentioned function, but instead of decreasing/incrementing the value this method increases/decrements it.
+	\end{enumerate}
+	\item NON-OS-Specific:
+	\begin{enumerate}
+		\item getCPUTime(): this function takes the following arguments
+		\begin{enumerate}
+			\item kernel(uint64\_t reference\footnote{A reference is like a pointer but the variable passed cannot be \textit{NULL}}): kernel time -> time the CPU spent for more \dq privileged\dq{} methods like system calls or interrupts
+			\item user(uint64\_t reference): user time -> this refers to any other methods for example a simple loop written by the user
+			\item idle(uint64\_t reference): idle time -> this time shows how long the system has been idle 
+		\end{enumerate}
+		This function gets the three times specified by the arguments and writes them in the passed references for further usage.\\
+		On Linux it uses the \texttt{returnData()} method with zero as its argument and it saves the first four entries of the returned vector. The zeroth and first entry sum up the user time, the second is the kernel time and the third is the idle time.\\
+		On Windows it first creates three \texttt{FILETIME} variables and uses \texttt{GetSystemTimes()} to get the three specified times. If \texttt{GetSystemTimes()} fails, an exception will be thrown and the function will return one, otherwise it will call \texttt{mergeFILETIME()} (because a FILETIME variable is a struct that contains two 32-bit attributes and one needs to concatenate the lower bits to the upper bits to get the real time as a 64-bit variable).
+	\end{enumerate}
+	\item getProcessTimes(): this function takes two uint64\_t references as its arguments and writes the user and kernel times in them. The methods used to get these times do not deliver the idle time (logically thinking there is no user case when this might be important).\\
+	On Linux the function calls the \texttt{times()} method specified by the \texttt{<sys/times.h>} header file. This writes the required times of the calling process in two attributes of type \texttt{clock\_t} called \textit{tms\_utime} and \textit{tms\_stime} which belong to a  data type called \texttt{struct tms} (this also contains the kernel and user time of any process children created by the current process, but these are irrelevant for this implementation).\\
+	On Windows it uses \texttt{GetProcessTimes()} to get the times similar to \texttt{getCPUTime()}. It uses \texttt{GetCurrentProcess()} to specify the current process. \texttt{GetProcessTimes()} also delivers the creation and exit time, these are irrelevant for this implementation. If \texttt{GetProcessTimes()} fails the function will throw an exception and will return one.
+	\item convertTime(): this is a utility method and takes a uint64\_t as its argument representing the time. \\
+	On Linux \texttt{sysconf(\_SC\_CLK\_TCK)} is called, which returns the system's clock ticks per second value. If this is fails an exception is thrown and the functions returns minus one, otherwise it return the seeked time in milliseconds.\\
+	On Windows it returns the given argument multiplied by 0.1, which also represents the time in milliseconds. 
+\end{enumerate}
