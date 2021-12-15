@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8...3.21)
+cmake_minimum_required(VERSION 3.12...3.21)
 
 # in case of older version 
 if(${CMAKE_VERSION} VERSION_LESS 3.12)

@@ -148,6 +148,24 @@ Fedor Pikus.
 \newblock C++ atomics, from basic to advanced. what they really do?
 \newblock Accessed: 2021-11-17.
 
+\bibitem{gcc}
+GNU Organisation.
+\newblock Gcc.
+\newblock \url{https://gcc.gnu.org/}.
+\newblock Accessed: 2021-12-11.
+
+\bibitem{mingw}
+MinGW Organisation.
+\newblock Mingw-w64.
+\newblock \url{https://www.mingw-w64.org/}.
+\newblock Accessed: 2021-12-11.
+
+\bibitem{cmake-overview}
+Kitware.
+\newblock About cmake.
+\newblock \url{https://cmake.org/overview/}.
+\newblock Accessed: 2021-12-11.
+
 \bibitem{linux-man-proc}
 Michael Kerrisk.
 \newblock proc(5)-linux manual page.

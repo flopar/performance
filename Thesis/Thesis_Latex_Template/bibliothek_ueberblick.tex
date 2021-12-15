@@ -60,7 +60,7 @@ The class's methods are:
 \end{enumerate}
 \section{System}
 This part of the library mainly contains methods to modify a thread's or process priority, the number of CPUs the a process can run on (see the cpu's affinity \ref{ssec:cpu_affinity} and the scheduler's policy \ref{ssec:sched_policies}).
-\subsection{Definitions}
+\subsection{Defines}
 \begin{enumerate}
 	\item STR\_ERR: macro returned by a function if it failed
 	\item IDLE\_TIME: macro that represents idle time of the system
@@ -113,9 +113,10 @@ This part of the library mainly contains methods to modify a thread's or process
 		\item decreaseProcessNiceValue(): this method takes an integer as its argument specifying the pid and is similar to \texttt{decreaseSchedClass()}, but instead of checking a local vector list, it uses \texttt{getpriority()} with \texttt{PRIO\_PROCESS} and \texttt{pid} to get the current nice value, saves it temporarily and decreases/increments it by one. Then it uses \texttt{setpriority()} to set the new value with the same arguments passed to \texttt{getpriority()}. If the nice value reaches 20, the function will throw an exception. The method will fail only if \texttt{set/getpriority} fails.
 		\item increaseProcessNiceValues: this method does the same as its former mentioned function, but instead of decreasing/incrementing the value this method increases/decrements it.
 	\end{enumerate}
-	\item NON-OS-Specific:
+	\item NON-OS-Specific:\\
+	NON-OS-Specific functions refrain to methods that either don't depend on any of the OS-Specific libraries such as the UNIX header files and the winAPI or they give the impression of identical behaviour, while in reality each case is manged with a lock-guard. 
 	\begin{enumerate}
-		\item getCPUTime(): this function takes the following arguments
+		\item getCPUTimes(): this function takes the following arguments
 		\begin{enumerate}
 			\item kernel(uint64\_t reference\footnote{A reference is like a pointer but the variable passed cannot be \textit{NULL}}): kernel time -> time the CPU spent for more \dq privileged\dq{} methods like system calls or interrupts
 			\item user(uint64\_t reference): user time -> this refers to any other methods for example a simple loop written by the user
@@ -124,11 +125,46 @@ This part of the library mainly contains methods to modify a thread's or process
 		This function gets the three times specified by the arguments and writes them in the passed references for further usage.\\
 		On Linux it uses the \texttt{returnData()} method with zero as its argument and it saves the first four entries of the returned vector. The zeroth and first entry sum up the user time, the second is the kernel time and the third is the idle time.\\
 		On Windows it first creates three \texttt{FILETIME} variables and uses \texttt{GetSystemTimes()} to get the three specified times. If \texttt{GetSystemTimes()} fails, an exception will be thrown and the function will return one, otherwise it will call \texttt{mergeFILETIME()} (because a FILETIME variable is a struct that contains two 32-bit attributes and one needs to concatenate the lower bits to the upper bits to get the real time as a 64-bit variable).
+		\item getProcessTimes(): this function takes two uint64\_t references as its arguments and writes the user and kernel times in them. The methods used to get these times do not deliver the idle time (logically thinking there is no user case when this might be important).\\
+		On Linux the function calls the \texttt{times()} method specified by the \texttt{<sys/times.h>} header file. This writes the required times of the calling process in two attributes of type \texttt{clock\_t} called \textit{tms\_utime} and \textit{tms\_stime} which belong to a  data type called \texttt{struct tms} (this also contains the kernel and user time of any process children created by the current process, but these are irrelevant for this implementation).\\
+		On Windows it uses \texttt{GetProcessTimes()} to get the times similar to \texttt{getCPUTimes()}. It uses \texttt{GetCurrentProcess()} to specify the current process. \texttt{GetProcessTimes()} also delivers the creation and exit time, these are irrelevant for this implementation. If \texttt{GetProcessTimes()} fails the function will throw an exception and will return one.
+		\item convertTime(): this is a utility method and takes a uint64\_t as its argument representing the time. \\
+		On Linux \texttt{sysconf(\_SC\_CLK\_TCK)} is called, which returns the system's clock ticks per second value. If this is fails an exception is thrown and the functions returns minus one, otherwise it return the seeked time in milliseconds.\\
+		On Windows it returns the given argument multiplied by 0.1, which also represents the time in milliseconds.
+		\item getSpecificCPUTime(): the method is more utility based and similar to \texttt{getCPUTimes()}, but instead of writing its times into the passed arguments, it returns only one time described by the given parameter. Its type is an integer and describes which CPU time should be returned as a uint64\_t value. Possible arguments are \texttt{IDLE\_TIME}, \texttt{USER\_TIME} and \texttt{KERNEL\_TIME}, which are defined in \texttt{system/system.hpp} file and extend to zero, one and two respectively.
+		\item increase-/decreaseThreadPrio(): is similar to \texttt{increase-/decreaseProcessNiceValue()} or \texttt{increase-/decreaseSchedClass()}.
+		On Linux the method takes an integer as parameter called \textit{id}, which it gets the current TID (if \textit{id} is zero, which is set by default) priority or the priority specified by \textit{id} with the help of \texttt{sched\_getsched()}. Afterwards it initializes a \textit{sched\_attr} struct, increases or decreases the priority (throws an error if the maximal or minimal priority is reached) and sets the priority through a system call\footnote{Using the system call is preferred, because it supports future development of the function for tempering with more thread's attributes and not only the their priority}. \\
+		On Windows it does the same. The only difference is in the parameter and the functions called to get and set the thread's priority. Here the \texttt{GetThreadPriority()} and \texttt{SetThreadPriority()} are used which expects a \textit{HANDLE} type as their arguments. That's why we also pass a \textit{HANDLE} to this function instead on an \textit{integer} as TID.    
+		\item calculateSystemLoad(): the function calculates and returns the system's current workload as a double value\footnote{This is mainly used in the workload class to tell the user the system's current workload and not overload the system}. It takes an integer as its arguments, which specifies the duration of the check.
+		On Linux it adds the kernel time to the user time, divides the sum to the addition of kernel, idle and system time and multiply the result with 100 to get a workload as a percentage. 
+		\begin{equation}
+		workload =  \frac{\mathrm{t}_{user}+\mathrm{t}_{kernel}}{\mathrm{t}_{user}+\mathrm{t}_{kernel}+\mathrm{t}_{idle}}*100
+		\end{equation}\\
+		On Windows however kernel time also contains the idle time of the system (as specified in the winAPI documentation), so in order to get a meaningful and correct result we have to subtract idle time from kernel time.
+		\begin{equation}
+		workload =  \frac{\mathrm{t}_{kernel}-\mathrm{t}_{idle}+\mathrm{t}_{user}}{\mathrm{t}_{user}+\mathrm{t}_{kernel}}*100
+		\end{equation}\\
+		\item calculateAndShowLoad(): this functions takes three parameters:
+		\begin{enumerate}
+			\item duration: the duration of the check while the load simulation is active
+			\item processWLList: a \textit{vector} that contains entries with the process's workload in one seconds intervals. So the number of entries is also defined by the duration of the check
+			\item systenWLList: also a \textit{vector}, which contains the system's workloads during the check. It size also depends on the duration of the check 
+		\end{enumerate}
+		It also calculates the system's and process's workloads similar to the latter. But instead of just printing it to the screen it saves the values into lists (\textit{std::vectors}) used later for writing logging files. Before terminating it also determines the time which the system was not idle using the \texttt{convertTime()} and \texttt{getSpecficCPUTime()}
+		\item writeOverallStats(): this operations takes two arguments:\\
+		1) \textit{stat}, which represents the number of the statistic that will be written to the log file 
+		2) \textit{statName}, a string representing the name of the stat
+		After calling this functions, it will try to create and open a \textit{comma separated file}(CSV) named \dq \textit{overall\_stats.csv}\dq{}. If this fails an exception will be thrown and the function returns -1. Otherwise it will write the given stat with the given name string passed by \textit{statName} and close the file.
+		\item wirteRuntimeStats(): similar to the latter, this functions writes all statistics given by its first argument with the name passed into the second argument to a CSV file. If the CSV file could be successfully created and opened, it will write the statistics and close if afterwards. Otherwise the method will throw an exception and return -1.
 	\end{enumerate}
-	\item getProcessTimes(): this function takes two uint64\_t references as its arguments and writes the user and kernel times in them. The methods used to get these times do not deliver the idle time (logically thinking there is no user case when this might be important).\\
-	On Linux the function calls the \texttt{times()} method specified by the \texttt{<sys/times.h>} header file. This writes the required times of the calling process in two attributes of type \texttt{clock\_t} called \textit{tms\_utime} and \textit{tms\_stime} which belong to a  data type called \texttt{struct tms} (this also contains the kernel and user time of any process children created by the current process, but these are irrelevant for this implementation).\\
-	On Windows it uses \texttt{GetProcessTimes()} to get the times similar to \texttt{getCPUTime()}. It uses \texttt{GetCurrentProcess()} to specify the current process. \texttt{GetProcessTimes()} also delivers the creation and exit time, these are irrelevant for this implementation. If \texttt{GetProcessTimes()} fails the function will throw an exception and will return one.
-	\item convertTime(): this is a utility method and takes a uint64\_t as its argument representing the time. \\
-	On Linux \texttt{sysconf(\_SC\_CLK\_TCK)} is called, which returns the system's clock ticks per second value. If this is fails an exception is thrown and the functions returns minus one, otherwise it return the seeked time in milliseconds.\\
-	On Windows it returns the given argument multiplied by 0.1, which also represents the time in milliseconds. 
 \end{enumerate}
+\section{Build System - CMAKE}
+As described in \ref{objective} the goal of this library is to create methods supporting the two big operating systems in the industry: Linux and Windows. In order to do that the library comes with additional support for projects that use CMake for their build system. When calling the \textit{cmake} command on the main \textit{CMakeLists.txt}, the system will generate different files depending on the calling OS. When called on Linux, it will generate \textit{Make} files that can be used with the make mechanism that comes with most (almost all) \textit{UNIX} distributions to build the files specified in \textit{CMakeLists.txt} of each directory. When called on windows .... .
+We can use the CMake syntax to either link the components to the library statically or dynamically\footnote{Static Library means that the linked libraries will be part of the executable, while the code from a Dynamically Linked Library will be linked at runtime, thus resulting in a much smaller sized executable. A good hint for the user when trying to link this library}. 
+\subsection{Implementation}
+As already mentioned, when using \textit{CMake} each directory needs a \textit{CMakeLists.txt}. The main file is the most important file, because it sets the requirements for the whole project.\\
+The first requirement for this project is the minimum cmake version, which is set from 3.12 to 3.21. This way it supports even older version(if the user didn't bother updating the program). Then we set a failing criteria, for the user to know that the library doesn't support older versions. Afterwards we set some CMake standard variables to make the user have at least C++17 enabled. This is done for two main reasons: \\
+First, the library uses newer elements for its components, therefore older versions won't be compatible and so errors will occur.\\
+Second, the library should encourage the users to start implementing modern and up-to-date standards (in my opinion C++17 is not even a new standard, considering)
+After that the library prints a message to tell the user what operating system was recognized by CMake and then we define the name of the project, the version, description and its programming language.\\
+Finally we tell CMake which directories contain the code for our project by adding them to the include search path and linking the targets that are defined in those directories to the main executable target created in the \textit{CMakeLists.txt} that can be found in the source subdirectory.\textsl{}

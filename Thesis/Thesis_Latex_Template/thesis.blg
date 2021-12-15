@@ -5,57 +5,51 @@ A level-1 auxiliary file: deckblatt.aux
 A level-1 auxiliary file: einleitung.aux
 A level-1 auxiliary file: systemgrundlagen.aux
 A level-1 auxiliary file: bibliothek_ueberblick.aux
-A level-1 auxiliary file: beispiele.aux
-A level-1 auxiliary file: analyse.aux
+A level-1 auxiliary file: testing.aux
 The style file: unsrt.bst
 Database file #1: literatur.bib
 Warning--entry type for "atomicConference" isn't style-file defined
 --line 471 of file literatur.bib
-Warning--I didn't find a database entry for "li00"
-Warning--I didn't find a database entry for "jackson91"
-Warning--I didn't find a database entry for "lakhina04a"
-Warning--I didn't find a database entry for "netflow"
-Warning--I didn't find a database entry for "rfc2386"
 Warning--can't use both author and editor fields in Daneva1995
-You've used 27 entries,
+You've used 30 entries,
             1791 wiz_defined-function locations,
-            607 strings with 7994 characters,
-and the built_in function-call counts, 5857 in all, are:
-= -- 533
-> -- 164
+            614 strings with 8141 characters,
+and the built_in function-call counts, 6259 in all, are:
+= -- 569
+> -- 176
 < -- 11
-+ -- 69
-- -- 42
++ -- 75
+- -- 45
 * -- 231
-:= -- 797
-add.period$ -- 87
-call.type$ -- 27
-change.case$ -- 20
+:= -- 860
+add.period$ -- 99
+call.type$ -- 30
+change.case$ -- 23
 chr.to.int$ -- 0
-cite$ -- 28
-duplicate$ -- 322
-empty$ -- 682
-format.name$ -- 42
-if$ -- 1457
+cite$ -- 31
+duplicate$ -- 337
+empty$ -- 736
+format.name$ -- 45
+if$ -- 1553
 int.to.chr$ -- 0
-int.to.str$ -- 27
+int.to.str$ -- 30
 missing$ -- 24
-newline$ -- 142
-num.names$ -- 24
-pop$ -- 172
+newline$ -- 160
+num.names$ -- 27
+pop$ -- 193
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 189
+skip$ -- 195
 stack$ -- 0
 substring$ -- 268
-swap$ -- 118
+swap$ -- 121
 text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 49
-width$ -- 29
-write$ -- 290
-(There were 7 warnings)
+while$ -- 52
+width$ -- 32
+write$ -- 323
+(There were 2 warnings)

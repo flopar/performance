@@ -1,4 +1,5 @@
 \chapter{State of the art}
+This chapter summarizes already existing technologies and implementations that are relevant to the library. Despite the fact that most of them are written in the C language, they are still relevant as they describe how many operating systems work and where many C++ standards come from.   
 \section{Current Situation} 
 At the time of writing this (December 2021), there are four mostly used architectures in the IT-Branch. These are Windows, Linux and MacOS. Linux was developed with the UNIX system as its core, while MacOS is only based on UNIX, which means that these are similar but not entirely compatible with each other. The big difference comes with Windows.\\
 Each operating system can deliver informations about its own computer.
@@ -252,3 +253,17 @@ To explain this in detail let's observe the following example:
 \end{center}
 All of these are atomic operation, but number three is different from the first two. The first and second operation are both \textit{atomic increments}. The third however, needs to apply more operations on the variable. Here there is an \textit{atomic read}, to get the value from x and store it in a register, afterwards we add one to it and there is an \textit{atomic write}, to set the variable to its new value. If you are working with multiple threads any other thread can come in between the \texttt{write} and the \texttt{read} and temper with the value, because there is no exclusivity while the value is stored in the register. 
 The atomic library comes with additional member functions to make sequences of reading and writing easier and specialized member function that define bitwise operations on a variable, but they go way too deep in complexity and understanding for me to focus too much on them.
+\section{CMake}
+Despite the numerous implementations for the C++ language, there are still some hardships that need to be overcome when working with it. When it came to building, many people used os-dependent technologies such as the \textit{GNU Compile Collection}(short GCC) for Linux\cite{gcc} or MingW, which supports the usage of the GCC compiler, on Windows\cite{mingw}. Despite the existing methods, the demand \dq for a cross-platform build environment\dq{} was so high a new tool called \textit{CMake} emerged\cite{cmake-overview}.\\
+\dq CMake is an extensible open-source system that manages the build process in an operating system and in compiler-independent manner\dq{}. As mentioned on their website, the system is used with native build environments and can be used to build binaries of a specific projects. These binaries can be executable files or compiled libraries such as \text{*.o}-files (also known as Object-files) on Linux or \textit{*.dll} (Dynamical Linked Library) on Windows. In order to use this program one has to first write basic text files and call them \textit{CMakeLists.txt}. The content of these files needs to be written in an interpreted language. Its Syntax goes as follows: \texttt{COMMAND(args...)}. Each subdirectory of the project needs to contain a \textit{CMakeLists.txt} file that will later be linked through a command to the main \textit{CMakeLists.txt} file. 
+
+\section{Need for action}
+Although the presented technology uses the C and C++ syntax and logic, there is still no universal tool to cover the most relevant operating systems out there when it comes to the machine's performance. This is where this library comes in handy.\\
+The goals are:
+\begin{enumerate}
+	\item summarize the complexity between operating systems into easy-to-understand methods
+	\item supply the user with numerous operations to ensure homogeneity and flexibility usage in order to cover most user-cases in the industry 
+	\item  encourage creative test-solving ways   
+\end{enumerate}
+% Nachfragen :S es sieht nicht ganz richtig aus 
+%warum ge0stae ich die Library so wie sie ist?

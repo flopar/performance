@@ -8,37 +8,35 @@
 \BOOKMARK [2][-]{subsection.1.2.2}{1.2.2 Common approaches}{section.1.2}% 8
 \BOOKMARK [1][-]{section.1.3}{1.3 Benchmarking}{chapter.1}% 9
 \BOOKMARK [2][-]{subsection.1.3.1}{1.3.1 Workload}{section.1.3}% 10
-\BOOKMARK [1][-]{section.1.4}{1.4 Obective}{chapter.1}% 11
-\BOOKMARK [0][]{chapter.2}{2 State of the art}{}% 12
-\BOOKMARK [1][-]{section.2.1}{2.1 Current Situation}{chapter.2}% 13
-\BOOKMARK [1][-]{section.2.2}{2.2 Processes}{chapter.2}% 14
-\BOOKMARK [2][-]{subsection.2.2.1}{2.2.1 Threads}{section.2.2}% 15
-\BOOKMARK [2][-]{subsection.2.2.2}{2.2.2 Differences between threads and processes}{section.2.2}% 16
-\BOOKMARK [2][-]{subsection.2.2.3}{2.2.3 Attributes}{section.2.2}% 17
-\BOOKMARK [2][-]{subsection.2.2.4}{2.2.4 Stack Size}{section.2.2}% 18
-\BOOKMARK [1][-]{section.2.3}{2.3 Concurrency}{chapter.2}% 19
-\BOOKMARK [1][-]{section.2.4}{2.4 CPU Affinity}{chapter.2}% 20
-\BOOKMARK [1][-]{section.2.5}{2.5 Priorities}{chapter.2}% 21
-\BOOKMARK [2][-]{subsection.2.5.1}{2.5.1 Windows}{section.2.5}% 22
-\BOOKMARK [2][-]{subsection.2.5.2}{2.5.2 Linux}{section.2.5}% 23
-\BOOKMARK [1][-]{section.2.6}{2.6 Synchronization}{chapter.2}% 24
-\BOOKMARK [2][-]{subsection.2.6.1}{2.6.1 Mutex}{section.2.6}% 25
-\BOOKMARK [2][-]{subsection.2.6.2}{2.6.2 Atomic Variables}{section.2.6}% 26
-\BOOKMARK [0][]{chapter.3}{3 Library Overview}{}% 27
-\BOOKMARK [1][-]{section.3.1}{3.1 Workload}{chapter.3}% 28
-\BOOKMARK [2][-]{subsection.3.1.1}{3.1.1 Attributes}{section.3.1}% 29
-\BOOKMARK [2][-]{subsection.3.1.2}{3.1.2 Methods}{section.3.1}% 30
-\BOOKMARK [1][-]{section.3.2}{3.2 System}{chapter.3}% 31
-\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Definitions}{section.3.2}% 32
-\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Methods}{section.3.2}% 33
-\BOOKMARK [0][]{chapter.4}{4 Beispiele}{}% 34
-\BOOKMARK [1][-]{section.4.1}{4.1 Zitieren}{chapter.4}% 35
-\BOOKMARK [1][-]{section.4.2}{4.2 Bild einf\374gen}{chapter.4}% 36
-\BOOKMARK [2][-]{subsection.4.2.1}{4.2.1 Ein Bild skaliert}{section.4.2}% 37
-\BOOKMARK [2][-]{subsection.4.2.2}{4.2.2 Zwei Bilder nebeneinander oder untereinander}{section.4.2}% 38
-\BOOKMARK [1][-]{section.4.3}{4.3 Tabellen}{chapter.4}% 39
-\BOOKMARK [0][]{chapter.5}{5 Analyse}{}% 40
-\BOOKMARK [1][-]{section.5.1}{5.1 Abschnitt 1}{chapter.5}% 41
-\BOOKMARK [1][-]{section.5.2}{5.2 Abschnitt 2}{chapter.5}% 42
-\BOOKMARK [2][-]{subsection.5.2.1}{5.2.1 Unterabschnitt}{section.5.2}% 43
-\BOOKMARK [0][]{subsubsection.5.2.1.1}{Bibliography}{}% 44
+\BOOKMARK [1][-]{section.1.4}{1.4 Vision and Objective}{chapter.1}% 11
+\BOOKMARK [2][-]{subsection.1.4.1}{1.4.1 Vision}{section.1.4}% 12
+\BOOKMARK [2][-]{subsection.1.4.2}{1.4.2 Objective}{section.1.4}% 13
+\BOOKMARK [2][-]{subsection.1.4.3}{1.4.3 Obstacles}{section.1.4}% 14
+\BOOKMARK [0][]{chapter.2}{2 State of the art}{}% 15
+\BOOKMARK [1][-]{section.2.1}{2.1 Current Situation}{chapter.2}% 16
+\BOOKMARK [1][-]{section.2.2}{2.2 Processes}{chapter.2}% 17
+\BOOKMARK [2][-]{subsection.2.2.1}{2.2.1 Threads}{section.2.2}% 18
+\BOOKMARK [2][-]{subsection.2.2.2}{2.2.2 Differences between threads and processes}{section.2.2}% 19
+\BOOKMARK [2][-]{subsection.2.2.3}{2.2.3 Attributes}{section.2.2}% 20
+\BOOKMARK [2][-]{subsection.2.2.4}{2.2.4 Stack Size}{section.2.2}% 21
+\BOOKMARK [1][-]{section.2.3}{2.3 Concurrency}{chapter.2}% 22
+\BOOKMARK [1][-]{section.2.4}{2.4 CPU Affinity}{chapter.2}% 23
+\BOOKMARK [1][-]{section.2.5}{2.5 Priorities}{chapter.2}% 24
+\BOOKMARK [2][-]{subsection.2.5.1}{2.5.1 Windows}{section.2.5}% 25
+\BOOKMARK [2][-]{subsection.2.5.2}{2.5.2 Linux}{section.2.5}% 26
+\BOOKMARK [1][-]{section.2.6}{2.6 Synchronization}{chapter.2}% 27
+\BOOKMARK [2][-]{subsection.2.6.1}{2.6.1 Mutex}{section.2.6}% 28
+\BOOKMARK [2][-]{subsection.2.6.2}{2.6.2 Atomic Variables}{section.2.6}% 29
+\BOOKMARK [1][-]{section.2.7}{2.7 CMake}{chapter.2}% 30
+\BOOKMARK [1][-]{section.2.8}{2.8 Need for action}{chapter.2}% 31
+\BOOKMARK [0][]{chapter.3}{3 Library Overview}{}% 32
+\BOOKMARK [1][-]{section.3.1}{3.1 Workload}{chapter.3}% 33
+\BOOKMARK [2][-]{subsection.3.1.1}{3.1.1 Attributes}{section.3.1}% 34
+\BOOKMARK [2][-]{subsection.3.1.2}{3.1.2 Methods}{section.3.1}% 35
+\BOOKMARK [1][-]{section.3.2}{3.2 System}{chapter.3}% 36
+\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Defines}{section.3.2}% 37
+\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Methods}{section.3.2}% 38
+\BOOKMARK [1][-]{section.3.3}{3.3 Build System - CMAKE}{chapter.3}% 39
+\BOOKMARK [2][-]{subsection.3.3.1}{3.3.1 Implementation}{section.3.3}% 40
+\BOOKMARK [0][]{chapter.4}{4 Accuracy testing}{}% 41
+\BOOKMARK [0][]{figure.4.2}{Bibliography}{}% 42

@@ -14,8 +14,7 @@ int writeRuntimeStats(auto list, std::string statName)
 	{
 		throw std::runtime_error("Couldn't open file to write");
 		return -1;
-	}
-	/* problems occured while using list.back() -> newline would come too often */
+	}	
 	statisticsFile << statName << ",";
 	int lenList = list.size()-1;
 	for(int i = 0; i < lenList; i++)
@@ -37,7 +36,7 @@ int writeRuntimeStats(auto list, std::string statName)
 
 void test(int mode, unsigned int percentage, bool async)
 {
-	std::vector<double> procWorkload, sysWorkload, test1,test2;
+	std::vector<double> procWorkload, sysWorkload;
 
 	// flag to indicate normal or critical workload for the workload class
 	unsigned int prio = NULL;
