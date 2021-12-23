@@ -30,6 +30,8 @@ int setCPUAvailability(HANDLE& proc, uint64_t mask);
 int checkCPUAvailability(HANDLE& proc);
 int increaseSchedClass();
 int decreaseSchedClass();
+int increaseThreadPrio(HANDLE id = 0);
+int decreaseThreadPrio(HANDLE id = 0);
 #endif
 
 // linux headers, defines and methods
@@ -59,16 +61,15 @@ void printPolicy(int policy);
 int changePolicy(int policy, int pid);
 int decreaseProcessNiceValue(int pid=0);
 int increaseProcessNiceValue(int pid=0);
-
+int increaseThreadPrio(int id = 0);
+int decreaseThreadPrio(int id = 0);
 #endif
 
 // Non-OS-Specific methods
 uint64_t getSpecificCPUTime(int which);
 int convertTime(uint64_t timeToConvert);
-int writeOverallStats(auto stat, std::string statName);
+int writeOverallStats(double stat, std::string statName);
 int getProcessTimes(uint64_t& kernel, uint64_t& user);
-int increaseThreadPrio(int id=0);
-int decreaseThreadPrio(int id=0);
 int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle);
 int calculateAndShowLoad(double duration, std::vector<double>& processWLList, std::vector<double>& systemWLList);
 double calculateSystemLoad(int duration);

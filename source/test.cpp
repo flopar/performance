@@ -6,7 +6,7 @@
 /* 
  * this function will write statistic to a csv File on if the type of "list" is an iterable object
  */
-int writeRuntimeStats(auto list, std::string statName)
+int writeRuntimeStats(std::vector<double> list, std::string statName)
 {
 	std::ofstream statisticsFile;
 	statisticsFile.open("runtime_statistics.csv", std::ios::in | std::ios::app | std::ios::binary);
@@ -107,8 +107,8 @@ void test(int mode, unsigned int percentage, bool async)
 
 int main(int argc, char* argv[])
 {
-	//test(CRITICAL, 10, true);	
-	test(NORMAL, 90, false);
+	test(CRITICAL, 10, true);	
+	//test(NORMAL, 90, false);
 
 	return 0;
 }
