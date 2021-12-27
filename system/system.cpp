@@ -700,8 +700,8 @@ int calculateAndShowLoad(double duration, std::vector<double>& processWLList, st
 				system_workload_sum += system_workload;
 				processWLList.push_back(process_workload);
 				systemWLList.push_back(system_workload);
-				std::cout << "Current process workload " << process_workload << std::endl;
-				std::cout << "Current system workload " << system_workload << std::endl;
+				//std::cout << "Current process workload " << process_workload << std::endl;
+				//std::cout << "Current system workload " << system_workload << std::endl;
 				duration--;
 			}
 			else

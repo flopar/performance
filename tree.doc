@@ -1,0 +1,28 @@
+Auflistung der Ordnerpfade
+Volumeseriennummer : 0000008E 5691:7683
+C:\USERS\FLORIAN P×RVU\DESKTOP\7.SEMESTER\BACHELORARBEIT\PERFORMANCE\PERFORMANCE
+|   .gitignore
+|   CMakeLists.txt
+|   LICENSE
+|   listOfReferences.txt
+|   README.md
+|   tree.doc
+|   
++---scripts
+|       eval.py
+|       evaluation.py
+|       
++---source
+|       CMakeLists.txt
+|       test.cpp
+|       
++---system
+|       CMakeLists.txt
+|       system.cpp
+|       system.hpp
+|       
+\---workload
+        CMakeLists.txt
+        workload.cpp
+        workload.hpp
+        

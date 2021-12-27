@@ -107,8 +107,8 @@ void test(int mode, unsigned int percentage, bool async)
 
 int main(int argc, char* argv[])
 {
-	test(CRITICAL, 10, true);	
-	//test(NORMAL, 90, false);
+	//test(CRITICAL, 10, true);	
+	test(NORMAL, 0, false);
 
 	return 0;
 }
