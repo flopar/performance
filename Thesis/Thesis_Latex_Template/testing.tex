@@ -2,12 +2,13 @@
 In order to show the accuracy of the methods and establish a meaningful use of (some of) the library's components, the following method was created.
 \begin{figure}[h]
 	\centering
-	\begin{minipage}[b]{0.5\textwidth}
-		\includegraphics[width=\textwidth]{../figures/testing/testing_method.png}
+	\begin{minipage}[b]{0.7\textwidth}
+		\includegraphics[width=\textwidth]{../figures/testing/test_linux.png}
+		\caption{Testing method - Linux}
 	\end{minipage}
-	\begin{minipage}[b]{0.5\textwidth}
-		\includegraphics[width=\textwidth]{../figures/testing/testing_method_2.png}
-		\caption{Testing method}
+	\begin{minipage}[b]{0.7\textwidth}
+		\includegraphics[width=\textwidth]{../figures/testing/test_windows.png}
+		\caption{Testing method - Windows}
 	\end{minipage}
 \end{figure}
 Here we pass the most crucial parameters:
@@ -23,4 +24,129 @@ The method can be called as followed:
 \begin{figure}[!htbp]
 	\includegraphics[width=\textwidth]{../figures/testing/main.png}
 	\caption{Main testing method}
+\end{figure}\\
+To run the experiment the following steps were executed:\\
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[scale=0.4]{../figures/testing/cmakeSteps.png}
+	%\caption{Main testing method}
+\end{figure}\\
+This will create two log files:\textit{overall\_stats.csv} and \textit{runtime\_statistics.csv}.
+
+\section{Results}
+\subsection{Linux}
+The Linux machine under testing has the system's attributes and OS:
+\begin{enumerate}
+	\item OS: 				Ubuntu 16.04
+	\item Processor: 		Intel Core i5-7200U, 2.50GHz
+	\item Cores:			4
+	\item Threads per Core:	2
+	\item Architecture: 	x86\_64
+\end{enumerate}
+\subsubsection{Normal Mode}
+Normal mode was tested with a 90\% workload. The results were as expected. Additionally the following statistics were logged in the \textit{overall\_stats.csv} file.
+\begin{enumerate}
+	\item Average System Workload: 90.2126
+	\item Average Process Workload: 89.5858
+	\item NIT\footnote{NotIdleTime}(time process was working out of 60 seconds): 60.00s 
+\end{enumerate}  
+More internal tests showed a variations to NIT while the percentage set was very low or near zero. In this scenario 
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{../figures/testing/linux/normalStats/workload_normal.png}
+		\caption{Library comparison with Linux's top-command: normal mode}
+		\hspace{3mm}
+	\end{minipage}
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.6]{../figures/testing/linux/normalStats/Stats.png}
+		\caption{Overtime statistics: normal mode}
+	\end{minipage}
+\end{figure}
+
+\newpage
+\subsubsection{Critical Mode}
+Critical mode was tested with a 10\% workload. The results were as expected. Additionally the following statistics were logged in the \textit{overall\_stats.csv} file.
+\begin{enumerate}
+	\item Average System Workload: 10.564
+	\item Average Process Workload: 9.97427
+	\item NIT(time process was working out of 60 seconds): 59.799s
+\end{enumerate}
+As expected, the system's workload remained in a reasonable range of $10 \pm 1.5\%$, while the process had a range of $10 \pm 1\%$. Because of the low workload percentage the NIT dropped a few milliseconds, which needs to be expected even for real time systems on a Unix machine, because of the fair scheduler. This behavior may result from the sleep time of the working threads while the test is being rescheduled.
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{../figures/testing/linux/criticalStats/workload_critical.png}
+		\caption{Library comparison with Linux's top-command: normal mode}
+		\hspace{3mm}
+	\end{minipage}
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.6]{../figures/testing/linux/criticalStats/Stats.png}
+		\caption{Overtime statistics: normal mode}
+	\end{minipage}
+\end{figure}
+\newpage
+\subsection{Windows}
+The Windows machine under testing has the following system attributes and OS:
+\begin{enumerate}
+	\item OS: Microsoft Windows 10 Home
+	\item Processor: Intel Core i7-8700, 3.20GHz
+	\item Cores: 6
+	\item Logical Cores: 12
+	\item Architecture: x64-based-processor
+\end{enumerate}
+\subsubsection{Normal Mode}
+As with Linux, normal mode was tested with a 90\% percent workload. The following values were logged in the comma separated files:
+\begin{enumerate}
+	\item Average System Workload: 87.8445
+	\item Average Process Workload: 85.3584
+	\item NIT: 66.040s
+\end{enumerate}
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.18]{../figures/testing/windows/normalStats/windows_normalMode.PNG}
+		\caption{Library comparison with Windows's task manager: normal mode}
+		\hspace{3mm}
+	\end{minipage}
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.6]{../figures/testing/windows/normalStats/Stats.png}
+		\caption{Overtime statistics: normal mode}
+	\end{minipage}
+\end{figure}
+
+
+\newpage
+\subsubsection{Critical Mode}
+Critical mode was tested with a 10\% workload. The following values were logged in the comma separated files:
+\begin{enumerate}
+	\item Average System Workload: 10.351
+	\item Average Process Workload: 8.22164
+	\item NIT: 60.907s 
+\end{enumerate}
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{../figures/testing/windows/criticalStats/Unbenannt.PNG}
+		\caption{Library comparison with Windows's task manager: critical mode}
+		\hspace{3mm}
+	\end{minipage}
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.15]{../figures/testing/windows/criticalStats/priority.png}
+		\caption{Task manager priority level}
+		\hspace{3mm}
+	\end{minipage}
+	\begin{minipage}[b]{\textwidth}
+		\centering
+		\includegraphics[scale=0.6]{../figures/testing/windows/criticalStats/Stats.png}
+		\caption{Overtime statistics: critical mode}
+	\end{minipage}
 \end{figure}

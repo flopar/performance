@@ -11,16 +11,20 @@ def makeDiagram(elements : list):
     csvData = np.array(elements)
 
     # Plot the figure
-    fig, ax = plt.subplots()
+    fig, axs = plt.subplots(len(elements))
         
     x_values = range(len(csvData[0][1:]))  
-     
+    
+    counter = 0
     for x in csvData:
-        plt.plot(x_values, x[1:], label=x[0])
-    ax.legend()
+        axs[counter].set(xlabel='time', ylabel='workload percentage')
+        axs[counter].set_title(x[0])
+        axs[counter].plot(x_values, np.round(np.float32(x[1:]), decimals=3))
+        counter += 1
+    #fig.tight_layout()
+    #plt.axis([0, 65, 0, 32])
+    #print("saving diagram")
     fig.tight_layout()
-    plt.axis([0, 65, 0, 32])
-    print("saving diagram")
     plt.savefig("Stats.png")
 
 
@@ -83,7 +87,11 @@ if __name__ == '__main__':
         for row in spamreader:
             csvData.append(row)
     print(csvData)
-     
+    print(len(csvData[0]))
+    print(len(csvData[1]))
+    makeDiagram(csvData)
+
+
     
 
 

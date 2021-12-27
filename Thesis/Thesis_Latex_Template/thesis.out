@@ -1,42 +1,46 @@
 \BOOKMARK [0][]{Contents.0}{Contents}{}% 1
 \BOOKMARK [0][]{chapter.1}{1 Introduction}{}% 2
 \BOOKMARK [1][-]{section.1.1}{1.1 Motivation}{chapter.1}% 3
-\BOOKMARK [2][-]{subsection.1.1.1}{1.1.1 Performance \046 Testing}{section.1.1}% 4
-\BOOKMARK [2][-]{subsection.1.1.2}{1.1.2 General}{section.1.1}% 5
-\BOOKMARK [1][-]{section.1.2}{1.2 Growing markets}{chapter.1}% 6
-\BOOKMARK [2][-]{subsection.1.2.1}{1.2.1 The costs of perfection}{section.1.2}% 7
-\BOOKMARK [2][-]{subsection.1.2.2}{1.2.2 Common approaches}{section.1.2}% 8
-\BOOKMARK [1][-]{section.1.3}{1.3 Benchmarking}{chapter.1}% 9
-\BOOKMARK [2][-]{subsection.1.3.1}{1.3.1 Workload}{section.1.3}% 10
-\BOOKMARK [1][-]{section.1.4}{1.4 Vision and Objective}{chapter.1}% 11
-\BOOKMARK [2][-]{subsection.1.4.1}{1.4.1 Vision}{section.1.4}% 12
-\BOOKMARK [2][-]{subsection.1.4.2}{1.4.2 Objective}{section.1.4}% 13
-\BOOKMARK [2][-]{subsection.1.4.3}{1.4.3 Obstacles}{section.1.4}% 14
-\BOOKMARK [0][]{chapter.2}{2 State of the art}{}% 15
-\BOOKMARK [1][-]{section.2.1}{2.1 Current Situation}{chapter.2}% 16
-\BOOKMARK [1][-]{section.2.2}{2.2 Processes}{chapter.2}% 17
-\BOOKMARK [2][-]{subsection.2.2.1}{2.2.1 Threads}{section.2.2}% 18
-\BOOKMARK [2][-]{subsection.2.2.2}{2.2.2 Differences between threads and processes}{section.2.2}% 19
-\BOOKMARK [2][-]{subsection.2.2.3}{2.2.3 Attributes}{section.2.2}% 20
-\BOOKMARK [2][-]{subsection.2.2.4}{2.2.4 Stack Size}{section.2.2}% 21
-\BOOKMARK [1][-]{section.2.3}{2.3 Concurrency}{chapter.2}% 22
-\BOOKMARK [1][-]{section.2.4}{2.4 CPU Affinity}{chapter.2}% 23
-\BOOKMARK [1][-]{section.2.5}{2.5 Priorities}{chapter.2}% 24
-\BOOKMARK [2][-]{subsection.2.5.1}{2.5.1 Windows}{section.2.5}% 25
-\BOOKMARK [2][-]{subsection.2.5.2}{2.5.2 Linux}{section.2.5}% 26
-\BOOKMARK [1][-]{section.2.6}{2.6 Synchronization}{chapter.2}% 27
-\BOOKMARK [2][-]{subsection.2.6.1}{2.6.1 Mutex}{section.2.6}% 28
-\BOOKMARK [2][-]{subsection.2.6.2}{2.6.2 Atomic Variables}{section.2.6}% 29
-\BOOKMARK [1][-]{section.2.7}{2.7 CMake}{chapter.2}% 30
-\BOOKMARK [1][-]{section.2.8}{2.8 Need for action}{chapter.2}% 31
-\BOOKMARK [0][]{chapter.3}{3 Library Overview}{}% 32
-\BOOKMARK [1][-]{section.3.1}{3.1 Workload}{chapter.3}% 33
-\BOOKMARK [2][-]{subsection.3.1.1}{3.1.1 Attributes}{section.3.1}% 34
-\BOOKMARK [2][-]{subsection.3.1.2}{3.1.2 Methods}{section.3.1}% 35
-\BOOKMARK [1][-]{section.3.2}{3.2 System}{chapter.3}% 36
-\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Defines}{section.3.2}% 37
-\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Methods}{section.3.2}% 38
-\BOOKMARK [1][-]{section.3.3}{3.3 Build System - CMAKE}{chapter.3}% 39
-\BOOKMARK [2][-]{subsection.3.3.1}{3.3.1 Implementation}{section.3.3}% 40
-\BOOKMARK [0][]{chapter.4}{4 Accuracy testing}{}% 41
-\BOOKMARK [0][]{figure.4.2}{Bibliography}{}% 42
+\BOOKMARK [2][-]{subsection.1.1.1}{1.1.1 Choosing the right tools}{section.1.1}% 4
+\BOOKMARK [2][-]{subsection.1.1.2}{1.1.2 Performance \046 Testing}{section.1.1}% 5
+\BOOKMARK [2][-]{subsection.1.1.3}{1.1.3 General}{section.1.1}% 6
+\BOOKMARK [1][-]{section.1.2}{1.2 Growing markets}{chapter.1}% 7
+\BOOKMARK [2][-]{subsection.1.2.1}{1.2.1 The costs of perfection}{section.1.2}% 8
+\BOOKMARK [2][-]{subsection.1.2.2}{1.2.2 Common approaches}{section.1.2}% 9
+\BOOKMARK [1][-]{section.1.3}{1.3 Benchmarking}{chapter.1}% 10
+\BOOKMARK [2][-]{subsection.1.3.1}{1.3.1 Workload}{section.1.3}% 11
+\BOOKMARK [1][-]{section.1.4}{1.4 Vision and Objective}{chapter.1}% 12
+\BOOKMARK [2][-]{subsection.1.4.1}{1.4.1 Vision}{section.1.4}% 13
+\BOOKMARK [2][-]{subsection.1.4.2}{1.4.2 Objective}{section.1.4}% 14
+\BOOKMARK [2][-]{subsection.1.4.3}{1.4.3 Obstacles}{section.1.4}% 15
+\BOOKMARK [0][]{chapter.2}{2 State of the art}{}% 16
+\BOOKMARK [1][-]{section.2.1}{2.1 Current Situation}{chapter.2}% 17
+\BOOKMARK [1][-]{section.2.2}{2.2 Processes}{chapter.2}% 18
+\BOOKMARK [2][-]{subsection.2.2.1}{2.2.1 Threads}{section.2.2}% 19
+\BOOKMARK [2][-]{subsection.2.2.2}{2.2.2 Differences between threads and processes}{section.2.2}% 20
+\BOOKMARK [2][-]{subsection.2.2.3}{2.2.3 Attributes}{section.2.2}% 21
+\BOOKMARK [2][-]{subsection.2.2.4}{2.2.4 Stack Size}{section.2.2}% 22
+\BOOKMARK [1][-]{section.2.3}{2.3 Concurrency}{chapter.2}% 23
+\BOOKMARK [1][-]{section.2.4}{2.4 CPU Affinity}{chapter.2}% 24
+\BOOKMARK [1][-]{section.2.5}{2.5 Priorities}{chapter.2}% 25
+\BOOKMARK [2][-]{subsection.2.5.1}{2.5.1 Windows}{section.2.5}% 26
+\BOOKMARK [2][-]{subsection.2.5.2}{2.5.2 Linux}{section.2.5}% 27
+\BOOKMARK [1][-]{section.2.6}{2.6 Synchronization}{chapter.2}% 28
+\BOOKMARK [2][-]{subsection.2.6.1}{2.6.1 Mutex}{section.2.6}% 29
+\BOOKMARK [2][-]{subsection.2.6.2}{2.6.2 Atomic Variables}{section.2.6}% 30
+\BOOKMARK [1][-]{section.2.7}{2.7 CMake}{chapter.2}% 31
+\BOOKMARK [1][-]{section.2.8}{2.8 Need for action}{chapter.2}% 32
+\BOOKMARK [0][]{chapter.3}{3 Library Overview}{}% 33
+\BOOKMARK [1][-]{section.3.1}{3.1 Workload}{chapter.3}% 34
+\BOOKMARK [2][-]{subsection.3.1.1}{3.1.1 Attributes}{section.3.1}% 35
+\BOOKMARK [2][-]{subsection.3.1.2}{3.1.2 Methods}{section.3.1}% 36
+\BOOKMARK [1][-]{section.3.2}{3.2 System}{chapter.3}% 37
+\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Defines}{section.3.2}% 38
+\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Methods}{section.3.2}% 39
+\BOOKMARK [1][-]{section.3.3}{3.3 Build System - CMAKE}{chapter.3}% 40
+\BOOKMARK [2][-]{subsection.3.3.1}{3.3.1 Implementation}{section.3.3}% 41
+\BOOKMARK [0][]{chapter.4}{4 Accuracy testing}{}% 42
+\BOOKMARK [1][-]{section.4.1}{4.1 Results}{chapter.4}% 43
+\BOOKMARK [2][-]{subsection.4.1.1}{4.1.1 Linux}{section.4.1}% 44
+\BOOKMARK [2][-]{subsection.4.1.2}{4.1.2 Windows}{section.4.1}% 45
+\BOOKMARK [0][]{figure.4.12}{Bibliography}{}% 46

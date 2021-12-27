@@ -10,46 +10,47 @@ The style file: unsrt.bst
 Database file #1: literatur.bib
 Warning--entry type for "atomicConference" isn't style-file defined
 --line 471 of file literatur.bib
+Warning--empty booktitle in snowden
 Warning--can't use both author and editor fields in Daneva1995
-You've used 30 entries,
+You've used 33 entries,
             1791 wiz_defined-function locations,
-            614 strings with 8141 characters,
-and the built_in function-call counts, 6259 in all, are:
-= -- 569
-> -- 176
-< -- 11
-+ -- 75
-- -- 45
-* -- 231
-:= -- 860
-add.period$ -- 99
-call.type$ -- 30
-change.case$ -- 23
+            632 strings with 8534 characters,
+and the built_in function-call counts, 7138 in all, are:
+= -- 651
+> -- 201
+< -- 13
++ -- 85
+- -- 52
+* -- 280
+:= -- 980
+add.period$ -- 109
+call.type$ -- 33
+change.case$ -- 26
 chr.to.int$ -- 0
-cite$ -- 31
-duplicate$ -- 337
-empty$ -- 736
-format.name$ -- 45
-if$ -- 1553
+cite$ -- 35
+duplicate$ -- 385
+empty$ -- 829
+format.name$ -- 52
+if$ -- 1771
 int.to.chr$ -- 0
-int.to.str$ -- 30
-missing$ -- 24
-newline$ -- 160
-num.names$ -- 27
-pop$ -- 193
+int.to.str$ -- 33
+missing$ -- 27
+newline$ -- 175
+num.names$ -- 30
+pop$ -- 206
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 195
+skip$ -- 226
 stack$ -- 0
-substring$ -- 268
-swap$ -- 121
-text.length$ -- 11
+substring$ -- 331
+swap$ -- 141
+text.length$ -- 13
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 1
-while$ -- 52
-width$ -- 32
-write$ -- 323
-(There were 2 warnings)
+warning$ -- 2
+while$ -- 60
+width$ -- 35
+write$ -- 356
+(There were 3 warnings)

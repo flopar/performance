@@ -1,5 +1,22 @@
 \begin{thebibliography}{10}
 
+\bibitem{snowden}
+Edward Snowden.
+\newblock Permanent record.
+\newblock pages 39--40. Pan Mcmillan, 2019.
+
+\bibitem{9434501}
+Dongdong Lu, Jie Wu, Yongxiang Sheng, Peng Liu, and Mengmeng Yang.
+\newblock Analysis of the popularity of programming languages in open source
+  software communities.
+\newblock In {\em 2020 International Conference on Big Data and Social Sciences
+  (ICBDSS)}, pages 111--114, 2020.
+
+\bibitem{1657941}
+D.~Spinellis.
+\newblock Choosing a programming language.
+\newblock {\em IEEE Software}, 23(4):62--63, 2006.
+
 \bibitem{8432081}
 Davide Arcelli, Vittorio Cortellessa, and Daniele Di~Pompeo.
 \newblock Performance-driven software architecture refactoring.
