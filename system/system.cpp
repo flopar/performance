@@ -586,7 +586,7 @@ int getCPUTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle)
 // MacOS not implemented yet
 #endif
 }
-int writeOverallStats(auto stat, std::string statName)
+int writeOverallStats(double stat, std::string statName)
 {
 	std::ofstream statisticsFile;
 	statisticsFile.open("overall_stats.csv", std::ios::in | std::ios::app | std::ios::binary);
@@ -700,8 +700,8 @@ int calculateAndShowLoad(double duration, std::vector<double>& processWLList, st
 				system_workload_sum += system_workload;
 				processWLList.push_back(process_workload);
 				systemWLList.push_back(system_workload);
-				std::cout << "Current process workload " << process_workload << std::endl;
-				std::cout << "Current system workload " << system_workload << std::endl;
+				//std::cout << "Current process workload " << process_workload << std::endl;
+				//std::cout << "Current system workload " << system_workload << std::endl;
 				duration--;
 			}
 			else
@@ -722,7 +722,7 @@ int calculateAndShowLoad(double duration, std::vector<double>& processWLList, st
 	auto totalDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - startDuration).count();
 	if(pre_notIdle != -1)
 	{
-		int notIdle = convertTime(getSpecificCPUTime(IDLE_TIME));
+		double notIdle = convertTime(getSpecificCPUTime(IDLE_TIME));
 		notIdle -= pre_notIdle;
 		std::cout << "idle time " << notIdle << "ms" << std::endl;
 		notIdle = totalDuration - notIdle;
