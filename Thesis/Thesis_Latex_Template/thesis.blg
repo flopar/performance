@@ -6,51 +6,57 @@ A level-1 auxiliary file: einleitung.aux
 A level-1 auxiliary file: systemgrundlagen.aux
 A level-1 auxiliary file: bibliothek_ueberblick.aux
 A level-1 auxiliary file: testing.aux
+A level-1 auxiliary file: future_development.aux
 The style file: unsrt.bst
 Database file #1: literatur.bib
 Warning--entry type for "atomicConference" isn't style-file defined
 --line 471 of file literatur.bib
 Warning--empty booktitle in snowden
 Warning--can't use both author and editor fields in Daneva1995
-You've used 33 entries,
+Warning--empty booktitle in cortexM4
+Too many commas in name 1 of "Karl-Bridge-Microsoft, Vent Sharkey, David Coulter, Drew Batchelor, Michael Satran" for entry windows-fibers-doc
+while executing---line 944 of file unsrt.bst
+Too many commas in name 1 of "Karl-Bridge-Microsoft, Vent Sharkey, David Coulter, Drew Batchelor, Michael Satran" for entry windows-fibers-doc
+while executing---line 944 of file unsrt.bst
+You've used 35 entries,
             1791 wiz_defined-function locations,
-            632 strings with 8534 characters,
-and the built_in function-call counts, 7138 in all, are:
-= -- 651
-> -- 201
+            643 strings with 8865 characters,
+and the built_in function-call counts, 7433 in all, are:
+= -- 675
+> -- 209
 < -- 13
-+ -- 85
-- -- 52
-* -- 280
-:= -- 980
-add.period$ -- 109
-call.type$ -- 33
-change.case$ -- 26
++ -- 89
+- -- 54
+* -- 286
+:= -- 1025
+add.period$ -- 116
+call.type$ -- 35
+change.case$ -- 28
 chr.to.int$ -- 0
-cite$ -- 35
-duplicate$ -- 385
-empty$ -- 829
-format.name$ -- 52
-if$ -- 1771
+cite$ -- 38
+duplicate$ -- 401
+empty$ -- 870
+format.name$ -- 54
+if$ -- 1841
 int.to.chr$ -- 0
-int.to.str$ -- 33
-missing$ -- 27
-newline$ -- 175
-num.names$ -- 30
-pop$ -- 206
+int.to.str$ -- 35
+missing$ -- 28
+newline$ -- 186
+num.names$ -- 32
+pop$ -- 220
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 226
+skip$ -- 231
 stack$ -- 0
 substring$ -- 331
-swap$ -- 141
+swap$ -- 143
 text.length$ -- 13
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 60
-width$ -- 35
-write$ -- 356
-(There were 3 warnings)
+warning$ -- 3
+while$ -- 62
+width$ -- 37
+write$ -- 377
+(There were 2 error messages)

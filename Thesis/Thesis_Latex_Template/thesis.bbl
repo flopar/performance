@@ -150,6 +150,12 @@ Getpriorityclass function.
   \url{https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getpriorityclass}.
 \newblock Accessed: 2021-11-15.
 
+\bibitem{cortexM4}
+Jospeh Yiu.
+\newblock The definitive guide to arm® cortex®-m3 and cortex®-m4 processors,
+  3rd edition.
+\newblock Newnes, October 2013.
+
 \bibitem{cppExpert}
 Shunguang~Wu Vardan~Grigoryan.
 \newblock {\em Expert C++}.
@@ -183,16 +189,24 @@ Kitware.
 \newblock \url{https://cmake.org/overview/}.
 \newblock Accessed: 2021-12-11.
 
+\bibitem{linux-man-set/getattribute}
+Michael Kerrisk.
+\newblock sched\_setattr(2)-linux manual page.
+\newblock \url{https://man7.org/linux/man-pages/man2/sched_setattr.2.html}.
+\newblock Accessed: 2021-11-25.
+
 \bibitem{linux-man-proc}
 Michael Kerrisk.
 \newblock proc(5)-linux manual page.
 \newblock \url{https://man7.org/linux/man-pages/man5/proc.5.html#NAME}.
 \newblock Accessed: 2021-11-25.
 
-\bibitem{linux-man-set/getattribute}
-Michael Kerrisk.
-\newblock sched\_setattr(2)-linux manual page.
-\newblock \url{https://man7.org/linux/man-pages/man2/sched_setattr.2.html}.
-\newblock Accessed: 2021-11-25.
+\bibitem{windows-fibers-doc}
+David Coulter Drew Batchelor Michael~Satran Karl-Bridge-Microsoft,
+  Vent~Sharkey.
+\newblock Fibers.
+\newblock
+  \url{https://docs.microsoft.com/en-us/windows/win32/procthread/fibers}.
+\newblock Accessed: 2022-01-06.
 
 \end{thebibliography}

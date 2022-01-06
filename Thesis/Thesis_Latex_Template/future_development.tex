@@ -1,0 +1,10 @@
+\chapter{Future Development}
+As mentioned at the beginning, the current state of the library is not one that I'm proud of. This is because of the lack of expertise, research- and development time. The following points should be reworked or implemented in the future:
+\begin{enumerate}
+	\item CMake compiler support: although CMake recognizes the compiler by itself, there are a lot of cases where teams develop their software for more than one compiler on the same machine. Therefore it would be a convenience to have a CMake file template that searches for compilers on the calling machine and sets the appropriate CMake variables
+	\item Windows Fibers support: in my research about threads for different architectures, windows fibers were mentioned. According to Microsoft Docs \dq fibers do not provide advantages over a well-designed multithreaded application. However, using fibers can make it easier to port applications that were designed to schedule their own threads\dq{}\cite{windows-fibers-doc}
+	\item Error Handling: as of now, personally, I'm not satisfied by the way some functions handle errors. 
+	\item Naming conventions: some methods have similar names, because they do almost the same thing, although in some cases a more creative name would be more pleasing
+	\item CPU's affinity: this subject should be researched more and be also implemented for other operating systems
+	\item Linking: the current state of the library links its components statically. If possible, the components should be linked dynamically, in order to minimize the size of the calling executable	
+\end{enumerate}

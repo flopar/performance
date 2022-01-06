@@ -10,7 +10,7 @@ In order to show the accuracy of the methods and establish a meaningful use of (
 		\includegraphics[width=\textwidth]{../figures/testing/test_windows.png}
 		\caption{Testing method - Windows}
 	\end{minipage}
-\end{figure}
+\end{figure}\newpage
 Here we pass the most crucial parameters:
 \begin{enumerate}
 	\item percentage: in order to specify how big the workload created should be 
@@ -32,7 +32,7 @@ To run the experiment the following steps were executed:\\
 	%\caption{Main testing method}
 \end{figure}\\
 This will create two log files:\textit{overall\_stats.csv} and \textit{runtime\_statistics.csv}.
-
+\newpage
 \section{Results}
 \subsection{Linux}
 The Linux machine under testing has the system's attributes and OS:
@@ -50,22 +50,20 @@ Normal mode was tested with a 90\% workload. The results were as expected. Addit
 	\item Average Process Workload: 89.5858
 	\item NIT\footnote{NotIdleTime}(time process was working out of 60 seconds): 60.00s 
 \end{enumerate}  
-More internal tests showed a variations to NIT while the percentage set was very low or near zero. In this scenario 
 \begin{figure}[!htbp]
 	\centering
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.2]{../figures/testing/linux/normalStats/workload_normal.png}
+		\includegraphics[scale=0.15]{../figures/testing/linux/normalStats/workload_normal.png}
 		\caption{Library comparison with Linux's top-command: normal mode}
 		\hspace{3mm}
 	\end{minipage}
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.6]{../figures/testing/linux/normalStats/Stats.png}
+		\includegraphics[scale=0.35]{../figures/testing/linux/normalStats/Stats.png}
 		\caption{Overtime statistics: normal mode}
 	\end{minipage}
 \end{figure}
-
 \newpage
 \subsubsection{Critical Mode}
 Critical mode was tested with a 10\% workload. The results were as expected. Additionally the following statistics were logged in the \textit{overall\_stats.csv} file.
@@ -74,7 +72,6 @@ Critical mode was tested with a 10\% workload. The results were as expected. Add
 	\item Average Process Workload: 9.97427
 	\item NIT(time process was working out of 60 seconds): 59.799s
 \end{enumerate}
-As expected, the system's workload remained in a reasonable range of $10 \pm 1.5\%$, while the process had a range of $10 \pm 1\%$. Because of the low workload percentage the NIT dropped a few milliseconds, which needs to be expected even for real time systems on a Unix machine, because of the fair scheduler. This behavior may result from the sleep time of the working threads while the test is being rescheduled.
 \begin{figure}[!htbp]
 	\centering
 	\begin{minipage}[b]{\textwidth}
@@ -150,3 +147,14 @@ Critical mode was tested with a 10\% workload. The following values were logged 
 		\caption{Overtime statistics: critical mode}
 	\end{minipage}
 \end{figure}
+\newpage
+\section{Findings}
+\subsection{Linux}
+Both critical and normal mode were successfully comparable to \textit{top\_command} pre-installed on every Unix machine. One can see that in normal more the process has a priority of 20 and a nice value of zero, which is standard on my Linux machine, while in critical mode the priority is set to \textit{RT}(which stands for real-time) and the nice value is -19 (the highest nice value on a Unix machine).\\
+While testing the normal mode, one could observe the CPU's percentage exceeding the 100\% mark and reaching up to 360\%. This is due to the command adding each CPU's workload. Hence the result will show the number of CPUs that the machine has multiplied by the load that each CPU has. In our example we set the system's workload to 90\%. That means (in theory) each CPU will have to work 90 percent of the time, which results the load on the whole system would be:\vspace{1mm}\\
+$number\_of\_CPUs(4) * workload(90\%) = top\_command\_display(360\%)$
+\vspace{1mm}\\
+This can also be seen in the critical mode test, where the system's workload was displayed as being almost 40\% when we set our workload to 10\%.\\
+Additionally the expected system's workload remained in a reasonable range of $10 \pm 1.5\%$, while the process had a range of $10 \pm 1\%$ in the critical mode, while in normal mode the results are similar. Because of the low workload the process's NIT dropped a few milliseconds, which needs to be expected when the thread work only for 10\% of the time and for the rest 90\% they sleep.
+\subsection{Windows}
+On my Windows machine the results were resembling those on my Unix machine. The library's output was almost identical to that created by the \textit{task manager}. Similar to Linux the NIT on Windows also dropped a few milliseconds in critical mode. However the difference is substantial between the two operating systems. This might be because on Linux we also change the way the process is being scheduled, while on Windows we always use the same scheduler and increase only the priority of the test process. Besides that, the results can be considered satisfying. The workload's range and the process's priority have been pleasing.

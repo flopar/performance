@@ -20,35 +20,40 @@
 \contentsline {subsection}{\numberline {2.2.1}Threads}{10}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Differences between threads and processes}{11}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Attributes}{11}{subsection.2.2.3}
-\contentsline {subsection}{\numberline {2.2.4}Stack Size}{11}{subsection.2.2.4}
-\contentsline {section}{\numberline {2.3}Concurrency}{12}{section.2.3}
-\contentsline {subsubsection}{\numberline {2.3.0.1}Context switching}{12}{subsubsection.2.3.0.1}
-\contentsline {section}{\numberline {2.4}CPU Affinity}{12}{section.2.4}
-\contentsline {section}{\numberline {2.5}Priorities}{13}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}Windows}{13}{subsection.2.5.1}
-\contentsline {subsection}{\numberline {2.5.2}Linux}{13}{subsection.2.5.2}
-\contentsline {subsubsection}{\numberline {2.5.2.1}Nice Values}{14}{subsubsection.2.5.2.1}
-\contentsline {subsubsection}{\numberline {2.5.2.2}Scheduling}{15}{subsubsection.2.5.2.2}
-\contentsline {section}{\numberline {2.6}Synchronization}{15}{section.2.6}
-\contentsline {subsection}{\numberline {2.6.1}Mutex}{17}{subsection.2.6.1}
-\contentsline {subsection}{\numberline {2.6.2}Atomic Variables}{17}{subsection.2.6.2}
-\contentsline {section}{\numberline {2.7}CMake}{18}{section.2.7}
-\contentsline {section}{\numberline {2.8}Need for action}{18}{section.2.8}
-\contentsline {chapter}{\numberline {3}Library Overview}{19}{chapter.3}
-\contentsline {section}{\numberline {3.1}Workload}{20}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Attributes}{20}{subsection.3.1.1}
-\contentsline {subsection}{\numberline {3.1.2}Methods}{20}{subsection.3.1.2}
-\contentsline {section}{\numberline {3.2}System}{22}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Defines}{22}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Methods}{23}{subsection.3.2.2}
-\contentsline {section}{\numberline {3.3}Build System - CMAKE}{26}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Implementation}{27}{subsection.3.3.1}
-\contentsline {chapter}{\numberline {4}Accuracy testing}{29}{chapter.4}
-\contentsline {section}{\numberline {4.1}Results}{30}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Linux}{30}{subsection.4.1.1}
-\contentsline {subsubsection}{\numberline {4.1.1.1}Normal Mode}{31}{subsubsection.4.1.1.1}
-\contentsline {subsubsection}{\numberline {4.1.1.2}Critical Mode}{32}{subsubsection.4.1.1.2}
-\contentsline {subsection}{\numberline {4.1.2}Windows}{33}{subsection.4.1.2}
-\contentsline {subsubsection}{\numberline {4.1.2.1}Normal Mode}{33}{subsubsection.4.1.2.1}
-\contentsline {subsubsection}{\numberline {4.1.2.2}Critical Mode}{34}{subsubsection.4.1.2.2}
-\contentsline {chapter}{Bibliography}{35}{figure.4.12}
+\contentsline {section}{\numberline {2.3}Stack Size}{11}{section.2.3}
+\contentsline {section}{\numberline {2.4}Concurrency}{12}{section.2.4}
+\contentsline {subsubsection}{\numberline {2.4.0.1}Context switching}{12}{subsubsection.2.4.0.1}
+\contentsline {section}{\numberline {2.5}CPU Affinity}{12}{section.2.5}
+\contentsline {section}{\numberline {2.6}Priorities}{13}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}Windows}{13}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.2}Linux}{14}{subsection.2.6.2}
+\contentsline {subsubsection}{\numberline {2.6.2.1}Nice Values}{14}{subsubsection.2.6.2.1}
+\contentsline {subsubsection}{\numberline {2.6.2.2}Privileges}{15}{subsubsection.2.6.2.2}
+\contentsline {subsubsection}{\numberline {2.6.2.3}Scheduling}{16}{subsubsection.2.6.2.3}
+\contentsline {section}{\numberline {2.7}Synchronization}{17}{section.2.7}
+\contentsline {subsection}{\numberline {2.7.1}Mutex}{18}{subsection.2.7.1}
+\contentsline {subsection}{\numberline {2.7.2}Atomic Variables}{18}{subsection.2.7.2}
+\contentsline {section}{\numberline {2.8}CMake}{19}{section.2.8}
+\contentsline {section}{\numberline {2.9}Need for action}{19}{section.2.9}
+\contentsline {chapter}{\numberline {3}Library Overview}{21}{chapter.3}
+\contentsline {section}{\numberline {3.1}Workload}{22}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Attributes}{22}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Methods}{23}{subsection.3.1.2}
+\contentsline {section}{\numberline {3.2}System}{25}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Defines}{25}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Methods}{25}{subsection.3.2.2}
+\contentsline {section}{\numberline {3.3}Build System - CMAKE}{29}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Implementation}{29}{subsection.3.3.1}
+\contentsline {chapter}{\numberline {4}Accuracy testing}{31}{chapter.4}
+\contentsline {section}{\numberline {4.1}Results}{33}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Linux}{33}{subsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.1.1}Normal Mode}{33}{subsubsection.4.1.1.1}
+\contentsline {subsubsection}{\numberline {4.1.1.2}Critical Mode}{34}{subsubsection.4.1.1.2}
+\contentsline {subsection}{\numberline {4.1.2}Windows}{35}{subsection.4.1.2}
+\contentsline {subsubsection}{\numberline {4.1.2.1}Normal Mode}{35}{subsubsection.4.1.2.1}
+\contentsline {subsubsection}{\numberline {4.1.2.2}Critical Mode}{36}{subsubsection.4.1.2.2}
+\contentsline {section}{\numberline {4.2}Findings}{37}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Linux}{37}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Windows}{37}{subsection.4.2.2}
+\contentsline {chapter}{\numberline {5}Future Development}{39}{chapter.5}
+\contentsline {chapter}{Bibliography}{41}{Item.132}

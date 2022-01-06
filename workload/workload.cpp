@@ -53,9 +53,10 @@ void Workload::simulateWorkload(unsigned int randomize, unsigned int* WLPriority
 	// maybe rewrite this with condition variables -> std::condition_variable::wait_until()
 	if(*WLPriority == MAX_PRIO)
 	{
+		bool increase = true;
 		try
 		{
-			while(true)
+			while(increase)
 			{
 				increaseThreadPrio(0);
 			}
@@ -63,18 +64,21 @@ void Workload::simulateWorkload(unsigned int randomize, unsigned int* WLPriority
 		catch(const std::exception& e)
 		{
 			std::cout << "Thread #" << randomize << " " << e.what() << std::endl;
+			increase = false;
 		}
 	}
+	std::cout << "increased prio";
 	while(!m_startSimulation.load())
 	{
 		//Busy waiting for all threads to be created
 	}
 	unsigned int countingVar = 0;
-	long long    sleepTime;
+	long long    sleepTime;	
 	if(m_asyncWorkload)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(randomize*50));
 	}
+	std::cout << "starting sim";
 	while(m_runningSimulation.load())
 	{
 		sleepTime = (long long)(500 - m_workload.load() * 5);
