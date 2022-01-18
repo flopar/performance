@@ -1,7 +1,7 @@
 \chapter{State of the art}
-This chapter summarizes already existing technologies and implementations that are relevant to the library. Despite the fact that most of them are written in the C language, they are still relevant as they describe how many operating systems work and where many C++ standards come from.   
+This chapter summarizes already existing technologies and implementations that are relevant to the library. Despite the fact that most of them were written in in the past using the C language, they are still relevant as they describe how many operating systems work and where many C++ standards come from.   
 \section{Current Situation} 
-At the time of writing this (December 2021), there are four mostly used architectures in the IT-Branch. These are Windows, Linux and MacOS. Linux was developed with the UNIX system as its core, while MacOS is only based on UNIX, which means that these are similar but not entirely compatible with each other. The big difference comes with Windows.\\
+At the time of writing this (December 2021), there are three mostly used architectures in the IT-Branch. These are Windows, Linux and MacOS. Linux was developed with the UNIX system as its core, while MacOS is only based on UNIX, which means that these are similar but not entirely compatible with each other. The big difference comes with Windows.\\
 \footnotetext{Some companies also use ARM(aarch64), but this is not an OS and per default doesn't come with any process control system. In order to do so one needs to write or use an extra library for that solely purpose}Each operating system can deliver informations about its own computer.
 For that, each of them has its own unique program. Windows uses the \dq Task-Manger\dq{} which comes with a GUI and shows real-time information about the CPU and memory of the computer, it comes with a list of processes and makes it possible for the user to manage them with only a couple of clicks.\\
 Linux on the other hand is more text oriented. This operating system comes with a built in command called "top". This also delivers informations about your system, but it doesn't allow you to manipulate processes like \dq Task-manger\dq{} does. Although not very practicable for developers, these tools allow the user to measure performance in a normal state where your computer is not put under pressure, whereas the most interesting state is when the CPU needs to do a lot of operations and it needs to share its valuable time with other processes. To force such situations, the user can use online stress tests, which use the browser as an workload source, which for many is not very practicable, because it uses an additional program, that runs in the background. Online stress tests rely on internet to work and a stable ethernet or wifi connection to work. This way the results can be very inaccurate if the the network is under pressure.
@@ -15,7 +15,7 @@ Linux on the other hand is more text oriented. This operating system comes with 
 There are already some alternative libraries on the internet to recreate this method, but most of them are written in other programming languages. Adding them to a C++ Project would rise the complexity of the source code.\\
 Some people would think "Well C++ is a new and modern language. There must be something similar out there". This statement is true and because of its young age there are a limited number of officially tested methods. You could also take a look at the headers implemented in the \href{https://en.cppreference.com/w/cpp/header}{C++ standard library} \cite{CppRef} to familiarize yourself with common algorithms and data structures.
 Not all operating systems will be covered in this thesis.
-The following statements are true for the testing machines used in chapter 4?.
+The following statements are true for the testing machines used in \autoref{ssec:Accuracy_testing}.
 \section{Processes}
 To many operating systems, a process is like a wrapper defined by the kernel in order to allocate resources to an executing program.\\
 When a process is created the system assigns him a \textit{process unique identifier} also called PID(a positive integer). Each process has its own PID, so two different executing programs cannot have the same PID \footnote{On UNIX like machines the first process to be called is the init process with PID 1}. The methods used to create a new process differ on each operating systems.
@@ -161,16 +161,18 @@ At last you could also modify the \dq/etc/security/limits.conf\dq{} file and set
 certain user, but this is not the best solution, because that user would have the power to change
 priorities not only for one program, but for all its programs.
 \subsubsection{Privileges}
+\textit{NOTE: This section is mentioned only under Linux, because the WinAPI functions can be called without setting any other privileges}\\
 As mentioned above, when a user wants to increase the priority of a thread or process, one has to either use special commands or be signed up as root. The reason for this is the way a processor works. There are commands that use the so called \textit{privileged} and \textit{unprivileged} instructions.\\
 The privileged instructions can access every corner of a processor and has no memory restrictions, such as interrupt registers, control registers or registers that define on which frequency the CPU is running. The unprivileged instructions have restrictions to internal memory segments and attributes, such as changing the default scheduler or the capabilities of a process. This way, one can restrict some applications in order to not temper with critical system areas.\\
-To simply explain this, let's take a look at the stack of a simpler CPU such as a cortex M4 and its registers pictured in figure \ref{cortex_M4_registers}\footnote{CPUs such as Intel or Ryzen are more complex, because they have to ensure the functionality of operating systems such as Windows or Linux, whereas Cortex processors are meant for embedded devices with simpler instruction set. However they also work with OS such as RTOS(real time operating systems)}.
+To simply explain this, let's take a look at the stack of a simpler CPU such as a cortex M4 and its registers pictured in figure \ref{cortex_M4_registers}\footnote{CPUs such as Intel or Ryzen are more complex, because they have to ensure the functionality of operating systems such as Windows or Linux, whereas Cortex processors are meant for embedded devices with simpler and smaller instruction set. However they also can work with OS such as RTOS(real time operating systems)}.
 \begin{figure}[!htbp]
 	\centering
 	\subfigure[Cortex M4 Stack]{\label{fig:a}\includegraphics[scale=0.65]{../figures/systemgrundlagen/cortex_m4_stack.jpg}}
 	\subfigure[Cortex M4 Special Regsiters]{\label{fig:b}\includegraphics[scale=0.8]{../figures/systemgrundlagen/cortex_m4_special_registers.jpg}}
+	\caption{Cortex M4 register}
 	\label{cortex_M4_registers}
 \end{figure}
-When a user writes a simple program such as the addition of some variables using the ALU\footnote{Arithmetic logical unit}, then this can be ran in unprivileged mode and so the processor will use only the registers in the \textit{Register Bank}. However if the user has a more complex program that uses for example interrupt routines from the peripheral of the CPU, which for example Intel processors constantly do for maintaining the system, then the code will have to use privileged code for setting the appropriate flags, which means the writing to registers such as the \textit{CONTROL} register, and then land in a ISR\footnote{Interrupt Service Routine}. Registers such as the CONTROL register can only be accessed by privileged instructions and are protected by the MPU\footnote{Memory protection unit}, because they have such power, that a wrong setting can shutdown the whole processor\cite{cortexM4}.
+When a user writes a simple program such as the addition of some variables using the ALU\footnote{Arithmetic logical unit}, then this can be ran in unprivileged mode and so the processor will use most likely the lower registers (R0-R7) in the \textit{Register Bank}. However if the user has a more complex program that uses for example interrupt routines from the peripheral of the CPU, which for example Intel processors constantly do for maintaining the system, then the code will have to use privileged code for setting the appropriate flags, which means the writing to registers such as the \textit{CONTROL} register, and then land in a ISR\footnote{Interrupt Service Routine}. Registers such as the CONTROL register, NVIC\footnote{Nested Interrupt Vector: a table containing all of the system's interrupts} or even the ROM table can only be accessed by privileged instructions and are protected by the MPU\footnote{Memory protection unit}, because they have such power, that a wrong setting can shutdown the whole processor\cite{cortexM4}.
 \subsubsection{Scheduling}
 \label{ssec:sched_policies}
 Unlike Windows, Linux has methods to change one's process and its threads scheduling policies.The default policy set on UNIX
@@ -268,7 +270,7 @@ The goals are:
 \begin{enumerate}
 	\item summarize the complexity between operating systems into easy-to-understand methods
 	\item supply the user with numerous operations to ensure homogeneity and flexibility usage in order to cover most user-cases in the industry 
-	\item  encourage creative test-solving ways   
+	\item  encourage in-house development of product based test and benchmarks  
 \end{enumerate}
 % Nachfragen :S es sieht nicht ganz richtig aus 
 %warum ge0stae ich die Library so wie sie ist?

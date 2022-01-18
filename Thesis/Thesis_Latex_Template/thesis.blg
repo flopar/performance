@@ -20,7 +20,7 @@ Too many commas in name 1 of "Karl-Bridge-Microsoft, Vent Sharkey, David Coulter
 while executing---line 944 of file unsrt.bst
 You've used 35 entries,
             1791 wiz_defined-function locations,
-            643 strings with 8865 characters,
+            643 strings with 8859 characters,
 and the built_in function-call counts, 7433 in all, are:
 = -- 675
 > -- 209

@@ -42,18 +42,19 @@
 \contentsline {section}{\numberline {3.2}System}{25}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Defines}{25}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Methods}{25}{subsection.3.2.2}
-\contentsline {section}{\numberline {3.3}Build System - CMAKE}{29}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Implementation}{29}{subsection.3.3.1}
-\contentsline {chapter}{\numberline {4}Accuracy testing}{31}{chapter.4}
-\contentsline {section}{\numberline {4.1}Results}{33}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Linux}{33}{subsection.4.1.1}
-\contentsline {subsubsection}{\numberline {4.1.1.1}Normal Mode}{33}{subsubsection.4.1.1.1}
-\contentsline {subsubsection}{\numberline {4.1.1.2}Critical Mode}{34}{subsubsection.4.1.1.2}
-\contentsline {subsection}{\numberline {4.1.2}Windows}{35}{subsection.4.1.2}
-\contentsline {subsubsection}{\numberline {4.1.2.1}Normal Mode}{35}{subsubsection.4.1.2.1}
-\contentsline {subsubsection}{\numberline {4.1.2.2}Critical Mode}{36}{subsubsection.4.1.2.2}
-\contentsline {section}{\numberline {4.2}Findings}{37}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Linux}{37}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Windows}{37}{subsection.4.2.2}
-\contentsline {chapter}{\numberline {5}Future Development}{39}{chapter.5}
-\contentsline {chapter}{Bibliography}{41}{Item.132}
+\contentsline {section}{\numberline {3.3}Build System - CMAKE}{30}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Implementation}{30}{subsection.3.3.1}
+\contentsline {chapter}{\numberline {4}Accuracy testing}{33}{chapter.4}
+\contentsline {section}{\numberline {4.1}Results}{35}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Linux}{35}{subsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.1.1}Normal Mode}{35}{subsubsection.4.1.1.1}
+\contentsline {subsubsection}{\numberline {4.1.1.2}Critical Mode}{36}{subsubsection.4.1.1.2}
+\contentsline {subsection}{\numberline {4.1.2}Windows}{37}{subsection.4.1.2}
+\contentsline {subsubsection}{\numberline {4.1.2.1}Normal Mode}{37}{subsubsection.4.1.2.1}
+\contentsline {subsubsection}{\numberline {4.1.2.2}Critical Mode}{38}{subsubsection.4.1.2.2}
+\contentsline {section}{\numberline {4.2}Findings}{39}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Linux}{39}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Windows}{39}{subsection.4.2.2}
+\contentsline {chapter}{\numberline {5}Future Development}{41}{chapter.5}
+\contentsline {chapter}{Bibliography}{43}{Item.132}
+\contentsline {chapter}{Index}{45}{chapter*.2}

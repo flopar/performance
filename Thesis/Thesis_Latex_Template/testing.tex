@@ -1,4 +1,5 @@
 \chapter{Accuracy testing}
+\label{ssec:Accuracy_testing}
 In order to show the accuracy of the methods and establish a meaningful use of (some of) the library's components, the following method was created.
 \begin{figure}[h]
 	\centering
@@ -54,13 +55,13 @@ Normal mode was tested with a 90\% workload. The results were as expected. Addit
 	\centering
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.15]{../figures/testing/linux/normalStats/workload_normal.png}
+		\includegraphics[scale=0.3]{../figures/testing/linux/normalStats/workload_normal.png}
 		\caption{Library comparison with Linux's top-command: normal mode}
 		\hspace{3mm}
 	\end{minipage}
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.35]{../figures/testing/linux/normalStats/Stats.png}
+		\includegraphics[scale=0.4]{../figures/testing/linux/normalStats/Stats.png}
 		\caption{Overtime statistics: normal mode}
 	\end{minipage}
 \end{figure}
@@ -76,7 +77,7 @@ Critical mode was tested with a 10\% workload. The results were as expected. Add
 	\centering
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.2]{../figures/testing/linux/criticalStats/workload_critical.png}
+		\includegraphics[scale=0.35]{../figures/testing/linux/criticalStats/workload_critical.png}
 		\caption{Library comparison with Linux's top-command: normal mode}
 		\hspace{3mm}
 	\end{minipage}
@@ -107,13 +108,13 @@ As with Linux, normal mode was tested with a 90\% percent workload. The followin
 	\centering
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.18]{../figures/testing/windows/normalStats/windows_normalMode.PNG}
+		\includegraphics[scale=0.3]{../figures/testing/windows/normalStats/windows_normalMode.PNG}
 		\caption{Library comparison with Windows's task manager: normal mode}
 		\hspace{3mm}
 	\end{minipage}
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.6]{../figures/testing/windows/normalStats/Stats.png}
+		\includegraphics[scale=0.5]{../figures/testing/windows/normalStats/Stats.png}
 		\caption{Overtime statistics: normal mode}
 	\end{minipage}
 \end{figure}
@@ -131,19 +132,19 @@ Critical mode was tested with a 10\% workload. The following values were logged 
 	\centering
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.2]{../figures/testing/windows/criticalStats/Unbenannt.PNG}
+		\includegraphics[scale=0.3]{../figures/testing/windows/criticalStats/Unbenannt.PNG}
 		\caption{Library comparison with Windows's task manager: critical mode}
 		\hspace{3mm}
 	\end{minipage}
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.15]{../figures/testing/windows/criticalStats/priority.png}
+		\includegraphics[scale=0.22]{../figures/testing/windows/criticalStats/priority.png}
 		\caption{Task manager priority level}
 		\hspace{3mm}
 	\end{minipage}
 	\begin{minipage}[b]{\textwidth}
 		\centering
-		\includegraphics[scale=0.6]{../figures/testing/windows/criticalStats/Stats.png}
+		\includegraphics[scale=0.51]{../figures/testing/windows/criticalStats/Stats.png}
 		\caption{Overtime statistics: critical mode}
 	\end{minipage}
 \end{figure}
@@ -157,4 +158,4 @@ $number\_of\_CPUs(4) * workload(90\%) = top\_command\_display(360\%)$
 This can also be seen in the critical mode test, where the system's workload was displayed as being almost 40\% when we set our workload to 10\%.\\
 Additionally the expected system's workload remained in a reasonable range of $10 \pm 1.5\%$, while the process had a range of $10 \pm 1\%$ in the critical mode, while in normal mode the results are similar. Because of the low workload the process's NIT dropped a few milliseconds, which needs to be expected when the thread work only for 10\% of the time and for the rest 90\% they sleep.
 \subsection{Windows}
-On my Windows machine the results were resembling those on my Unix machine. The library's output was almost identical to that created by the \textit{task manager}. Similar to Linux the NIT on Windows also dropped a few milliseconds in critical mode. However the difference is substantial between the two operating systems. This might be because on Linux we also change the way the process is being scheduled, while on Windows we always use the same scheduler and increase only the priority of the test process. Besides that, the results can be considered satisfying. The workload's range and the process's priority have been pleasing.
+On my Windows machine the results were resembling those on my Unix machine. The library's output was almost identical to that created by the \textit{task manager}. Similar to Linux the NIT on Windows also dropped a few milliseconds in critical mode. However the difference is substantial between the two operating systems. This might occur, because on Linux we also change the way the process is being scheduled, while on Windows we always use the same scheduler and increase only the priority of the test process. Besides that, the results can be considered satisfying. The workload's range and the process's priority have been pleasing.
