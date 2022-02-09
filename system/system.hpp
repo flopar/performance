@@ -8,15 +8,20 @@
 #include <bitset>
 #include <algorithm>
 #include <chrono>
-#include <fstream>
+
 
 // maybe remove it later on
 #include <iostream>
 
-#define STR_ERR "String_ERROR" 
 #define IDLE_TIME 0
 #define USER_TIME 1
 #define KERNEL_TIME 2
+
+
+#ifdef __linux__
+#include "system_linux.hpp"
+#endif
+
 
 
 // windows headers, defines and methods
@@ -32,37 +37,6 @@ int increaseSchedClass();
 int decreaseSchedClass();
 int increaseThreadPrio(HANDLE id = 0);
 int decreaseThreadPrio(HANDLE id = 0);
-#endif
-
-// linux headers, defines and methods
-#ifdef __linux__
-#include <sys/times.h>
-#include <errno.h>
-#include <sys/resource.h>
-#include <sched.h>
-#include <sys/syscall.h>
-#include <unistd.h>
-
-struct sched_attr{
-	uint32_t size;			
-	uint32_t sched_policy;
-	uint64_t sched_flags;
-	int32_t sched_nice;
-	uint32_t sched_priority;
-	/* The remaining fields are for SCHED_DEADLINE*/
-	uint64_t sched_runtime;
-	uint64_t sched_deadline;
-	uint64_t sched_period;
-};
-
-std::string readCPUTime(int cpu);
-std::vector<uint64_t> returnData(int cpu);
-void printPolicy(int policy);
-int changePolicy(int policy, int pid);
-int decreaseProcessNiceValue(int pid=0);
-int increaseProcessNiceValue(int pid=0);
-int increaseThreadPrio(int id = 0);
-int decreaseThreadPrio(int id = 0);
 #endif
 
 // Non-OS-Specific methods

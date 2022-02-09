@@ -111,39 +111,3 @@ int main(int argc, char* argv[])
 	//test(NORMAL, 90, false);
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-	// With sched_setscheduler you can change the policy of that thread (and its priortiy if the
-	// given policy is a realtime policy like RR or FIFO)
-/*	errno = 0;
-	struct sched_attr prio;
-	std::cout << "get_attr " << syscall(SYS_sched_getattr, 0, &prio, sizeof(prio), 0) << std::endl;
-	std::cout << "Errno " << errno << std::endl << std::endl;
-	std::cout << "policy of attr " << prio.sched_policy << "\nprio of attr " << prio.sched_priority << "\nnice of attr " << prio.sched_nice << std::endl;	
-	prio.sched_policy = SCHED_RR;
-	std::cout << "policy after set " << prio.sched_policy << std::endl;
-	std::cout << "set_attr " << syscall(SYS_sched_setattr, 0, &prio, 0) << std::endl;
-	std::cout << "Errno " << errno << std::endl;
-	newcap.rlim_cur = 2;
-	newcap.rlim_max = 10;
-	int curr_proc = getpid();
-	std::cout <<"prlimit: " << prlimit(curr_proc, RLIMIT_NICE, &newcap, &oldcap) << std::endl;
-	std::cout << "Limit prio: " << RLIMIT_RTPRIO << std::endl;
-	std::cout << "Errno: " << errno << std::endl;
-	std::cout << "Limit nice: " << RLIMIT_NICE << std::endl;
-	std::cout << "Prio of proc: " << getpriority(PRIO_PROCESS, curr_proc) << std::endl;
-	std::cout << "Errno: " << errno << std::endl;	
-	std::cout << "setprio returned: " << setpriority(PRIO_PROCESS, curr_proc, 21) << std::endl;
-	std::cout << "Prio of proc: " << getpriority(PRIO_PROCESS, curr_proc) << std::endl;
-	std::cout << "Errno: " << errno << std::endl;
-	std::cout << "setprio returned: " << setpriority(PRIO_PROCESS, curr_proc, 15) << std::endl;
-	std::cout << "Prio of proc: " << getpriority(PRIO_PROCESS, curr_proc) << std::endl;
-	*/

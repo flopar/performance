@@ -5,17 +5,22 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 	cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-# set the c++ standard to c++17
+# set the c++ standard to at least c++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-message("System: ${CMAKE_SYSTEM_NAME}")
 project(performance	VERSION 1.0
 			DESCRIPTION "Bachelor Thesis - performance"
 			LANGUAGES CXX)
 
+# System Name must be asked after the project() command 
+# otherwise the variable will be blank
+message("System: ${CMAKE_SYSTEM_NAME}")
+
+# Always add the main source file
 add_subdirectory(source)
+
 
 # Allows the build of the library
 add_subdirectory(system)
@@ -30,3 +35,5 @@ target_include_directories(test PUBLIC
 target_link_libraries(test 
 	system 
 	workload)
+
+
