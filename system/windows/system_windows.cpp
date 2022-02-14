@@ -9,30 +9,53 @@ uint64_t mergeFILETIME(FILETIME ft)
 	return merge;
 }
 
-int checkCPUAvailability(HANDLE& proc)
+int getCPUMasks(uint64_t& ProcAffinityMask, uint64_t& SystemAffinityMask, HANDLE proc)
 {
-	uint64_t ProcAffinityMask = 0, SystemAffinityMask = 0;
+	if (proc == 0)
+	{
+		proc = GetCurrentProcess();
+	}
 	BOOL ret = GetProcessAffinityMask(proc, &ProcAffinityMask, &SystemAffinityMask);
 	if (!ret)
 	{
 		throw std::runtime_error("Couldn't get affinity mask for the given process");
 		return 1;
 	}
-	else
+	return 0;
+}
+
+void checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, HANDLE proc)
+{
+	uint64_t ProcAffinityMask = 0, SystemAffinityMask = 0;
+	int check = getCPUMasks(ProcAffinityMask, SystemAffinityMask, proc);
+	if (!check)
 	{
-		std::cout << "Process cpu availability: " << std::uppercase << std::hex << ProcAffinityMask << std::endl;
-		std::cout << "Proc mask binary equivalent: " << std::bitset<8>{ProcAffinityMask} << std::endl;
-		std::cout << "System cpu availability: " << std::uppercase << std::hex << SystemAffinityMask << std::endl;
-		std::cout << "System mask binary equivalent: " << std::bitset<8>{ProcAffinityMask} << std::endl;
-		return 0;
+		std::bitset systembits = std::bitset<128>{ SystemAffinityMask };
+		std::bitset procbits = std::bitset<128>{ ProcAffinityMask };
+		std::cout << "proc count: " << procbits.count() << std::endl;
+		systemCPUs = systembits.count();
+		processCPUs = procbits.count();
 	}
 }
 
-// this function needs rethinking....
-int setCPUAvailability(HANDLE& proc, uint64_t mask)
+int setProcessSpecificAvailability(uint8_t pos, bool value, HANDLE proc)
 {
-	BOOL ret = SetProcessAffinityMask(proc, mask);
-	if (!ret)
+	if (proc == 0)
+	{
+		proc = GetCurrentProcess();
+	}
+	uint64_t ProcAffinityMask = 0, SystemAffinityMask = 0;
+	int check = getCPUMasks(ProcAffinityMask, SystemAffinityMask, proc);
+	std::bitset procbits = std::bitset<128>{ ProcAffinityMask };
+	if (pos > procbits.count() || pos < 0)
+	{
+		throw std::range_error("CPU position to set is out of range");
+		return 1;
+	}
+	procbits.set(pos, value);
+	ProcAffinityMask = procbits.to_ullong();
+	check = SetProcessAffinityMask(proc, ProcAffinityMask);
+	if (!check)
 	{
 		throw std::runtime_error("Setting the afinity masked for the given process failes");
 		return 1;
@@ -40,9 +63,12 @@ int setCPUAvailability(HANDLE& proc, uint64_t mask)
 	return 0;
 }
 
-
-int increaseSchedClass()
+int increaseSchedClass(HANDLE proc)
 {
+	if (proc == 0)
+	{
+		proc = GetCurrentProcess();
+	}
 	// Get current PrioClass and if its not the highest increase the value of it
 	uint32_t currProcClassPrio = GetPriorityClass(GetCurrentProcess());
 	std::cout << "Current prio class " << currProcClassPrio << std::endl;
@@ -60,19 +86,23 @@ int increaseSchedClass()
 			if (*iterator == currProcClassPrio)
 			{
 				index++;
-				SetPriorityClass(GetCurrentProcess(), schedPrioList.at(index));
+				SetPriorityClass(proc, schedPrioList.at(index));
 				std::cout << "New prio class: " << GetPriorityClass(GetCurrentProcess()) << std::endl;
 				return 0;
 			}
 			index++;
 			iterator++;
 		}
-		
+		return 0;
 	}
 }
 
-int decreaseSchedClass()
+int decreaseSchedClass(HANDLE proc)
 {
+	if (proc == 0)
+	{
+		proc = GetCurrentProcess();
+	}
 	// Get current PrioClass and if its not the lowest decrease the value of it
 	uint32_t currProcClassPrio = GetPriorityClass(GetCurrentProcess());
 	std::cout << "Current prio class " << currProcClassPrio << std::endl;
@@ -91,14 +121,14 @@ int decreaseSchedClass()
 			if (*iterator == currProcClassPrio)
 			{
 				index--;
-				SetPriorityClass(GetCurrentProcess(), schedPrioList.at(index));
+				SetPriorityClass(proc, schedPrioList.at(index));
 				std::cout << "New prio class: " << GetPriorityClass(GetCurrentProcess()) << std::endl;
 				return 0;
 			}
 			index++;
 			iterator++;
 		}
-		return 1;
+		return 0;
 	}
 }
 
@@ -130,19 +160,16 @@ int increaseThreadPrio(HANDLE id)
 				index++;
 				if (id == 0)
 				{
-					SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
+					id = GetCurrentThread();
 				}
-				else
-				{
-					SetThreadPriority(id, threadPrioList.at(index));
-				}
+				SetThreadPriority(id, threadPrioList.at(index));
 				std::cout << "New thread Prio: " << GetThreadPriority(GetCurrentThread()) << std::endl;
 				return 0;
 			}
 			index++;
 			iterator++;
 		}
-		return 1;
+		return 0;
 	}
 }
 
@@ -174,18 +201,15 @@ int decreaseThreadPrio(HANDLE id)
 				index--;
 				if (id == 0)
 				{
-					SetThreadPriority(GetCurrentThread(), threadPrioList.at(index));
+					id = GetCurrentThread();
 				}
-				else
-				{
-					SetThreadPriority(id, threadPrioList.at(index));
-				}
+				SetThreadPriority(id, threadPrioList.at(index));
 				std::cout << "New thread Prio: " << GetThreadPriority(GetCurrentThread()) << std::endl;
 				return 0;
 			}
 			index++;
 			iterator++;
 		}
-		return 1;
+		return 0;
 	}
 }

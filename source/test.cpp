@@ -10,16 +10,16 @@ int writeRuntimeStats(std::vector<double> list, std::string statName)
 {
 	std::ofstream statisticsFile;
 	statisticsFile.open("runtime_statistics.csv", std::ios::in | std::ios::app | std::ios::binary);
-	if(!statisticsFile.is_open())
+	if (!statisticsFile.is_open())
 	{
 		throw std::runtime_error("Couldn't open file to write");
 		return -1;
-	}	
+	}
 	statisticsFile << statName << ",";
-	int lenList = list.size()-1;
-	for(int i = 0; i < lenList; i++)
+	int lenList = list.size() - 1;
+	for (int i = 0; i < lenList; i++)
 	{
-		if(i < lenList-1)
+		if (i < lenList - 1)
 		{
 			statisticsFile << list[i] << ",";
 		}
@@ -33,7 +33,6 @@ int writeRuntimeStats(std::vector<double> list, std::string statName)
 	return 0;
 }
 
-
 void test(int mode, unsigned int percentage, bool async)
 {
 	std::vector<double> procWorkload, sysWorkload;
@@ -46,6 +45,9 @@ void test(int mode, unsigned int percentage, bool async)
 #ifdef __linux__
 	bool incrementNice = true;
 #endif
+	size_t proc = 0, system = 0;
+	checkCPUAvailability(std::ref(proc), std::ref(system));
+	std::cout << "proc: " << proc << std::endl << "system: " << system << std::endl;
 	try
 	{	
 		/* If mode was set to CRITICAL we will increase this thread's priortiy and set a
@@ -88,6 +90,7 @@ void test(int mode, unsigned int percentage, bool async)
 			}
 #endif
 		}
+		/*
 		// Create Workload, start it, analyze it, stop it and write the results to a file
 		workload::Workload worky(percentage, &prio, async);
 		worky.startWL();
@@ -97,6 +100,7 @@ void test(int mode, unsigned int percentage, bool async)
 		
 		writeRuntimeStats(procWorkload, "ProcessWorkload");
 		writeRuntimeStats(sysWorkload, "SystemWorkload");
+		*/
 	}
 	catch(const std::exception& e)
 	{
@@ -107,7 +111,7 @@ void test(int mode, unsigned int percentage, bool async)
 
 int main(int argc, char* argv[])
 {
-	test(CRITICAL, 10, true);	
-	//test(NORMAL, 90, false);
+	//test(CRITICAL, 10, true);	
+	test(NORMAL, 90, false);
 	return 0;
 }

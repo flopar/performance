@@ -4,6 +4,7 @@
 #include <ios>
 #include <vector>
 #include <windows.h>
+#include <thread>
 
 // Defines
 static std::vector<int> schedPrioList = {IDLE_PRIORITY_CLASS, BELOW_NORMAL_PRIORITY_CLASS, NORMAL_PRIORITY_CLASS, ABOVE_NORMAL_PRIORITY_CLASS, HIGH_PRIORITY_CLASS, REALTIME_PRIORITY_CLASS};
@@ -11,9 +12,9 @@ static std::vector<int> threadPrioList = {THREAD_PRIORITY_IDLE, THREAD_PRIORITY_
 
 
 uint64_t mergeFILETIME(FILETIME ft);
-int checkCPUAvailability(HANDLE& proc);
-int setCPUAvailability(HANDLE& proc, uint64_t mask);
-int increaseSchedClass();
-int decreaseSchedClass();
+void checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, HANDLE proc = 0);
+int setProcessSpecificAvailability(uint8_t pos, bool value, HANDLE proc = 0);
+int increaseSchedClass(HANDLE proc = 0);
+int decreaseSchedClass(HANDLE proc = 0);
 int increaseThreadPrio(HANDLE id = 0);
 int decreaseThreadPrio(HANDLE id = 0);
