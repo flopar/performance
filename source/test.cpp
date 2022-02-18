@@ -45,9 +45,6 @@ void test(int mode, unsigned int percentage, bool async)
 #ifdef __linux__
 	bool incrementNice = true;
 #endif
-	size_t proc = 0, system = 0;
-	checkCPUAvailability(std::ref(proc), std::ref(system));
-	std::cout << "proc: " << proc << std::endl << "system: " << system << std::endl;
 	try
 	{	
 		/* If mode was set to CRITICAL we will increase this thread's priortiy and set a
@@ -90,7 +87,6 @@ void test(int mode, unsigned int percentage, bool async)
 			}
 #endif
 		}
-		/*
 		// Create Workload, start it, analyze it, stop it and write the results to a file
 		workload::Workload worky(percentage, &prio, async);
 		worky.startWL();
@@ -100,7 +96,6 @@ void test(int mode, unsigned int percentage, bool async)
 		
 		writeRuntimeStats(procWorkload, "ProcessWorkload");
 		writeRuntimeStats(sysWorkload, "SystemWorkload");
-		*/
 	}
 	catch(const std::exception& e)
 	{
@@ -112,6 +107,21 @@ void test(int mode, unsigned int percentage, bool async)
 int main(int argc, char* argv[])
 {
 	//test(CRITICAL, 10, true);	
-	test(NORMAL, 90, false);
+	//test(NORMAL, 90, false);
+	
+	size_t system = 0, proc = 0;
+	checkCPUAvailability(std::ref(proc), std::ref(system));
+	std::cout << "system: " << system << std::endl << "proc: " << proc << std::endl;
+	/*cpu_set_t* test;
+	size_t size;
+	test = CPU_ALLOC(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));	
+	size = CPU_ALLOC_SIZE(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));
+	std::cout << "memory allocated: " << size << std::endl << "size of test: " << sizeof(test) << std::endl;
+	CPU_ZERO_S(size,test);	
+	std::cout << "get affinity returned: " << sched_getaffinity(0, sizeof(test), test) << std::endl;
+	std::cout << "number of cpus set: " << CPU_COUNT_S(size,test) << std::endl;
+	std::cout << "test: " << test[0] << std::endl;
+	CPU_FREE(test);
+	*/
 	return 0;
 }

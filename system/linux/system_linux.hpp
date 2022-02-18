@@ -7,6 +7,7 @@
 #include <sys/resource.h>
 #include <sched.h>
 #include <sys/syscall.h>
+#include <sys/sysinfo.h>
 #include <unistd.h>
 
 // Standard library headers
@@ -37,3 +38,4 @@ void printPolicy(int policy);
 int changePolicy(int policy, int pid);
 int increaseThreadPrio(int id = 0);
 int decreaseThreadPrio(int id = 0);
+int checkCPUAvailability(size_t& system, size_t& proc, pid_t pid = 0);

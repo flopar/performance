@@ -1,5 +1,24 @@
 #include "system_linux.hpp"
 
+int checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, pid_t pid)
+{	
+	// Allocate memory for the affinity mask and get the needed size for the mask
+	cpu_set_t* affinity = CPU_ALLOC(get_nprocs_conf());
+	size_t size = CPU_ALLOC_SIZE(get_nprocs_conf());
+	CPU_ZERO_S(size, affinity);
+	int check = 0;
+	check = sched_getaffinity(pid, size, affinity);
+	if(check)
+	{
+		throw std::runtime_error("Failed getting the affinity mask for the given process");
+		return 1;
+	}
+	processCPUs = static_cast<size_t>(CPU_COUNT_S(size, affinity));
+	systemCPUs = static_cast<size_t>(get_nprocs_conf());
+	CPU_FREE(affinity);
+	return 0;
+}
+
 std::string readCPUTime(int cpu)
 {
 	std::string text;
@@ -275,5 +294,3 @@ int decreaseThreadPrio(int id)
 		}
 	}
 }
-
-
