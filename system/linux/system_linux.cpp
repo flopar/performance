@@ -1,22 +1,82 @@
 #include "system_linux.hpp"
 
-int checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, pid_t pid)
+
+/*
+ *Description:  This function returns an unique_pointer in order to tell the user an allocation took place
+ *		and at the same time telling him he won't have to care much about it
+ */
+// TODO: find a way to make use of unique_pointers 
+int getSizeAndSet(pid_t tid, std::unique_ptr<cpu_set_t>& set, size_t&setSize)
+{
+	*set = CPU_ALLOC(get_nprocs());
+	setSize = CPU_ALLOC_SIZE(get_nprocs());
+	CPU_ZERO_S(setSize, *set);
+	if(sched_getaffinity(tid, setSize, *set))
+	{
+		throw std::runtime_error("Failed getting the affinity mask for the given thread/process!\n");
+		return 1;
+	}
+	return 0;
+}
+
+/*
+ * Description: This function delivers the number of CPUs avaiable to the given pid.
+ *		It is specified that the id passed on to "sched_getaffinity" changes
+ *		the affinity of a spcific thread, hence the function does not differentiate
+ *		between a TID and PID. If 0 is passed the calling thread will have its affinity
+ *		changed. If a TID is passsed, that thread will have its affinity changed and (last
+ *		but not least) if a PID is passed, that PID main thread will have its affinity
+ *		changed.
+ */
+int checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, size_t& offlineCPUs, pid_t tid)
 {	
 	// Allocate memory for the affinity mask and get the needed size for the mask
-	cpu_set_t* affinity = CPU_ALLOC(get_nprocs_conf());
-	size_t size = CPU_ALLOC_SIZE(get_nprocs_conf());
-	CPU_ZERO_S(size, affinity);
-	int check = 0;
-	check = sched_getaffinity(pid, size, affinity);
-	if(check)
+	std::unique_ptr<cpu_set_t> affinity;
+	// get the allocated memory size
+	size_t size;
+	if(getSizeAndSet(tid, &affinity, std::ref(size)))
 	{
-		throw std::runtime_error("Failed getting the affinity mask for the given process");
+		throw std::runtime_error("Getting size and cpu set failed!\n");
 		return 1;
 	}
 	processCPUs = static_cast<size_t>(CPU_COUNT_S(size, affinity));
-	systemCPUs = static_cast<size_t>(get_nprocs_conf());
+	systemCPUs = static_cast<size_t>(get_nprocs());
+	offlineCPUs = static_cast<size_t>(get_nprocs_conf()) - systemCPUs;
 	CPU_FREE(affinity);
 	return 0;
+}
+
+int setProcessSpecificAvailability(int cpu, bool value, pid_t tid)
+{
+	// check user input
+	if((cpu < 0) || (cpu > get_nprocs()))
+	{
+		throw std::runtime_error("Given CPU is ambigious\n");
+		return 1;
+	}
+	cpu_set_t* affinity;
+	size_t size;
+	if(getSizeAndSet(tid, &affinity, std::ref(size)))
+	{
+		throw std::runtime_error("Getting size and cpu set failed!\n");
+		return 1;
+	}
+	// check if cpu is set
+	int cpuSet = CPU_ISSET_S(cpu, size, affinity);
+	if(value)
+	{
+		if(!cpuSet)
+		{
+			CPU_SET_S(cpu, size, affinity);
+		}
+	}
+	else
+	{
+		if(cpuSet)
+		{
+			CPU_CLR_S(cpu, size, affinity);
+		}
+	}
 }
 
 std::string readCPUTime(int cpu)

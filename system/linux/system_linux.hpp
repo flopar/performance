@@ -38,4 +38,4 @@ void printPolicy(int policy);
 int changePolicy(int policy, int pid);
 int increaseThreadPrio(int id = 0);
 int decreaseThreadPrio(int id = 0);
-int checkCPUAvailability(size_t& system, size_t& proc, pid_t pid = 0);
+int checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, size_t& offlineCPUs, pid_t tid = 0);

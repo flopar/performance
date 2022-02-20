@@ -109,9 +109,9 @@ int main(int argc, char* argv[])
 	//test(CRITICAL, 10, true);	
 	//test(NORMAL, 90, false);
 	
-	size_t system = 0, proc = 0;
-	checkCPUAvailability(std::ref(proc), std::ref(system));
-	std::cout << "system: " << system << std::endl << "proc: " << proc << std::endl;
+	size_t system = 0, proc = 0, offline = 53;
+	checkCPUAvailability(std::ref(proc), std::ref(system), std::ref(offline));
+	std::cout << "system: " << system << std::endl << "proc: " << proc << std::endl << "offline: " << offline << std::endl;
 	/*cpu_set_t* test;
 	size_t size;
 	test = CPU_ALLOC(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));	
