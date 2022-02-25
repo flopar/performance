@@ -18,22 +18,28 @@ project(performance	VERSION 1.0
 # otherwise the variable will be blank
 message("System: ${CMAKE_SYSTEM_NAME}")
 
+# Enable -pthread and -lthread
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+
 # Always add the main source file
 add_subdirectory(source)
 
 
 # Allows the build of the library
-add_subdirectory(system)
-add_subdirectory(workload)
+#add_subdirectory(workload)
+add_subdirectory(process_manipulator)
 
 # Adds the directories to the include search path
 target_include_directories(test PUBLIC 
-	system
-	workload)
+	process_manipulator)
+	#workload)
 
 # Links the libraries to the main target
-target_link_libraries(test 
-	system 
-	workload)
+target_link_libraries(test
+	Threads::Threads
+	process_manipulator)
+	#workload)
 
 

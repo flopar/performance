@@ -32,12 +32,6 @@ struct sched_attr
 	uint64_t sched_period;
 };
 
-std::string readCPUTime(int cpu);
-std::vector<uint64_t> returnData(int cpu);
-int decreaseProcessNiceValue(int pid=0);
-int increaseProcessNiceValue(int pid=0);
-void printPolicy(int policy);
-int changePolicy(int policy, int pid);
-int increaseThreadPrio(int id = 0);
-int decreaseThreadPrio(int id = 0);
+
+
 int checkCPUAvailability(size_t& processCPUs, size_t& systemCPUs, size_t& offlineCPUs, pid_t tid = 0);

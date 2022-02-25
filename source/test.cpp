@@ -1,5 +1,6 @@
-#include <workload.hpp>
-#include <system.hpp>
+//#include <workload.hpp>
+#include <process_manipulator.hpp>
+
 
 #define NORMAL 0
 #define CRITICAL 1
@@ -32,7 +33,7 @@ int writeRuntimeStats(std::vector<double> list, std::string statName)
 	statisticsFile.close();
 	return 0;
 }
-
+/*
 void test(int mode, unsigned int percentage, bool async)
 {
 	std::vector<double> procWorkload, sysWorkload;
@@ -47,8 +48,8 @@ void test(int mode, unsigned int percentage, bool async)
 #endif
 	try
 	{	
-		/* If mode was set to CRITICAL we will increase this thread's priortiy and set a
-		 * real time scheduling policy depending on the calling OS */ 
+		// If mode was set to CRITICAL we will increase this thread's priortiy and set a
+		// real time scheduling policy depending on the calling OS  
 		if(mode)
 		{
 #ifdef __linux__
@@ -102,16 +103,48 @@ void test(int mode, unsigned int percentage, bool async)
 		std::cout << e.what() << std::endl;
 	}
 }
-
+*/
 
 int main(int argc, char* argv[])
 {
 	//test(CRITICAL, 10, true);	
 	//test(NORMAL, 90, false);
-	
-	size_t system = 0, proc = 0, offline = 53;
+	pid_t pid = getpid();
+	process_manipulator<pid_t> proc_man = process_manipulator<pid_t>(pid);
+	std::cout << proc_man.get_handle() << std::endl;
+	try{
+		proc_man.changePolicy(SCHED_RR);
+		proc_man.increaseThreadPrio(-1);
+	}catch(const std::exception& e){
+		std::cout << e.what() << std::endl;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*	size_t system = 0, proc = 0, offline = 53;
 	checkCPUAvailability(std::ref(proc), std::ref(system), std::ref(offline));
 	std::cout << "system: " << system << std::endl << "proc: " << proc << std::endl << "offline: " << offline << std::endl;
+	
+*/	
+
+
+
+
 	/*cpu_set_t* test;
 	size_t size;
 	test = CPU_ALLOC(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));	
