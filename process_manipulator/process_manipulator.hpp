@@ -69,10 +69,13 @@ class process_manipulator
 
 		/* -- Available CPUs -- */
 		int m_systemCPUs = 0, m_processCPUs = 0, m_offlineCPUs = 0, m_threadCPUs = 0;
-
+#ifdef __linux__
+		cpu_set_t* cpuSet;
+		size_t setSize;
+#endif
 #ifdef WIN32
 		// This is the main thread of the calling process and is set in the class's constructor 		
-		HANDLE m_thread_handle;
+		HANDLE m_threadHandle;
 
 		// CPU utility varibales for a smoother and cleaner way of setting CPUs
 		std::bitset<64> sysbits, procbits, threadbits;
@@ -81,7 +84,7 @@ class process_manipulator
 	public:
 		/* -- Constructor & Destructor -- */
 		process_manipulator(T handle);
-		~process_manipulator() = default;
+		~process_manipulator();
 	
 		/* -- Setters & getters -- */
 		T get_handle();
@@ -99,7 +102,7 @@ class process_manipulator
 		/* -- Priorities -- */
 		int increaseThreadPrio(int8_t times=1);
 		int decreaseThreadPrio(int8_t times=1);
-
+				
 #ifdef __linux__
 		// Linux specific priorities
 		int decreaseProcessNiceValue();
@@ -115,6 +118,8 @@ class process_manipulator
 #endif
 
 		/* -- CPU manipulation -- */
+		void updateCPUs();
+		int setThreadCPU(int pos, bool value);
 #ifdef __linux__
 #elif WIN32
 		void updateCPUs(std::bitset<64> ProcessAffMask = 0, std::bitset<64> ThreadAffMask = 0);

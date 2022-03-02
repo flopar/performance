@@ -111,11 +111,12 @@ int main(int argc, char* argv[])
 	//test(NORMAL, 90, false);
 #ifdef __linux__
 	pid_t pid = getpid();
-	process_manipulator<pid_t> proc_man = process_manipulator<pid_t>(pid);
-	std::cout << proc_man.get_handle() << std::endl;
+	process_manipulator<pid_t> proc_man = process_manipulator<pid_t>(0);
 	try{
-		proc_man.changePolicy(SCHED_RR);
-		proc_man.increaseThreadPrio(-1);
+		proc_man.setThreadCPU(2, false);
+		proc_man.setThreadCPU(22, true);
+		//proc_man.changePolicy(SCHED_RR);
+		//proc_man.increaseThreadPrio(-1);
 	}catch(const std::exception& e){
 		std::cout << e.what() << std::endl;
 	}
@@ -135,16 +136,5 @@ int main(int argc, char* argv[])
 		std::cout << e.what() << std::endl;
 	}
 #endif
-	/*cpu_set_t* test;
-	size_t size;
-	test = CPU_ALLOC(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));	
-	size = CPU_ALLOC_SIZE(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));
-	std::cout << "memory allocated: " << size << std::endl << "size of test: " << sizeof(test) << std::endl;
-	CPU_ZERO_S(size,test);	
-	std::cout << "get affinity returned: " << sched_getaffinity(0, sizeof(test), test) << std::endl;
-	std::cout << "number of cpus set: " << CPU_COUNT_S(size,test) << std::endl;
-	std::cout << "test: " << test[0] << std::endl;
-	CPU_FREE(test);
-	*/
 	return 0;
 }

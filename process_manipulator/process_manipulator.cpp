@@ -35,8 +35,20 @@ template<>
 process_manipulator<pid_t>::process_manipulator(pid_t handle)
 {
 	m_handle = handle;
+	int cpus = static_cast<int>(sysconf(_SC_NPROCESSORS_ONLN));
+	cpuSet = CPU_ALLOC(cpus);
+	setSize = CPU_ALLOC_SIZE(cpus);
+	CPU_ZERO_S(setSize, cpuSet);
+	sched_getaffinity(handle, setSize, cpuSet);
+	m_systemCPUs = m_processCPUs = m_threadCPUs = CPU_COUNT_S(setSize, cpuSet);
+	m_offlineCPUs = m_systemCPUs - m_threadCPUs;
 }
 
+template<>
+process_manipulator<pid_t>::~process_manipulator()
+{
+	CPU_FREE(cpuSet);
+}
 template<> 
 pid_t process_manipulator<pid_t>::get_handle()
 {
@@ -48,6 +60,64 @@ void process_manipulator<pid_t>::set_handle(pid_t handle)
 {
 	m_handle = handle;
 }
+
+template<>
+int process_manipulator<pid_t>::getSysCPU()
+{
+	return m_systemCPUs;
+}
+
+template<>
+int process_manipulator<pid_t>::getProcCPU()
+{
+	return m_processCPUs;
+}
+
+template<>
+int process_manipulator<pid_t>::getThreadCPU()
+{
+	return m_threadCPUs;
+}
+
+template<>
+void process_manipulator<pid_t>::updateCPUs()
+{
+	m_processCPUs = m_threadCPUs = CPU_COUNT_S(setSize, cpuSet);
+}
+
+template<>
+int process_manipulator<pid_t>::setThreadCPU(int pos, bool value)
+{
+	if(pos > m_processCPUs || pos < 0)
+	{
+		throw std::range_error("CPU position to set is out of range");
+		return 1;
+	}
+	bool cpu_set = CPU_ISSET_S(pos, setSize, cpuSet) ? true : false;
+	if(cpu_set != value)
+	{	
+		if(value)
+		{
+			CPU_SET_S(pos, setSize, cpuSet);
+		}
+		else
+		{
+			CPU_CLR_S(pos, setSize, cpuSet);
+		}
+		if(sched_setaffinity(m_handle, setSize, cpuSet))
+		{
+			throw std::runtime_error("Setting the affinity mask for the given process failed\n");
+			return 1;
+		}
+		updateCPUs();
+	}
+	else
+	{
+		throw std::runtime_error("Thread CPU already set to the given value!");
+		return 1;
+	}
+}
+
 template<class T>
 int process_manipulator<T>::increaseProcessNiceValue()
 {
@@ -301,7 +371,7 @@ template<>
 process_manipulator<HANDLE>::process_manipulator(HANDLE handle)
 {
 	m_handle = handle;
-	m_thread_handle = GetCurrentThread();
+	m_threadHandle = GetCurrentThread();
 
 	// get the available CPUs
 	uint64_t ProcAffinityMask = 0, SystemAffinityMask = 0;
@@ -513,20 +583,10 @@ int process_manipulator<HANDLE>::decreaseSchedClass(int8_t times)
 }
 
 template <>
-void process_manipulator<HANDLE>::updateCPUs(std::bitset<64> ProcessAffMask, std::bitset<64> ThreadAffMask)
+void process_manipulator<HANDLE>::updateCPUs()
 {
-	if (ThreadAffMask == 0)
-	{
-		m_processCPUs = ProcessAffMask.count();
-		procbits = ProcessAffMask;
-		m_threadCPUs = ProcessAffMask.count();
-		threadbits = ProcessAffMask;
-	}
-	if (ProcessAffMask == 0)
-	{
-		m_threadCPUs = ThreadAffMask.count();
-		threadbits = ThreadAffMask;
-	}
+	m_processCPUs = procbits.count();
+	m_threadCPUs = threadbits.count();
 }
 
 template<>
@@ -548,7 +608,7 @@ int process_manipulator<HANDLE>::setProcessCPU(uint8_t pos, bool value)
 			throw std::runtime_error("Setting the afinity masked for the given process failes");
 			return 1;
 		}
-		updateCPUs(procbits);
+		updateCPUs();
 		return 0;
 	}
 	else
@@ -577,7 +637,7 @@ int process_manipulator<HANDLE>::setThreadCPU(uint8_t pos, bool value)
 			throw std::runtime_error("Setting the afinity masked for the given process failes");
 			return 1;
 		}
-		updateCPUs(0, procbits);
+		updateCPUs();
 		return 0;
 	}
 	else
