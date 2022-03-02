@@ -18,6 +18,18 @@ void process_manipulator<T>::set_handle(T handle)
 	m_handle = handle;
 }
 
+template <class T>
+int process_manipulator<T>::getSysCPU()
+{
+	return m_systemCPUs;
+}
+
+template <class T>
+int process_manipulator<T>::getProcCPU()
+{
+	return m_systemCPUs;
+}
+
 #ifdef __linux__
 template<>
 process_manipulator<pid_t>::process_manipulator(pid_t handle)
@@ -283,6 +295,298 @@ int process_manipulator<pid_t>::decreaseThreadPrio(int8_t times)
 		}
 	}
 }
+#endif
+#ifdef WIN32
+template<>
+process_manipulator<HANDLE>::process_manipulator(HANDLE handle)
+{
+	m_handle = handle;
+	m_thread_handle = GetCurrentThread();
+
+	// get the available CPUs
+	uint64_t ProcAffinityMask = 0, SystemAffinityMask = 0;
+	BOOL ret = GetProcessAffinityMask(m_handle, &ProcAffinityMask, &SystemAffinityMask);
+	if (!ret)
+	{
+		throw std::runtime_error("Couldn't get affinity mask for the given process");
+	}
+	sysbits = std::bitset<64>{ SystemAffinityMask };
+	procbits = std::bitset<64>{ ProcAffinityMask };
+	threadbits = procbits;
+
+	m_systemCPUs = sysbits.count();
+	m_processCPUs = procbits.count();
+	m_threadCPUs = m_processCPUs;
+	m_offlineCPUs = m_systemCPUs - m_processCPUs;
+}
+
+template<>
+HANDLE process_manipulator<HANDLE>::get_handle()
+{
+	return m_handle;
+}
+
+template<>
+void process_manipulator<HANDLE>::set_handle(HANDLE handle)
+{
+	m_handle = handle;
+}
+
+template<>
+int process_manipulator<HANDLE>::getSysCPU()
+{
+	return m_systemCPUs;
+}
+
+template<>
+int process_manipulator<HANDLE>::getProcCPU()
+{
+	return m_systemCPUs;
+}
+
+template<>
+int process_manipulator<HANDLE>::getThreadCPU()
+{
+	return m_threadCPUs;
+}
+
+template<>
+int process_manipulator<HANDLE>::increaseThreadPrio(int8_t times)
+{
+	if (times < 0)
+	{
+		std::invalid_argument("Given argument is not allowed!\n");
+		return 1;
+	}
+	int currThreadPrio = GetThreadPriority(m_thread_handle);
+	if (currThreadPrio == THREAD_PRIORITY_ERROR_RETURN)
+	{
+		std::runtime_error("The thread's priority could not be gotten!\n");
+		return 1;
+	}
+	std::cout << "Current thread prio: " << currThreadPrio << std::endl;
+	if (currThreadPrio == threadPrioList.back())
+	{
+		throw std::runtime_error("Thread Priority cannot be increased. Highest priority is already set!");
+		return 1;
+	}
+	int* iterator = std::find(&threadPrioList.front(), &threadPrioList.back(), currThreadPrio);
+	for(int i = 0 ; i < times; i++)
+	{
+		if (*iterator == THREAD_PRIORITY_TIME_CRITICAL && i != times)
+		{
+			std::cout << "Increase argument was too high!\n" << "Setting the maximum priority allowed: " << THREAD_PRIORITY_TIME_CRITICAL << std::endl;
+			currThreadPrio = THREAD_PRIORITY_TIME_CRITICAL;
+		}
+		iterator++;
+	}
+	currThreadPrio = *iterator;
+	if (!SetThreadPriority(m_thread_handle, currThreadPrio))
+	{
+		std::runtime_error("The priority could not be set!\n");
+		return 1;
+	}
+	std::cout << "New thread prio: " << GetThreadPriority(m_thread_handle) << std::endl;
+	return 0;
+}
+
+template<>
+int process_manipulator<HANDLE>::decreaseThreadPrio(int8_t times)
+{
+	if (times < 0)
+	{
+		std::invalid_argument("Given argument is not allowed!\n");
+		return 1;
+	}
+	int currThreadPrio = GetThreadPriority(m_thread_handle);
+	if (currThreadPrio == THREAD_PRIORITY_ERROR_RETURN)
+	{
+		std::runtime_error("The thread's priority could not be gotten!\n");
+		return 1;
+	}
+	std::cout << "Current thread prio: " << currThreadPrio << std::endl;
+	if (currThreadPrio == threadPrioList.front())
+	{
+		throw std::invalid_argument("Thread Priority cannot be decreased. Lowest priority is already set!");
+		return 1;
+	}
+	int* iterator = std::find(&threadPrioList.front(), &threadPrioList.back(), currThreadPrio);
+	for (int i = times; i > 0; i--)
+	{
+		if (*iterator == THREAD_PRIORITY_IDLE && i != times)
+		{
+			std::cout << "Decrease argument was too high!\n" << "Setting the minimum priority allowed: " << THREAD_PRIORITY_IDLE << std::endl;
+			currThreadPrio = THREAD_PRIORITY_IDLE;
+		}
+		iterator--;
+	}
+	currThreadPrio = *iterator;
+	if (!SetThreadPriority(m_thread_handle, currThreadPrio))
+	{
+		std::runtime_error("The priority could not be set!\n");
+		return 1;
+	}
+	std::cout << "New thread prio: " << GetThreadPriority(m_thread_handle) << std::endl;
+	return 0;
+}
+
+template<>
+int process_manipulator<HANDLE>::increaseSchedClass(int8_t times)
+{
+	if (times < 0)
+	{
+		std::invalid_argument("Given argument is not allowed!\n");
+		return 1;
+	}
+	// Get current PrioClass and if its not the highest increase the value of it
+	uint32_t currProcClassPrio = GetPriorityClass(GetCurrentProcess());
+	if (!currProcClassPrio)
+	{
+		std::runtime_error("Couldn't get the class priority for the given process!\n");
+		return 1;
+	}
+	std::cout << "Current prio class " << currProcClassPrio << std::endl;
+	if (currProcClassPrio == schedPrioList.back())
+	{
+		throw std::invalid_argument("Priority Class cannot be increased. Highest class is already set!");
+		return 1;
+	}
+	int* iterator = std::find(&schedPrioList.front(), &schedPrioList.back(), currProcClassPrio);
+	for (int i = 0; i < times; i++)
+	{
+		if (*iterator == schedPrioList.back() && i != times)
+		{
+			std::cout << "Increase argument was too high!\n" << "Setting the maximum priority allowed: " << schedPrioList.back() << std::endl;
+			currProcClassPrio = schedPrioList.back();
+		}
+		iterator++;
+	}
+	currProcClassPrio = *iterator;
+	if (!SetPriorityClass(m_handle, currProcClassPrio))
+	{
+		std::runtime_error("The class could not be set!\n");
+		return 1;
+	}
+	std::cout << "New class prio: " << GetPriorityClass(m_handle) << std::endl;
+	return 0;
+}
+
+template<>
+int process_manipulator<HANDLE>::decreaseSchedClass(int8_t times)
+{
+	if (times < 0)
+	{
+		std::invalid_argument("Given argument is not allowed!\n");
+		return 1;
+	}
+	// Get current PrioClass and if its not the highest increase the value of it
+	uint32_t currProcClassPrio = GetPriorityClass(GetCurrentProcess());
+	if (!currProcClassPrio)
+	{
+		std::runtime_error("Couldn't get the class priority for the given process!\n");
+		return 1;
+	}
+	std::cout << "Current prio class " << currProcClassPrio << std::endl;
+	if (currProcClassPrio == schedPrioList.front())
+	{
+		throw std::invalid_argument("Priority Class cannot be decreased. Lowest class is already set!");
+		return 1;
+	}
+	int* iterator = std::find(&schedPrioList.front(), &schedPrioList.back(), currProcClassPrio);
+	for (int i = times; i > 0; i--)
+	{
+		if (*iterator == schedPrioList.front() && i != times)
+		{
+			std::cout << "Decrease argument was too high!\n" << "Setting the minimum priority allowed: " << schedPrioList.front() << std::endl;
+			currProcClassPrio = schedPrioList.front();
+		}
+		iterator--;
+	}
+	currProcClassPrio = *iterator;
+	if (!SetPriorityClass(m_handle, currProcClassPrio))
+	{
+		std::runtime_error("The class could not be set!\n");
+		return 1;
+	}
+	std::cout << "New class prio: " << GetPriorityClass(m_handle) << std::endl;
+	return 0;
+}
+
+template <>
+void process_manipulator<HANDLE>::updateCPUs(std::bitset<64> ProcessAffMask, std::bitset<64> ThreadAffMask)
+{
+	if (ThreadAffMask == 0)
+	{
+		m_processCPUs = ProcessAffMask.count();
+		procbits = ProcessAffMask;
+		m_threadCPUs = ProcessAffMask.count();
+		threadbits = ProcessAffMask;
+	}
+	if (ProcessAffMask == 0)
+	{
+		m_threadCPUs = ThreadAffMask.count();
+		threadbits = ThreadAffMask;
+	}
+}
+
+template<>
+int process_manipulator<HANDLE>::setProcessCPU(uint8_t pos, bool value)
+{
+	uint64_t ProcAffinityMask;
+	if (pos > m_processCPUs || pos < 0)
+	{
+		throw std::range_error("CPU position to set is out of range");
+		return 1;
+	}
+	if (procbits[pos] != value)
+	{
+		procbits.set(pos, value);
+		ProcAffinityMask = procbits.to_ullong();
+		int check = SetProcessAffinityMask(m_handle, std::ref(ProcAffinityMask));
+		if (!check)
+		{
+			throw std::runtime_error("Setting the afinity masked for the given process failes");
+			return 1;
+		}
+		updateCPUs(procbits);
+		return 0;
+	}
+	else
+	{
+		throw std::runtime_error("Process CPU already set to the given value!");
+		return 1;
+	}
+}
+
+template<>
+int process_manipulator<HANDLE>::setThreadCPU(uint8_t pos, bool value)
+{
+	uint64_t ThreadAffinityMask;
+	if (pos > m_processCPUs || pos < 0)
+	{
+		throw std::range_error("CPU position to set is out of range");
+		return 1;
+	}
+	if (threadbits[pos] != value)
+	{
+		threadbits.set(pos, value);
+		ThreadAffinityMask = threadbits.to_ullong();
+		int check = SetThreadAffinityMask(m_handle, std::ref(ThreadAffinityMask));
+		if (!check)
+		{
+			throw std::runtime_error("Setting the afinity masked for the given process failes");
+			return 1;
+		}
+		updateCPUs(0, procbits);
+		return 0;
+	}
+	else
+	{
+		throw std::runtime_error("Thread CPU already set to the given value!");
+		return 1;
+	}
+}
+
 #endif
 template<class T>
 int process_manipulator<T>::getProcessTimes(uint64_t& kernel, uint64_t& user)

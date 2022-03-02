@@ -7,9 +7,12 @@
 #include <sys/syscall.h>
 #include <sys/sysinfo.h>
 #include <unistd.h>
+// util header
+#include <util_linux.hpp>
 #endif
 #ifdef WIN32
 #include<windows.h>
+#include<util_windows.hpp>
 #endif
 
 // cross-platfrom headers
@@ -24,13 +27,16 @@
 #include <vector>
 #include <thread>
 #include <iostream>
-#include <util_linux.hpp>
+#include <bitset>
+
 
 /*-- DEFINES --*/
 #define IDLE_TIME 0
 #define USER_TIME 1
 #define KERNEL_TIME 2
+
 #ifdef __linux__
+
 // Struct defined as the linux man pages require, but for some reason
 // is not defined in the header files
 struct sched_attr
@@ -46,32 +52,54 @@ struct sched_attr
 	uint64_t sched_period;
 };
 #endif
+#ifdef WIN32
+static std::vector<int> schedPrioList = { IDLE_PRIORITY_CLASS, BELOW_NORMAL_PRIORITY_CLASS, NORMAL_PRIORITY_CLASS, ABOVE_NORMAL_PRIORITY_CLASS, HIGH_PRIORITY_CLASS, REALTIME_PRIORITY_CLASS };
+static std::vector<int> threadPrioList = { THREAD_PRIORITY_IDLE, THREAD_PRIORITY_LOWEST, THREAD_PRIORITY_BELOW_NORMAL, THREAD_PRIORITY_NORMAL, THREAD_PRIORITY_ABOVE_NORMAL, THREAD_PRIORITY_HIGHEST, THREAD_PRIORITY_TIME_CRITICAL };
+#endif
+
 template<class T>
 class process_manipulator
 {
 	private:
+		/* -- Process Identification Attribute -- *
+		 *		Linux:		PID
+		 *		Windows:	HANDLE
+		 * -------------------------------------- */
 		T m_handle;
-//		CPU m_cpu;
+
+		/* -- Available CPUs -- */
+		int m_systemCPUs = 0, m_processCPUs = 0, m_offlineCPUs = 0, m_threadCPUs = 0;
+
+#ifdef WIN32
+		// This is the main thread of the calling process and is set in the class's constructor 		
+		HANDLE m_thread_handle;
+
+		// CPU utility varibales for a smoother and cleaner way of setting CPUs
+		std::bitset<64> sysbits, procbits, threadbits;
+#endif
+
 	public:
-		// Constructor & deconstructor
-		// constructor shall construct the cpu with the given handle as well
+		/* -- Constructor & Destructor -- */
 		process_manipulator(T handle);
 		~process_manipulator() = default;
 	
-
-			
-		// Setters & getters
+		/* -- Setters & getters -- */
 		T get_handle();
 		void set_handle(T handle);
+		int getSysCPU();
+		int getProcCPU();
+		int getThreadCPU();
+
 		
-		// System Times
+		/* -- System Times -- */
 		int getProcessTimes(uint64_t& kernel, uint64_t& user);
 		uint64_t getSpecificSystemTime(int which);
 		int getSystemTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle);
 		
-		// Priorities	
+		/* -- Priorities -- */
 		int increaseThreadPrio(int8_t times=1);
 		int decreaseThreadPrio(int8_t times=1);
+
 #ifdef __linux__
 		// Linux specific priorities
 		int decreaseProcessNiceValue();
@@ -80,11 +108,19 @@ class process_manipulator
 		int changePolicy(int which);
 #elif WIN32
 		// Windows specific priorities
+		int increaseSchedClass(int8_t times=1);
+		int decreaseSchedClass(int8_t times=1);
 #else
-		// MacOS & ARM64 no implemented
+#error "MacOS & ARM64 not implemented"
 #endif
 
-		// CPU manipulation for the given process and its threads
-		
-
+		/* -- CPU manipulation -- */
+#ifdef __linux__
+#elif WIN32
+		void updateCPUs(std::bitset<64> ProcessAffMask = 0, std::bitset<64> ThreadAffMask = 0);
+		int setProcessCPU(uint8_t pos, bool value);
+		int setThreadCPU(uint8_t pos, bool value);
+#else
+#error "MacOS & ARM64 not implemented"
+#endif
 };

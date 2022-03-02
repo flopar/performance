@@ -4,12 +4,12 @@ set_target_properties(process_manipulator PROPERTIES
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 	add_subdirectory(utility/linux)
-	target_include_directories(process_manipulator PUBLIC 
-		utility/linux)
+	target_include_directories(process_manipulator PUBLIC utility/linux)
 	target_link_libraries(process_manipulator 
 		util_linux)
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-	add_subdirectory(windows)
-	target_include_directories(process_manipulator PUBLIC windows)
-	target_link_libraries(process_manipulator system_windows)
+	add_subdirectory(utility/windows)
+	target_include_directories(process_manipulator PUBLIC utility/windows)
+	target_link_libraries(process_manipulator 
+		util_windows)
 endif()

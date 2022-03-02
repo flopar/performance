@@ -4,9 +4,8 @@
 
 #define NORMAL 0
 #define CRITICAL 1
-/* 
- * this function will write statistic to a csv File on if the type of "list" is an iterable object
- */
+/*
+// this function will write statistic to a csv File on if the type of "list" is an iterable object
 int writeRuntimeStats(std::vector<double> list, std::string statName)
 {
 	std::ofstream statisticsFile;
@@ -33,6 +32,7 @@ int writeRuntimeStats(std::vector<double> list, std::string statName)
 	statisticsFile.close();
 	return 0;
 }
+*/
 /*
 void test(int mode, unsigned int percentage, bool async)
 {
@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
 {
 	//test(CRITICAL, 10, true);	
 	//test(NORMAL, 90, false);
+#ifdef __linux__
 	pid_t pid = getpid();
 	process_manipulator<pid_t> proc_man = process_manipulator<pid_t>(pid);
 	std::cout << proc_man.get_handle() << std::endl;
@@ -118,33 +119,22 @@ int main(int argc, char* argv[])
 	}catch(const std::exception& e){
 		std::cout << e.what() << std::endl;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*	size_t system = 0, proc = 0, offline = 53;
-	checkCPUAvailability(std::ref(proc), std::ref(system), std::ref(offline));
-	std::cout << "system: " << system << std::endl << "proc: " << proc << std::endl << "offline: " << offline << std::endl;
-	
-*/	
-
-
-
-
+#endif
+#ifdef WIN32
+	HANDLE handle = GetCurrentProcess();
+	HANDLE thread = GetCurrentThread();
+	process_manipulator<HANDLE> proc_man = process_manipulator<HANDLE>(handle);
+	try
+	{
+		proc_man.increaseSchedClass();
+		proc_man.decreaseSchedClass();
+		proc_man.setProcessCPU(2, false);
+		proc_man.setProcessCPU(2, false);
+	}
+	catch (const std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
+#endif
 	/*cpu_set_t* test;
 	size_t size;
 	test = CPU_ALLOC(static_cast<int>(sysconf(_SC_NPROCESSORS_CONF)));	
