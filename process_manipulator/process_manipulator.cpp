@@ -390,6 +390,9 @@ process_manipulator<HANDLE>::process_manipulator(HANDLE handle)
 	m_offlineCPUs = m_systemCPUs - m_processCPUs;
 }
 
+template <>
+process_manipulator<HANDLE>::~process_manipulator() {}
+
 template<>
 HANDLE process_manipulator<HANDLE>::get_handle()
 {
@@ -428,7 +431,7 @@ int process_manipulator<HANDLE>::increaseThreadPrio(int8_t times)
 		std::invalid_argument("Given argument is not allowed!\n");
 		return 1;
 	}
-	int currThreadPrio = GetThreadPriority(m_thread_handle);
+	int currThreadPrio = GetThreadPriority(m_threadHandle);
 	if (currThreadPrio == THREAD_PRIORITY_ERROR_RETURN)
 	{
 		std::runtime_error("The thread's priority could not be gotten!\n");
@@ -451,12 +454,12 @@ int process_manipulator<HANDLE>::increaseThreadPrio(int8_t times)
 		iterator++;
 	}
 	currThreadPrio = *iterator;
-	if (!SetThreadPriority(m_thread_handle, currThreadPrio))
+	if (!SetThreadPriority(m_threadHandle, currThreadPrio))
 	{
 		std::runtime_error("The priority could not be set!\n");
 		return 1;
 	}
-	std::cout << "New thread prio: " << GetThreadPriority(m_thread_handle) << std::endl;
+	std::cout << "New thread prio: " << GetThreadPriority(m_threadHandle) << std::endl;
 	return 0;
 }
 
@@ -468,7 +471,7 @@ int process_manipulator<HANDLE>::decreaseThreadPrio(int8_t times)
 		std::invalid_argument("Given argument is not allowed!\n");
 		return 1;
 	}
-	int currThreadPrio = GetThreadPriority(m_thread_handle);
+	int currThreadPrio = GetThreadPriority(m_threadHandle);
 	if (currThreadPrio == THREAD_PRIORITY_ERROR_RETURN)
 	{
 		std::runtime_error("The thread's priority could not be gotten!\n");
@@ -491,12 +494,12 @@ int process_manipulator<HANDLE>::decreaseThreadPrio(int8_t times)
 		iterator--;
 	}
 	currThreadPrio = *iterator;
-	if (!SetThreadPriority(m_thread_handle, currThreadPrio))
+	if (!SetThreadPriority(m_threadHandle, currThreadPrio))
 	{
 		std::runtime_error("The priority could not be set!\n");
 		return 1;
 	}
-	std::cout << "New thread prio: " << GetThreadPriority(m_thread_handle) << std::endl;
+	std::cout << "New thread prio: " << GetThreadPriority(m_threadHandle) << std::endl;
 	return 0;
 }
 
@@ -590,7 +593,7 @@ void process_manipulator<HANDLE>::updateCPUs()
 }
 
 template<>
-int process_manipulator<HANDLE>::setProcessCPU(uint8_t pos, bool value)
+int process_manipulator<HANDLE>::setProcessCPU(int pos, bool value)
 {
 	uint64_t ProcAffinityMask;
 	if (pos > m_processCPUs || pos < 0)
@@ -619,7 +622,7 @@ int process_manipulator<HANDLE>::setProcessCPU(uint8_t pos, bool value)
 }
 
 template<>
-int process_manipulator<HANDLE>::setThreadCPU(uint8_t pos, bool value)
+int process_manipulator<HANDLE>::setThreadCPU(int pos, bool value)
 {
 	uint64_t ThreadAffinityMask;
 	if (pos > m_processCPUs || pos < 0)

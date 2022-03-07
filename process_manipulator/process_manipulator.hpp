@@ -122,9 +122,7 @@ class process_manipulator
 		int setThreadCPU(int pos, bool value);
 #ifdef __linux__
 #elif WIN32
-		void updateCPUs(std::bitset<64> ProcessAffMask = 0, std::bitset<64> ThreadAffMask = 0);
-		int setProcessCPU(uint8_t pos, bool value);
-		int setThreadCPU(uint8_t pos, bool value);
+		int setProcessCPU(int pos, bool value);
 #else
 #error "MacOS & ARM64 not implemented"
 #endif
