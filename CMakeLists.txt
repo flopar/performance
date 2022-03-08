@@ -16,7 +16,6 @@ project(performance	VERSION 1.0
 
 # System Name must be asked after the project() command 
 # otherwise the variable will be blank
-message("System: ${CMAKE_SYSTEM_NAME}")
 
 # Enable -pthread and -lthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -24,7 +23,7 @@ find_package(Threads REQUIRED)
 
 
 # Always add the main source file
-add_subdirectory(source)
+add_subdirectory(test)
 
 
 # Allows the build of the library

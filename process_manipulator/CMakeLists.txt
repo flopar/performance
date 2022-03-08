@@ -10,6 +10,8 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 	add_subdirectory(utility/windows)
 	target_include_directories(process_manipulator PUBLIC utility/windows)
-	target_link_libraries(process_manipulator 
+	target_link_libraries(process_manipulator PUBLIC 
 		util_windows)
+else()
+	message(FATA_ERROR "Implementation does not exist for the current OS")
 endif()
