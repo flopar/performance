@@ -1,15 +1,16 @@
 /*-- HEADERS --*/
 #ifdef __linux__ 
-#include <sys/times.h>
-#include <errno.h>
-#include <sys/resource.h>
-#include <sched.h>
-#include <sys/syscall.h>
-#include <sys/sysinfo.h>
-#include <unistd.h>
+#include<sys/times.h>
+#include<errno.h>
+#include<sys/resource.h>
+#include<sched.h>
+#include<sys/syscall.h>
+#include<sys/sysinfo.h>
+#include<unistd.h>
 // util header
-#include <util_linux.hpp>
+#include<util_linux.hpp>
 #endif
+
 #ifdef WIN32
 #include<windows.h>
 #include<util_windows.hpp>
@@ -22,12 +23,11 @@
 #include<stdexcept>
 // std::ref
 #include<functional>
-
-// Standard library headers
-#include <vector>
-#include <thread>
-#include <iostream>
-#include <bitset>
+#include<utility>
+#include<vector>
+#include<thread>
+#include<iostream>
+#include<bitset>
 
 
 /*-- DEFINES --*/
@@ -36,7 +36,6 @@
 #define KERNEL_TIME 2
 
 #ifdef __linux__
-
 // Struct defined as the linux man pages require, but for some reason
 // is not defined in the header files
 struct sched_attr
@@ -56,6 +55,12 @@ struct sched_attr
 static std::vector<int> schedPrioList = { IDLE_PRIORITY_CLASS, BELOW_NORMAL_PRIORITY_CLASS, NORMAL_PRIORITY_CLASS, ABOVE_NORMAL_PRIORITY_CLASS, HIGH_PRIORITY_CLASS, REALTIME_PRIORITY_CLASS };
 static std::vector<int> threadPrioList = { THREAD_PRIORITY_IDLE, THREAD_PRIORITY_LOWEST, THREAD_PRIORITY_BELOW_NORMAL, THREAD_PRIORITY_NORMAL, THREAD_PRIORITY_ABOVE_NORMAL, THREAD_PRIORITY_HIGHEST, THREAD_PRIORITY_TIME_CRITICAL };
 #endif
+struct TimesCollection
+{
+	uint64_t user;
+	uint64_t kernel;
+	uint64_t idle;
+};
 
 template<class T>
 class process_manipulator
@@ -93,11 +98,10 @@ class process_manipulator
 		int getProcCPU();
 		int getThreadCPU();
 
-		
 		/* -- System Times -- */
-		int getProcessTimes(uint64_t& kernel, uint64_t& user);
+		TimesCollection getProcessTimes();
+		TimesCollection getSystemTimes();
 		uint64_t getSpecificSystemTime(int which);
-		int getSystemTimes(uint64_t& kernel, uint64_t& user, uint64_t& idle);
 		
 		/* -- Priorities -- */
 		int increaseThreadPrio(int8_t times=1);
@@ -120,10 +124,7 @@ class process_manipulator
 		/* -- CPU manipulation -- */
 		void updateCPUs();
 		int setThreadCPU(int pos, bool value);
-#ifdef __linux__
-#elif WIN32
+#ifdef WIN32
 		int setProcessCPU(int pos, bool value);
-#else
-#error "MacOS & ARM64 not implemented"
 #endif
 };

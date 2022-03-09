@@ -1,4 +1,4 @@
-//#include <workload.hpp>
+/#include <workload.hpp>
 #include <process_manipulator.hpp>
 
 
@@ -114,7 +114,11 @@ int main(int argc, char* argv[])
 	process_manipulator<pid_t> proc_man = process_manipulator<pid_t>(0);
 	try{
 		proc_man.setThreadCPU(2, false);
-		proc_man.setThreadCPU(22, true);
+		std::cout << "before: " << proc_man.getThreadCPU() << std::endl;
+		proc_man.setThreadCPU(2, true);
+		std::cout << "after: " << proc_man.getThreadCPU() << std::endl;
+		proc_man.getSystemTimes();
+		proc_man.getProcessTimes();
 		//proc_man.changePolicy(SCHED_RR);
 		//proc_man.increaseThreadPrio(-1);
 	}catch(const std::exception& e){
