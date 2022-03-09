@@ -11,4 +11,5 @@ See subdirectory "docs". It contains a pdf file which started as my bachelor the
 This project is licensed under the MIT License - see the LICENSE.md file for details
 
 # Author 
-Name:		Florian Pîrvu                                                                                                                                        Twitter:	https://twitter.com/FlorianPirvu
+*Name:       Florian Pîrvu 
+*Twitter:    https://twitter.com/FlorianPirvu
