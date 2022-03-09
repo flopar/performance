@@ -12,4 +12,3 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 # Author 
 * Name:       Florian Pîrvu 
-* Twitter:    https://twitter.com/FlorianPirvu
