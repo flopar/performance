@@ -11,9 +11,5 @@ See subdirectory "docs". It contains a pdf file which started as my bachelor the
 This project is licensed under the MIT License - see the LICENSE.md file for details
 
 # Author 
-Markup : * Name:       Florian Pîrvu 
-         * Twitter:    https://twitter.com/FlorianPirvu
-Markup : * Bullet list
-              * Nested bullet
-                  * Sub-nested bullet etc
-          * Bullet list item 2
+* Name:       Florian Pîrvu 
+* Twitter:    https://twitter.com/FlorianPirvu
